@@ -4,8 +4,11 @@ import eventRoutes from './events.js';
 import feedRoutes from './feed.js';
 import locateRoutes from './locate.js';
 import loginRoutes from './login.js';
+import homeRoutes from './home.js';
 
 const constructorMethod = (app) => {
+
+  app.use("/",homeRoutes );
   app.use('/feed', feedRoutes);
   app.use('/events', eventRoutes);
   app.use('/about', aboutRoutes);
