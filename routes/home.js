@@ -1,13 +1,21 @@
 import { Router } from "express";
+import { getWifiLocations } from "../data/locations.js";
 
 const router = Router()
 
 router.route('/').get(async (req, res) => {
-  //code here for GET will render the home handlebars file
   res.render('../views/home');
 });
 
+router.route('/wifi-locations').get(async (req, res) =>{
+  try{
+    const wifiLocations = await getWifiLocations();
+    res.json(wifiLocations);
+  }catch (e){
+    res.status(500).json({ error: 'Failed to fetch Wi-Fi locations' });
+  }
+});
 
-  //code here for POST this is where your form will be submitting searchByTitle and then call your data function passing in the searchByTitle and then rendering the search results of up to 50 Movies.
+
 
 export default router;
