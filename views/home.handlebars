@@ -12,19 +12,6 @@
   </form>
 
   <div id="wifiLocations">
-    {{#if wifiLocations}}
-      <ul>
-        {{#each wifiLocations}}
-          <li>
-            <strong>{{lookup this 'Wifi name'}}</strong><br>
-            Place: {{this.Place}}<br>
-            Neighborhood: {{this.Neighborhood}}<br>
-            Latitude: {{this.Latitude}}<br>
-            Longitude: {{this.Longitude}}
-          </li>
-        {{/each}}
-      </ul>
-    {{/if}}
   </div>
 </main>
 

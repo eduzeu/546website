@@ -2,9 +2,12 @@ import { ObjectId } from "mongodb";
 import { dbConnection, closeConnection } from "../config/mongoConnection.js";
 import {wifiLocations as callWifi} from "../config/mongoCollections.js"
 import { wifiLocationsNewYork } from "../wifi.js";
+import { reviews } from "../config/mongoCollections.js";
 
 const db = await dbConnection();
 const teamCollection = await callWifi();
+const reviewCollection = await reviews();
+
 
 
 export const addWifiLocations = async () => {
@@ -56,5 +59,31 @@ export const getWifiLocations = async () => {
     });
   return wifiInfo;
 };
+
+export const createWifiReview = async (userId, locationId, locationType, rating, text) => {
+
+  if (!userId || !ObjectId.isValid(userId)) {
+    throw new Error("Invalid userId.");
+  }
+
+  const rating = await reviewCollection.insertOne({
+    _id: new ObjectId(),
+    userId: userId,
+    locationId: locationId,
+    locationType,
+    rating,
+    text
+  });
+
+  return rating;
+
+};
+
+export const getWifiReviews = async (id) => {
+
+  const getReview = await reviewCollection.find(id).toArray();
+  return getReview;
+}
+
 
 //  console.log(await getWifiLocations()); 
