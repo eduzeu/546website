@@ -7,6 +7,8 @@ import axios from "axios";
 const db = await dbConnection();
 const reviewCollection = await reviews();
 
+
+
 export const getWifiLocations = async () => {
   let response = await axios.get("https://data.cityofnewyork.us/resource/npnk-wrj8.json");
   let data = response.data

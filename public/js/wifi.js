@@ -1,11 +1,13 @@
+
+
 document.getElementById('wifiCheckbox').addEventListener('change', async function () {
   if (this.checked) {
     try {
       const response = await fetch('/wifi-locations');
       const data = await response.json();
-
+      //console.log(response)
       const locationContainer = document.getElementById('wifiLocations');
-      locationContainer.innerHTML = ''; // Clear previous locations
+      locationContainer.innerHTML = ''; 
 
       // Display locations if any are returned
       if (Object.keys(data).length > 0) {
@@ -71,39 +73,34 @@ document.getElementById('wifiCheckbox').addEventListener('change', async functio
       console.error('Error fetching Wi-Fi locations:', error);
     }
   } else {
-    // Clear locations if checkbox is unchecked
     document.getElementById('wifiLocations').innerHTML = '';
   }
 });
 
 const createReview = () => {
-  const structure = document.createElement('diV');
+  const structure = document.createElement('div');
   structure.style.top = '50%';
   structure.style.position = 'fixed';
   structure.style.left = '50%';
   structure.style.transform = 'translate(-50%, -50%)';
-  structure.style.backgroundColor = '#fff';
+  structure.style.backgroundColor = '#EFEBCE';
   structure.style.padding = '20px';
   structure.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.2)';
-  structure.style.zIndex = '1000';
   structure.style.borderRadius = '10px';
   structure.style.width = '300px';
   structure.style.textAlign = 'center';
 
   structure.innerHTML = `
-      <textarea rows="4" cols="30" placeholder="Enter your review here"></textarea><br><br>
-      <button button id="submitReviewButton">Submit</button>
+       <textarea rows="4" cols="30" placeholder="Enter your review here"></textarea><br><br>
+      <button id="submitReviewButton">Submit</button>
       <button id="closeButton">Close</button>
-        `;
-  
+  `;
+
   document.body.appendChild(structure);
 
   document.getElementById('closeButton').addEventListener('click', () =>{
     document.body.removeChild(structure);
   });
 
-  // document.getElementById('submitReviewButton').addEventListener('click', () =>{
-  //   const text = structure.querySelector('textarea').value;
-  //   if
-  // })
+ 
 };
