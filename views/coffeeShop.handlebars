@@ -1,0 +1,14 @@
+<header>
+    <h1>Find NYC Coffee Shops</h1>
+</header>
+
+<main>
+    {{#each coffeeShops}}
+        <article>
+            <strong>{{this.tags.name}}</strong>
+            <p>{{this.tags.addr:housenumber}} {{this.tags.addr:street}}, {{this.tags.addr:city}}{{#if this.tags.addr:postcode}},
+            {{this.tags.addr:postcode}}{{/if}}</p>
+            <p>Latitude: {{this.lat}}\tLongitude: {{this.lon}}</p>
+        </article>
+    {{/each}}
+</main>
