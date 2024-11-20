@@ -1,0 +1,9 @@
+.coffeeShopDetail {
+    margin-bottom: 20px;
+}
+
+.coffeeShopDetail p,
+.coffeeShopDetail strong {
+    padding: 0;
+    margin: 0;
+}
