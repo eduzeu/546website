@@ -12,15 +12,18 @@ const reviewCollection = await reviews();
 export const getWifiLocations = async () => {
   let response = await axios.get("https://data.cityofnewyork.us/resource/npnk-wrj8.json");
   let data = response.data
-  //console.log(data)
+ // console.log(data)
 
   let wifiInfo = {};
 
   for (const item of data) {
    // console.log(item);
+
+ 
     const ssid = item['public_space_open_space_name'];
     if (!wifiInfo[ssid]) { // Only add if it doesn't exist yet
       wifiInfo[ssid] = {
+        "place_id": item.oid,
         'Wifi name': item.ssid,
         'Place': item.borough_name,
         'Neighborhood': item.neighborhood_tabulation_area_1,
@@ -29,10 +32,12 @@ export const getWifiLocations = async () => {
       };
     }
   }
-  return wifiInfo;
+ return wifiInfo;
 };
 
-export const createWifiReview = async (rating, text) => {
+//console.log(await getWifiLocations());
+
+export const createWifiReview = async (rating, text,id) => {
 
   //console.log("data validated");
   const db = await dbConnection();
@@ -45,22 +50,38 @@ export const createWifiReview = async (rating, text) => {
   }
 
   const reviewCollection = await reviews();
+  const existingReview = await reviewCollection.findOne({ id });
 
-  // Insert the review into the 'reviews' collection
-  const result = await reviewCollection.insertOne({
-    _id: new ObjectId(),
-    rating,
-    text
-  });
-
-  return result;
-
+  if (existingReview) {
+    const updatedResult = await reviewCollection.updateOne(
+      { id },
+      {
+        $push: {
+          rating: rating,
+          text: text    
+        }
+      }
+    );
+    return updatedResult;
+  } else {
+    const newReview = await reviewCollection.insertOne({
+      _id: new ObjectId(),
+      rating: [rating],   
+      text: [text],
+      id                  
+    });
+    return newReview;
+  }
 };
 
-export const getWifiReviews = async (id) => {
-
-  const getReview = await reviewCollection.find(id).toArray();
-  return getReview;
-}
-
-console.log(await createWifiReview(5, "good place")); 
+export const getWifiReviews = async () => {
+  try {
+    const reviewsList = await reviewCollection.find().toArray();
+    return reviewsList;
+  } catch (error) {
+    throw new Error('Failed to fetch Wi-Fi reviews');
+  }
+};
+ 
+//console.log(await createWifiReview(2, "liked it", "15"));
+//console.log(await createWifiReview(5, "good place")); 

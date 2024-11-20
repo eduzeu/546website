@@ -1,9 +1,19 @@
 
+
+
+
 document.getElementById('wifiCheckbox').addEventListener('change', async function () {
   if (this.checked) {
     try {
       const response = await fetch('/wifi-locations');
       const data = await response.json();
+
+        const reviews = await fetch('/get-review');
+        const revData = await reviews.json();
+
+       //console.log(revData);
+
+      
       //console.log(response)
       const locationContainer = document.getElementById('wifiLocations');
       locationContainer.innerHTML = ''; 
@@ -35,16 +45,50 @@ document.getElementById('wifiCheckbox').addEventListener('change', async functio
             Place: ${location.Place}<br>
             Neighborhood: ${location.Neighborhood}<br>
             Latitude: ${location.Latitude}<br>
-            Longitude: ${location.Longitude}
+            Longitude: ${location.Longitude} <br>
+            Place id: ${location.place_id}
           `;
-          // Second cell: Ratings and reviews
           const ratingsCell = document.createElement('td');
           ratingsCell.style.border = '1px solid black';
-          ratingsCell.innerHTML = `
-            <strong>Rating:</strong> ${location.Rating || 'Not rated yet'}<br>
-            <strong>Reviews:</strong> ${location.Reviews || 'No reviews yet'}
-          `;
 
+          const locationReviews = revData.filter(rev => rev.id === location.place_id);
+        
+          if (locationReviews.length > 0) {
+            let total = 0;
+            let ratingCount = 0;
+
+            // Loop through each review's ratings array
+            locationReviews.forEach(item => {
+              item.rating.forEach(rating => {
+                total += rating; // Sum all ratings for this review
+              });
+              ratingCount += item.rating.length; // Count the number of ratings
+            });
+
+            if (ratingCount > 0) {
+              const avg = total / ratingCount; // Calculate the average
+              ratingsCell.innerHTML = `
+                <strong>Average Rating:</strong> ${avg.toFixed(1)} (${ratingCount} reviews)<br>
+                <a href="/reviews/${location.place_id}">See Reviews</a>
+              `;
+            } else {
+              ratingsCell.innerHTML = `
+                <strong>Rating:</strong> No valid ratings<br>
+                <strong>Reviews:</strong> No reviews yet
+              `;
+            }
+          } else {
+            ratingsCell.innerHTML = `
+              <strong>Rating:</strong> Not rated yet<br>
+              <strong>Reviews:</strong> No reviews yet
+            `;
+          }
+
+          ratingsCell.querySelector('a').addEventListener("click", () => {
+            event.preventDefault();
+            
+          })
+    
           const wifiReview = document.createElement('p');
           wifiReview.style.marginTop = '10px';
           wifiReview.innerHTML = `<a href="#">Been here? Write a review</a>`;
@@ -60,7 +104,7 @@ document.getElementById('wifiCheckbox').addEventListener('change', async functio
 
           wifiReview.querySelector('a').addEventListener('click', () => {
             event.preventDefault();
-            createReview();
+            createReview(location.place_id);
           })
         });
 
@@ -78,7 +122,7 @@ document.getElementById('wifiCheckbox').addEventListener('change', async functio
 });
 
 
-const callReview = async (score, text) => {
+const callReview = async (score, text, id) => {
 
   const numericScore = Number(score);
   try {
@@ -87,17 +131,18 @@ const callReview = async (score, text) => {
       headers: {
         'Content-Type': 'application/json',   
       },
-      body: JSON.stringify({ rating: numericScore , text: text }),  
+      body: JSON.stringify({ rating: numericScore , text: text, id: id }),  
     });
 
    
   } catch (error) {
-    console.error('Error calling review API:', error);
+    //console.error('Error calling review API:', error);
     throw new Error('Failed to submit the review');  // Throw a custom error for frontend handling
   }
 };
 
-const createReview = () => {
+
+const createReview = (id) => {
   const structure = document.createElement('div');
   structure.style.top = '50%';
   structure.style.position = 'fixed';
@@ -138,13 +183,14 @@ const createReview = () => {
     let text = userText;
 
     // Log values for debugging
-    console.log('Submitting review:', { score, text });
-    console.log(typeof score);
+    // console.log('Submitting review:', { score, text });
+    // console.log(typeof score);
 
     try {
       // Call the backend API to submit the review
-      await callReview(score, text);
-      alert('Review submitted successfully!');
+      await callReview(score, text, id);
+      //store review in array 
+     // alert('Review submitted successfully!');
       document.body.removeChild(structure); // Close the review form
     } catch (error) {
       console.error('Error submitting review:', error);
