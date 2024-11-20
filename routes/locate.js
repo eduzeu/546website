@@ -5,7 +5,7 @@ const router = Router()
 
 router.route("/coffeeShop")
     .get(async (req, res) => {
-        const coffeeShops = await fetchCoffeeShops
+        const coffeeShops = await fetchCoffeeShops();
         const elements = coffeeShops.elements;
         res.render("coffeeShop", {
             title: "Find Coffee Shops",
