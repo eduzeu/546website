@@ -17,7 +17,7 @@ export const getWifiLocations = async () => {
   let wifiInfo = {};
 
   for (const item of data) {
-    console.log(item);
+   // console.log(item);
     const ssid = item['public_space_open_space_name'];
     if (!wifiInfo[ssid]) { // Only add if it doesn't exist yet
       wifiInfo[ssid] = {
@@ -34,17 +34,26 @@ export const getWifiLocations = async () => {
 
 export const createWifiReview = async (rating, text) => {
 
-  if (!userId || !ObjectId.isValid(userId)) {
-    throw new Error("Invalid userId.");
+  //console.log("data validated");
+  const db = await dbConnection();
+
+  const collections = await db.listCollections().toArray();
+  const names = collections.map((collection) => collection.name);
+
+  if(!names.includes("reviews")){
+    await db.createCollection("reviews");
   }
 
-  const ratings = await reviewCollection.insertOne({
+  const reviewCollection = await reviews();
+
+  // Insert the review into the 'reviews' collection
+  const result = await reviewCollection.insertOne({
     _id: new ObjectId(),
     rating,
     text
   });
 
-  return ratings;
+  return result;
 
 };
 
@@ -54,5 +63,4 @@ export const getWifiReviews = async (id) => {
   return getReview;
 }
 
-
-// console.log(await getWifiLocations()); 
+console.log(await createWifiReview(5, "good place")); 

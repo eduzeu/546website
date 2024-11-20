@@ -1,5 +1,4 @@
 
-
 document.getElementById('wifiCheckbox').addEventListener('change', async function () {
   if (this.checked) {
     try {
@@ -59,7 +58,8 @@ document.getElementById('wifiCheckbox').addEventListener('change', async functio
           // Append row to the table body
           tbody.appendChild(row);
 
-          wifiDetailsCell.addEventListener('click', () => {
+          wifiReview.querySelector('a').addEventListener('click', () => {
+            event.preventDefault();
             createReview();
           })
         });
@@ -77,6 +77,26 @@ document.getElementById('wifiCheckbox').addEventListener('change', async functio
   }
 });
 
+
+const callReview = async (score, text) => {
+
+  const numericScore = Number(score);
+  try {
+    const response = await fetch('/wifi-review', {
+      method: 'POST', 
+      headers: {
+        'Content-Type': 'application/json',   
+      },
+      body: JSON.stringify({ rating: numericScore , text: text }),  
+    });
+
+   
+  } catch (error) {
+    console.error('Error calling review API:', error);
+    throw new Error('Failed to submit the review');  // Throw a custom error for frontend handling
+  }
+};
+
 const createReview = () => {
   const structure = document.createElement('div');
   structure.style.top = '50%';
@@ -91,16 +111,48 @@ const createReview = () => {
   structure.style.textAlign = 'center';
 
   structure.innerHTML = `
-       <textarea rows="4" cols="30" placeholder="Enter your review here"></textarea><br><br>
-      <button id="submitReviewButton">Submit</button>
-      <button id="closeButton">Close</button>
+    <input type="number" id="reviewScore" placeholder="Enter score (1-5)" min="1" max="5" style="margin-bottom: 10px; width: 90%;"><br>
+    <textarea  id="reviewText" rows="4" cols="30" placeholder="Enter your review here"></textarea><br><br>
+    <button id="submitReviewButton">Submit</button>
+    <button id="closeButton">Close</button>
   `;
 
   document.body.appendChild(structure);
 
-  document.getElementById('closeButton').addEventListener('click', () =>{
-    document.body.removeChild(structure);
+  document.getElementById('submitReviewButton').addEventListener('click', async () => {
+    let userScore = document.getElementById('reviewScore').value;
+    let userText = document.getElementById('reviewText').value.trim();
+
+    // Add validation checks
+    if (!userScore || isNaN(userScore) || userScore < 1 || userScore > 5) {
+      alert('Please enter a valid score between 1 and 5.');
+      return;
+    }
+
+    if (!userText) {
+      alert('Please enter a review text.');
+      return;
+    }
+
+    let score = parseInt(userScore, 10);
+    let text = userText;
+
+    // Log values for debugging
+    console.log('Submitting review:', { score, text });
+    console.log(typeof score);
+
+    try {
+      // Call the backend API to submit the review
+      await callReview(score, text);
+      alert('Review submitted successfully!');
+      document.body.removeChild(structure); // Close the review form
+    } catch (error) {
+      console.error('Error submitting review:', error);
+      alert('There was an error submitting your review.');
+    }
   });
 
- 
+  document.getElementById('closeButton').addEventListener('click', () => {
+    document.body.removeChild(structure); // Close the review form
+  });
 };

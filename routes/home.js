@@ -1,5 +1,6 @@
 import { Router } from "express";
-import { getWifiLocations } from "../data/locations.js";
+import { getWifiLocations, createWifiReview } from "../data/locations.js";
+
 
 const router = Router()
 
@@ -19,6 +20,20 @@ router.route('/wifi-locations').get(async (req, res) =>{
     res.status(500).json({ error: 'Failed to fetch Wi-Fi locations' });
   }
 });
+
+router.route('/wifi-review').post(async (req, res) => {
+  let score = req.body.rating;
+  let text = req.body.text;
+
+  //console.log(score, text);
+  try{
+    const wifiReview = await createWifiReview(score, text);
+    res.json(wifiReview);
+  }catch (e){
+    res.status(500).json({error: e});
+  }
+
+})
 
 
 
