@@ -84,10 +84,10 @@ document.getElementById('wifiCheckbox').addEventListener('change', async functio
             `;
           }
 
-          ratingsCell.querySelector('a').addEventListener("click", () => {
-            event.preventDefault();
-            
-          })
+          // ratingsCell.querySelector('a').addEventListener("click", () => {
+          //   event.preventDefault();
+
+          // })
     
           const wifiReview = document.createElement('p');
           wifiReview.style.marginTop = '10px';
