@@ -1,12 +1,16 @@
 import { Router } from "express";
-import { fetchCoffeeShops } from "../helpers.js";
+import { fetchCoffeeShops } from "../data/locations.js";
 
 const router = Router()
 
-router.route("/")
+router.route("/coffeeShop")
     .get(async (req, res) => {
-        let coffeeShops = await fetchCoffeeShops();
-        res.status(200).json(coffeeShops.elements);
+        const coffeeShops = await fetchCoffeeShops
+        const elements = coffeeShops.elements;
+        res.render("coffeeShop", {
+            title: "Find Coffee Shops",
+            coffeeShops: elements
+         });
     })
 
 export default router;
