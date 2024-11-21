@@ -1,0 +1,52 @@
+<body>
+    <header>
+        <h1>Main Feed Page</h1>
+    </header>
+    <main>
+        <div class="content">
+            <section class="input-section">
+                <label for="starting-address">Starting Address:</label>
+                <input type="text" id="starting-address" placeholder="Enter starting address">
+
+                <label for="radius">Radius (miles):</label>
+                <select id="radius">
+                    <option value="5">5 miles</option>
+                    <option value="10">10 miles</option>
+                    <option value="20">20 miles</option>
+                </select>
+
+                <fieldset>
+                    <legend>Filters:</legend>
+                    <label><input type="checkbox" name="filter" value="coffee"> Coffee</label>
+                    <label><input type="checkbox" name="filter" value="wifi"> Wifi</label>
+                </fieldset>
+            </section>
+
+            <section class="places-feed">
+                here eduardo and chri's stuff will go 
+            </section>
+        </div>
+        <aside class="sidebar">
+            <section class="place-of-the-day">
+                <h2>Place of the Day</h2>
+                <p>Name: ________</p>
+                <p>Address: _________</p>
+                <p>Type: ______</p>
+                <p><a href="#">more info...</a></p>
+            </section>
+            <div class="map">
+                <div id="map-canvas" style="height: 400px; width: 100%;"></div>
+            </div>
+        </aside>
+    </main>
+    <footer>
+        <p>2024 Feed Page</p>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key="></script>
+    <script src="/public/js/List.js"></script>
+    <script src="/public/js/Mapster.js"></script>
+    <script src="/public/js/map-options.js"></script>
+    <script src="/public/js/script.js"></script>
+</body>

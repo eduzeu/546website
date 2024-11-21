@@ -16,17 +16,17 @@
     // map
     map = mapster.create(element, options);
   
-    var marker = map.addMarker({
-        lat: 40.76030326972345,
-        lng:-73.99178458465607,
-      content: '<div style="color: #f00;">I like food</div>'
-    });
+    // var marker = map.addMarker({
+    //     lat: 40.76030326972345,
+    //     lng:-73.99178458465607,
+    //   content: '<div style="color: #f00;">I like food</div>'
+    // });
     
-    var marker2 = map.addMarker({
-        lat: 40.73010326975731,
-        lng:-73.99778458465607,
-      content: 'I like rice'
-    });
+    // var marker2 = map.addMarker({
+    //     lat: 40.73010326975731,
+    //     lng:-73.99778458465607,
+    //   content: 'I like rice'
+    // });
 
     $.getJSON(wifi_url, function(data) {
         console.log(data); // Debugging output

@@ -12,6 +12,10 @@ router.route('/home').get(async (req, res) => {
   res.render('../views/home');
 });
 
+router.route('/map').get(async (req, res) => {
+  res.render('../views/map');
+});
+
 router.route('/wifi-locations').get(async (req, res) =>{
   try{
     const wifiLocations = await getWifiLocations();
