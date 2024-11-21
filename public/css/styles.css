@@ -15,13 +15,30 @@
 
 }
 
+#coffeeLocations table {
+  text-align: center;
+  color: #EFEBCE;
+  background-color: #BB8588;
+}
+
 #wifiLocations table th,
 #wifiLocations table td {
   border: 1px solid #ddd;
   padding: 8px;
 }
 
+#coffeeLocations table th,
+#coffeeLocations table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+
 #wifiLocations table tr:hover {
+  background-color: #d68c8c;
+}
+
+#coffeeLocations table tr:hover {
   background-color: #d68c8c;
 }
 
@@ -30,6 +47,12 @@
 #wifiLocations table td:hover {
   background-color: #d68c8c;
 }
+
+#coffeLocations table th:hover,
+#coffeLocationsn table td:hover {
+  background-color: #d68c8c;
+}
+
 
 .modal {
   position: fixed;

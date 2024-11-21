@@ -13,4 +13,14 @@ router.route("/coffeeShop")
          });
     })
 
+router.route("/get-coffee").get(async (req, res) => {
+    try{
+        const coffeeShops = await fetchCoffeeShops();
+        res.json(coffeeShops);
+    }catch(e){
+        res.status(500).json({error: e});
+    }
+
+});
+
 export default router;
