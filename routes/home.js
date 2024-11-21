@@ -1,13 +1,51 @@
 import { Router } from "express";
+import { getWifiLocations, createWifiReview, getWifiReviews} from "../data/locations.js";
+
 
 const router = Router()
 
 router.route('/').get(async (req, res) => {
-  //code here for GET will render the home handlebars file
+  res.render('../views/account');
+});
+
+router.route('/home').get(async (req, res) => {
   res.render('../views/home');
 });
 
+router.route('/wifi-locations').get(async (req, res) =>{
+  try{
+    const wifiLocations = await getWifiLocations();
+    res.json(wifiLocations);
+  }catch (e){
+    res.status(500).json({ error: 'Failed to fetch Wi-Fi locations' });
+  }
+});
 
-  //code here for POST this is where your form will be submitting searchByTitle and then call your data function passing in the searchByTitle and then rendering the search results of up to 50 Movies.
+
+router.route('/wifi-review').post(async (req, res) => {
+  let score = req.body.rating;
+  let text = req.body.text;
+  let id = req.body.id;
+  //console.log(score, text);
+  try{
+    const wifiReview = await createWifiReview(score, text,id);
+    res.json(wifiReview);
+  }catch (e){
+    res.status(500).json({error: e});
+  }
+});
+
+router.route('/get-review').get(async (req, res) => {
+  try{
+    const reviews = await getWifiReviews();
+    res.json(reviews);
+  }catch (e){
+    res.status(500).json({error: e});
+  }
+})
+
+
+
+
 
 export default router;

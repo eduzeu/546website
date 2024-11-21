@@ -1,9 +1,32 @@
 .coffeeShopDetail {
-    margin-bottom: 20px;
+  margin-bottom: 20px;
 }
 
 .coffeeShopDetail p,
 .coffeeShopDetail strong {
-    padding: 0;
-    margin: 0;
+  padding: 0;
+  margin: 0;
+}
+
+#wifiLocations table {
+  text-align: center;
+  color: #EFEBCE;
+  background-color: #BB8588;
+
+}
+
+#wifiLocations table th,
+#wifiLocations table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+#wifiLocations table tr:hover {
+  background-color: #d68c8c;
+}
+
+/* Hover effect for individual table cells */
+#wifiLocations table th:hover,
+#wifiLocations table td:hover {
+  background-color: #d68c8c;
 }
