@@ -1,7 +1,5 @@
 import axios from "axios";
 import { ObjectId } from "mongodb";
-import { dbConnection, closeConnection } from "../config/mongoConnection.js";
-import { wifiLocationsNewYork } from "../wifi.js";
 import { reviews } from "../config/mongoCollections.js";
 
 const fetchFromOverpass = async (url, query) => {
@@ -40,17 +38,15 @@ export let fetchCoffeeShops = async () => {
         return item.tags["addr:housenumber"] !== undefined && item.tags["addr:street"] !== undefined && item.tags["addr:city"] !== undefined
     })
 
+    let filterByLatLong = filteredByLocationInfo.filter((item) => {
+        return item.lat !== undefined && item.lon !== undefined
+    })
+
     let results = rawData
-    results.elements = filteredByLocationInfo
+    results.elements = filterByLatLong
 
     return results;
 }
-
-
-const db = await dbConnection();
-const reviewCollection = await reviews();
-
-
 
 export const getWifiLocations = async () => {
   let response = await axios.get("https://data.cityofnewyork.us/resource/npnk-wrj8.json");
@@ -81,17 +77,6 @@ export const getWifiLocations = async () => {
 //console.log(await getWifiLocations());
 
 export const createWifiReview = async (rating, text,id) => {
-
-  //console.log("data validated");
-  const db = await dbConnection();
-
-  const collections = await db.listCollections().toArray();
-  const names = collections.map((collection) => collection.name);
-
-  if(!names.includes("reviews")){
-    await db.createCollection("reviews");
-  }
-
   const reviewCollection = await reviews();
   const existingReview = await reviewCollection.findOne({ id });
 
@@ -119,6 +104,7 @@ export const createWifiReview = async (rating, text,id) => {
 
 export const getWifiReviews = async () => {
   try {
+    const reviewCollection = await reviews();
     const reviewsList = await reviewCollection.find().toArray();
     return reviewsList;
   } catch (error) {
