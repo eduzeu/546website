@@ -1,4 +1,3 @@
-import axios from "axios";
 import { ObjectId } from "mongodb";
 import { dbConnection, closeConnection } from "../config/mongoConnection.js";
 import { wifiLocationsNewYork } from "../wifi.js";
