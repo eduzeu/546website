@@ -128,3 +128,8 @@
   background-color: #BB8588;
   color: white;
 }
+
+.checkbox-container {
+  display: flex;
+  gap: 20px;
+}

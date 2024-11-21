@@ -1,7 +1,7 @@
 document.getElementById('coffeeCheckBox').addEventListener('change', async function () {
   if (this.checked) {
     try {
-      const response = await fetch("/locate/get-coffee");
+      const response = await fetch("/get-coffee");
       const data = await response.json();
 
       const reviews = await fetch('/get-review');
