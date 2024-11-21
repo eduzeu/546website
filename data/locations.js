@@ -1,4 +1,9 @@
 import axios from "axios";
+import { ObjectId } from "mongodb";
+import { dbConnection, closeConnection } from "../config/mongoConnection.js";
+import { wifiLocationsNewYork } from "../wifi.js";
+import { reviews } from "../config/mongoCollections.js";
+import axios from "axios";
 
 const fetchFromOverpass = async (url, query) => {
     try {
@@ -41,11 +46,7 @@ export let fetchCoffeeShops = async () => {
 
     return results;
 }
-import { ObjectId } from "mongodb";
-import { dbConnection, closeConnection } from "../config/mongoConnection.js";
-import { wifiLocationsNewYork } from "../wifi.js";
-import { reviews } from "../config/mongoCollections.js";
-import axios from "axios";
+
 
 const db = await dbConnection();
 const reviewCollection = await reviews();
