@@ -1,10 +1,10 @@
 document.getElementById('coffeeCheckBox').addEventListener('change', async function () {
   if (this.checked) {
     try {
-      const response = await fetch("/coffeeShop");
+      const response = await fetch("../coffeeShop");
       const data = await response.json();
 
-      const reviews = await fetch('/get-review');
+      const reviews = await fetch('../review');
       const revData = await reviews.json();
 
       const locationContainer = document.getElementById('coffeeLocations');

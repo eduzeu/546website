@@ -1,3 +1,5 @@
+import axios from "axios";
+
 export const validateString = (str, strName) => {
   if (typeof str === "undefined")
     throw `${strName || "Provided parameter"} was not supplied.`;
@@ -26,6 +28,27 @@ export const validateNumber = (num, numName) => {
   if (isNaN(num)) {
     throw `${numName || "Provided data"} is not a number.`;
   }
+
+  return num;
+}
+
+export const validateRating = (rating, ratingName) => {
+  validateNumber(Number(rating), ratingName);
+
+  if (rating < 1 || rating > 5 || rating % 1 != 0) {
+    throw "Rating is invalid."
+  }
+
+  return rating;
+}
+
+export const validateStringId = (id, idName) => {
+  const strId = validateString(id, idName);
+
+  const numericId = Number(strId);
+  validateNumber(numericId, idName);
+
+  return strId;
 }
 
 export const validateNumericId = (id, idName) => {
@@ -35,4 +58,34 @@ export const validateNumericId = (id, idName) => {
   validateNumber(numericId, idName);
 
   return numericId;
+}
+
+export const fetch = async (url) => {
+  try {
+    let { data } = await axios.get(url);
+    return data
+
+  } catch (e) {
+    if (e.code === 'ENOTFOUND')
+      throw 'Error: Invalid URL';
+    else if (e.response)
+      throw `Error: ${e.response.status}: ${e.response.statusText}`;
+    else
+      throw `Error: ${e}`;
+  }
+}
+
+export const fetchFromOverpass = async (query) => {
+  try {
+    let { data } = await axios.post("https://overpass-api.de/api/interpreter", query);
+    return data
+
+  } catch (e) {
+    if (e.code === 'ENOTFOUND')
+      throw 'Error: Invalid URL';
+    else if (e.response)
+      throw `Error: ${e.response.status}: ${e.response.statusText}`;
+    else
+      throw `Error: ${e}`;
+  }
 }

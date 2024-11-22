@@ -2,10 +2,10 @@
 document.getElementById('wifiCheckbox').addEventListener('change', async function () {
   if (this.checked) {
     try {
-      const response = await fetch('/wifi-locations');
+      const response = await fetch('../wifi');
       const data = await response.json();
 
-      const reviews = await fetch('/get-review');
+      const reviews = await fetch('../review');
       const revData = await reviews.json();
 
       const locationContainer = document.getElementById('wifiLocations');
@@ -53,7 +53,7 @@ document.getElementById('wifiCheckbox').addEventListener('change', async functio
             });
           });
 
-          // console.log(allReviews);
+          console.log(allReviews);
 
           if (locationReviews.length > 0) {
             let total = 0;
@@ -132,13 +132,14 @@ document.getElementById('wifiCheckbox').addEventListener('change', async functio
 const callReview = async (score, text, id) => {
   const numericScore = Number(score);
   try {
-    const response = await fetch('/wifi-review', {
+    const response = await fetch('../review', {
       method: 'POST', 
       headers: {
         'Content-Type': 'application/json',   
       },
       body: JSON.stringify({ rating: numericScore , text: text, id: id }),  
     });   
+    console.log(response);
   } catch (error) {
     throw new Error('Failed to submit the review'); 
   }
