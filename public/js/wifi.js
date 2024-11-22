@@ -2,7 +2,7 @@
 document.getElementById('wifiCheckbox').addEventListener('change', async function () {
   if (this.checked) {
     try {
-      const response = await fetch('../wifi');
+      const response = await fetch('../location/wifi');
       const data = await response.json();
 
       const reviews = await fetch('../review/wifi');

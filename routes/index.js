@@ -1,12 +1,11 @@
 import { static as staticDir } from 'express';
 import aboutRoutes from './about.js';
-import coffeeShopRoutes from './coffeeShop.js';
 import eventRoutes from './events.js';
 import feedRoutes from './feed.js';
 import homeRoutes from './home.js';
+import locationRoutes from './location.js';
 import loginRoutes from './login.js';
 import reviewRoutes from './review.js';
-import wifiRoutes from './wifi.js';
 
 const constructorMethod = (app) => {
 
@@ -16,9 +15,8 @@ const constructorMethod = (app) => {
   app.use('/events', eventRoutes);
   app.use('/about', aboutRoutes);
   app.use('/login', loginRoutes);
-  app.use('/coffeeShop', coffeeShopRoutes);
   app.use('/review', reviewRoutes);
-  app.use('/wifi', wifiRoutes);
+  app.use('/location', locationRoutes);
   
   app.use('/public', staticDir('public'));
 
