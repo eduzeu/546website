@@ -2,10 +2,11 @@ import axios from "axios";
 import { ObjectId } from "mongodb";
 import { reviews } from "../config/mongoCollections.js";
 import { dbConnection } from "../config/mongoConnection.js";
+import * as helpers from "../helpers.js";
 
-const fetchFromOverpass = async (url, query) => {
+const fetchFromOverpass = async (query) => {
     try {
-        let { data } = await axios.post(url, query);
+        let { data } = await axios.post("https://overpass-api.de/api/interpreter", query);
         return data
     } catch (e) {
         if (e.code === 'ENOTFOUND')
@@ -25,7 +26,7 @@ export let fetchCoffeeShops = async () => {
     out body;
     `;
 
-    const rawData = await fetchFromOverpass("https://overpass-api.de/api/interpreter", query);
+    const rawData = await fetchFromOverpass(query);
 
     // While the below filtering could be expressed in the query
     // That extends the time it takes for it to be processed
@@ -47,6 +48,24 @@ export let fetchCoffeeShops = async () => {
     results.elements = filterByLatLong
 
     return results;
+}
+
+export const fetchCoffeeShopById = async (id) => {
+  helpers.validateNumber(id);
+
+  const query = `
+  [out:json];
+  node(${id});
+  out body;
+  `;
+
+  const rawData = await fetchCoffeeShops(query);
+
+  if (rawData.elements.length === 0) {
+    throw `No coffee shop found with id '${id}'.`;
+  }
+
+  return rawData.elements[0];
 }
 
 // console.log(await fetchCoffeeShops());
