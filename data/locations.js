@@ -1,6 +1,7 @@
 import axios from "axios";
 import { ObjectId } from "mongodb";
 import { reviews } from "../config/mongoCollections.js";
+import { dbConnection } from "../config/mongoConnection.js";
 
 const fetchFromOverpass = async (url, query) => {
     try {
@@ -47,6 +48,11 @@ export let fetchCoffeeShops = async () => {
 
     return results;
 }
+
+// console.log(await fetchCoffeeShops());
+
+const db = await dbConnection();
+const reviewCollection = await reviews();
 
 export const getWifiLocations = async () => {
   let response = await axios.get("https://data.cityofnewyork.us/resource/npnk-wrj8.json");

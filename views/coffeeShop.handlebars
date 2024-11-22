@@ -3,12 +3,16 @@
 </header>
 
 <main>
-    {{#each coffeeShops}}
-        <article class="coffeeShopDetail">
-            <strong>{{this.tags.name}}</strong>
-            <p>{{this.tags.addr:housenumber}} {{this.tags.addr:street}}, {{this.tags.addr:city}}{{#if this.tags.addr:postcode}},
-            {{this.tags.addr:postcode}}{{/if}}</p>
-            <p>Latitude: {{this.lat}} | Longitude: {{this.lon}}</p>
-        </article>
-    {{/each}}
+    <form>
+        <label>
+            Coffee
+        <input type="checkbox" id="coffeeCheckBox" name="cofee" />
+        </label>
+    </form>
+
+ <div id="coffeeLocations">
+  </div>
 </main>
+</main>
+
+<script src="/public/js/coffee.js"></script>
