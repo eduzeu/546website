@@ -1,8 +1,7 @@
-import { ObjectId } from "mongodb";
-import { dbConnection, closeConnection } from "../config/mongoConnection.js";
-import { wifiLocationsNewYork } from "../wifi.js";
-import { reviews } from "../config/mongoCollections.js";
 import axios from "axios";
+import { ObjectId } from "mongodb";
+import { reviews } from "../config/mongoCollections.js";
+import { dbConnection } from "../config/mongoConnection.js";
 
 const fetchFromOverpass = async (url, query) => {
     try {
