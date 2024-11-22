@@ -89,7 +89,7 @@ document.getElementById('coffeeCheckBox').addEventListener('change', async funct
 
           const coffeeReview = document.createElement('p');
           coffeeReview.style.marginTop = '10px';
-          coffeeReview.innerHTML = `<a id="review" href="#">Been here? Write a review</a>`;
+          coffeeReview.innerHTML = `<a class="review" href="#">Been here? Write a review</a>`;
 
           // Append cells to the row
           coffeeDetailsCell.appendChild(coffeeReview);

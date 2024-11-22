@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getWifiLocations, createWifiReview, getWifiReviews, fetchCoffeeShops} from "../data/locations.js";
+import { createWifiReview, fetchCoffeeShops, getWifiLocations, getWifiReviews } from "../data/locations.js";
 
 
 const router = Router()
@@ -9,7 +9,7 @@ router.route('/').get(async (req, res) => {
 });
 
 router.route('/home').get(async (req, res) => {
-  res.render('../views/home');
+  res.render('../views/home', { title: "WiFly NYC" });
 });
 
 router.route('/wifi-locations').get(async (req, res) =>{

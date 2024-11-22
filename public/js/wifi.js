@@ -92,7 +92,7 @@ document.getElementById('wifiCheckbox').addEventListener('change', async functio
     
           const wifiReview = document.createElement('p');
           wifiReview.style.marginTop = '10px';
-          wifiReview.innerHTML = `<a id="review" href="#">Been here? Write a review</a>`;
+          wifiReview.innerHTML = `<a class="review" href="#">Been here? Write a review</a>`;
 
           // Append cells to the row
           wifiDetailsCell.appendChild(wifiReview);
