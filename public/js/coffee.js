@@ -38,7 +38,8 @@ document.getElementById('coffeeCheckBox').addEventListener('change', async funct
             City: ${location.tags['addr:city']}<br>
             Latitude: ${location.lat}<br>
             Longitude: ${location.lon} <br>
-            Place id: ${location.id}
+            Place id: ${location.id}<br>
+            <a href="../coffeeShop/${location.id}">See More</a>
           `;
 
           const ratingsCell = document.createElement('td');

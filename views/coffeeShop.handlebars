@@ -1,18 +1,33 @@
 <header>
-    <h1>Find NYC Coffee Shops</h1>
+    <h1>{{ title }}</h1>
 </header>
 
 <main>
-    <form>
-        <label>
-            Coffee
-        <input type="checkbox" id="coffeeCheckBox" name="cofee" />
-        </label>
-    </form>
+    <section class="sectionSpacing">
+        <h2 class="coffeeDetailHeader">Location Details</h2>
+        <p class="noSpacing">{{ coffeeShop.tags.[addr:housenumber] }} {{ coffeeShop.tags.[addr:street] }}, {{ coffeeShop.tags.[addr:city]
+            }}</p>
+        <p class="noSpacing"><strong>Latitude:</strong> {{ coffeeShop.lat }}</p>
+        <p class="noSpacing"><strong>Longitude:</strong> {{ coffeeShop.lon }}</p>
+        <p class="noSpacing"><strong>Overall Rating:</strong> {{#if overallRating}}{{overallRating}} out of 5 stars{{else}}No Ratings Yet.{{/if}}</p>
+    </section>
 
- <div id="coffeeLocations">
-  </div>
-</main>
-</main>
+    <section>
+        <h2 class="coffeeDetailHeader">Reviews</h2>
+        {{#if review}}
+            {{#if review.rating.length}}
+                {{#each review.rating}}
+                    <div class="coffeeReview">
+                        <p class="noSpacing">{{this}} out of 5 stars</p>
+                        <p class="noSpacing">"{{lookup ../review.text @index}}"</p>
+                    </div>
+                {{/each}}
+            {{else}}
+            <p class="noSpacing">No Ratings Yet.</p>
+            {{/if}}
+        {{else}}
+        <p class="noSpacing">No Ratings Yet.</p>
+        {{/if}}
+    </section>
 
-<script src="/public/js/coffee.js"></script>
+</main>

@@ -1,5 +1,6 @@
 import { static as staticDir } from 'express';
 import aboutRoutes from './about.js';
+import coffeeShopRoutes from './coffeeShop.js';
 import eventRoutes from './events.js';
 import feedRoutes from './feed.js';
 import homeRoutes from './home.js';
@@ -17,6 +18,7 @@ const constructorMethod = (app) => {
   app.use('/login', loginRoutes);
   app.use('/review', reviewRoutes);
   app.use('/location', locationRoutes);
+  app.use('/coffeeShop', coffeeShopRoutes);
   
   app.use('/public', staticDir('public'));
 
