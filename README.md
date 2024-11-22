@@ -13,10 +13,6 @@ To get started with WiFly NYC locally, clone the repository and install the depe
 git clone https://github.com/eduzeu/546website.git
 cd 546website
 npm install
-npm install express
-npm install mongodb
-npm install axios
-npm install express-handlebars 
 ```
 
 ## Running the Application
