@@ -1,10 +1,10 @@
 document.getElementById('coffeeCheckBox').addEventListener('change', async function () {
   if (this.checked) {
     try {
-      const response = await fetch("/get-coffee");
+      const response = await fetch("../location/coffeeShop");
       const data = await response.json();
 
-      const reviews = await fetch('/get-review');
+      const reviews = await fetch('../review/coffee');
       const revData = await reviews.json();
 
       const locationContainer = document.getElementById('coffeeLocations');
@@ -38,7 +38,8 @@ document.getElementById('coffeeCheckBox').addEventListener('change', async funct
             City: ${location.tags['addr:city']}<br>
             Latitude: ${location.lat}<br>
             Longitude: ${location.lon} <br>
-            Place id: ${location.id}
+            Place id: ${location.id}<br>
+            <a href="../coffeeShop/${location.id}">See More</a>
           `;
 
           const ratingsCell = document.createElement('td');
@@ -107,7 +108,7 @@ document.getElementById('coffeeCheckBox').addEventListener('change', async funct
 
           coffeeReview.querySelector('a').addEventListener('click', (event) => {
             event.preventDefault();
-            createReview(location.id);
+            createReview(location.id, "coffee");
           });
         });
 

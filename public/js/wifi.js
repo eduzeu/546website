@@ -2,10 +2,10 @@
 document.getElementById('wifiCheckbox').addEventListener('change', async function () {
   if (this.checked) {
     try {
-      const response = await fetch('/wifi-locations');
+      const response = await fetch('../location/wifi');
       const data = await response.json();
 
-      const reviews = await fetch('/get-review');
+      const reviews = await fetch('../review/wifi');
       const revData = await reviews.json();
 
       const locationContainer = document.getElementById('wifiLocations');
@@ -112,7 +112,7 @@ document.getElementById('wifiCheckbox').addEventListener('change', async functio
 
           wifiReview.querySelector('a').addEventListener('click', () => {
             event.preventDefault();
-            createReview(location.place_id);
+            createReview(location.place_id, "wifi");
           });
         });
 
@@ -129,16 +129,17 @@ document.getElementById('wifiCheckbox').addEventListener('change', async functio
   }
 });
 
-const callReview = async (score, text, id) => {
+const callReview = async (score, text, id, type) => {
   const numericScore = Number(score);
   try {
-    const response = await fetch('/wifi-review', {
+    const response = await fetch('../review', {
       method: 'POST', 
       headers: {
         'Content-Type': 'application/json',   
       },
-      body: JSON.stringify({ rating: numericScore , text: text, id: id }),  
+      body: JSON.stringify({ rating: numericScore , text: text, id: id, type: type }),  
     });   
+    // console.log(response);
   } catch (error) {
     throw new Error('Failed to submit the review'); 
   }
@@ -181,7 +182,7 @@ const showReviews = (revs) => {
   document.body.appendChild(structure);
 };
 
-const createReview = (id) => {
+const createReview = (id, type) => {
   const structure = document.createElement('div');
   structure.className = 'modal';
 
@@ -214,7 +215,7 @@ const createReview = (id) => {
     let text = userText;
 
     try {
-       await callReview(score, text, id);
+       await callReview(score, text, id, type);
  
       document.body.removeChild(structure); // Close the review form
     } catch (error) {
