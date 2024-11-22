@@ -42,15 +42,6 @@ export const validateRating = (rating, ratingName) => {
   return rating;
 }
 
-export const validateStringId = (id, idName) => {
-  const strId = validateString(id, idName);
-
-  const numericId = Number(strId);
-  validateNumber(numericId, idName);
-
-  return strId;
-}
-
 export const validateNumericId = (id, idName) => {
   const strId = validateString(id, idName);
 
@@ -58,6 +49,16 @@ export const validateNumericId = (id, idName) => {
   validateNumber(numericId, idName);
 
   return numericId;
+}
+
+export const validateReviewType = (reviewType, typeName) => {
+  reviewType = validateString(reviewType, typeName);
+
+  if (reviewType !== "wifi" && reviewType !== "coffee") {
+    throw "Review type is invalid."
+  }
+
+  return reviewType
 }
 
 export const fetch = async (url) => {

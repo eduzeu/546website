@@ -4,7 +4,7 @@ document.getElementById('coffeeCheckBox').addEventListener('change', async funct
       const response = await fetch("../coffeeShop");
       const data = await response.json();
 
-      const reviews = await fetch('../review');
+      const reviews = await fetch('../review/coffee');
       const revData = await reviews.json();
 
       const locationContainer = document.getElementById('coffeeLocations');
@@ -107,7 +107,7 @@ document.getElementById('coffeeCheckBox').addEventListener('change', async funct
 
           coffeeReview.querySelector('a').addEventListener('click', (event) => {
             event.preventDefault();
-            createReview(location.id);
+            createReview(location.id, "coffee");
           });
         });
 
