@@ -15,9 +15,9 @@ app.set('view engine', 'handlebars');
 configRoutes(app);
 
 cloudinary.config({
-  cloud_name: 'dcvqjizwy',
-  api_key: '529917188571682',
-  api_secret: '<your_api_secret>' // Click 'View API Keys' above to copy your API secret
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET
 });
 
 app.listen(3000, () => {

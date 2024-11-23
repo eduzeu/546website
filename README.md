@@ -15,6 +15,13 @@ cd 546website
 npm install
 ```
 
+## Cloudinary API Key
+To use the image saving functionality of WiFly, you will need [Cloudinary](https://cloudinary.com) credentials.
+
+You can sign up for free and get the required API information.
+
+Rename `.env.example` to `.env` and update the values of `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, and `CLOUDINARY_API_SECRET` with your API key.
+
 ## Running the Application
 
 To run the app and get started with WiFly NYC, run the following command after installation: 
