@@ -68,6 +68,16 @@
             }
           }
         },
+        // trying finding by lat and long so i can remove marker
+        findMarkerByLatLong: function(lat,lng) {
+          var i = 0;
+          for(; i < this.markers.length; i++) {
+            var marker = this.markers[i];
+            if (marker.position.lat() === lat && marker.position.lng() === lng) {
+              return marker;
+            }
+          }
+        },
         _createMarker: function(opts) {
           opts.map = this.gMap;
           return new google.maps.Marker(opts);
