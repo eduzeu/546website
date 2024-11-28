@@ -1,4 +1,13 @@
-(function(window, google, mapster) {
+/**
+ * to convert to ES6 syntax: 
+ * 1. function declaration 
+ * 2. get rid of var -> const | let
+ * 3. arrow funcitons
+ * */
+
+// this works and is in ES6 syntax
+
+(async (window, google, mapster) => {
   
     mapster.MAP_OPTIONS = {
       center: {
@@ -18,5 +27,4 @@
         position: google.maps.ControlPosition.LEFT_BOTTOM
       }
     };
-    
-  }(window, google, window.Mapster || (window.Mapster = {})))
+  })(window, google, window.Mapster || (window.Mapster = {}))
