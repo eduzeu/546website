@@ -15,13 +15,30 @@
 
 }
 
+#coffeeLocations table {
+  text-align: center;
+  color: #EFEBCE;
+  background-color: #BB8588;
+}
+
 #wifiLocations table th,
 #wifiLocations table td {
   border: 1px solid #ddd;
   padding: 8px;
 }
 
+#coffeeLocations table th,
+#coffeeLocations table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+
 #wifiLocations table tr:hover {
+  background-color: #d68c8c;
+}
+
+#coffeeLocations table tr:hover {
   background-color: #d68c8c;
 }
 
@@ -29,4 +46,102 @@
 #wifiLocations table th:hover,
 #wifiLocations table td:hover {
   background-color: #d68c8c;
+}
+
+#coffeLocations table th:hover,
+#coffeLocationsn table td:hover {
+  background-color: #d68c8c;
+}
+
+
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #EFEBCE;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  width: 300px;
+  text-align: center;
+  z-index: 1000;
+}
+
+.exit-button {
+  margin-bottom: 10px;
+  padding: 5px 10px;
+  border: none;
+  background-color: #BB8588;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.review-container {
+  max-height: 200px;
+  overflow-y: auto;
+  padding: 10px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  border-radius: 5px;
+  height: 80px;
+}
+
+.review-container p:not(:last-child) {
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 5px;
+  margin-bottom: 5px;
+}
+
+.review-text {
+  margin: 10px 0;
+}
+
+.review-input {
+  margin-bottom: 10px;
+  width: 90%;
+}
+
+.review-textarea {
+  width: 90%;
+  margin-bottom: 10px;
+}
+
+.button-group {
+  margin-top: 10px;
+}
+
+.button-group button {
+  margin: 0 5px;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.submit-button {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.close-button {
+  background-color: #BB8588;
+  color: white;
+}
+
+.checkbox-container {
+  display: flex;
+  gap: 20px;
+}
+
+.coffeeReview {
+  padding-bottom: 10px;
+}
+
+h2.coffeeDetailHeader, p.noSpacing {
+  margin: 0
+}
+
+section.sectionSpacing {
+  margin-bottom: 20px;
 }

@@ -1,6 +1,4 @@
 import { Router } from "express";
-import { getWifiLocations, createWifiReview, getWifiReviews} from "../data/locations.js";
-
 
 const router = Router()
 
@@ -37,19 +35,7 @@ router.route('/wifi-review').post(async (req, res) => {
   }catch (e){
     res.status(500).json({error: e});
   }
+  res.render('../views/home', { title: "WiFly NYC" });
 });
-
-router.route('/get-review').get(async (req, res) => {
-  try{
-    const reviews = await getWifiReviews();
-    res.json(reviews);
-  }catch (e){
-    res.status(500).json({error: e});
-  }
-})
-
-
-
-
 
 export default router;
