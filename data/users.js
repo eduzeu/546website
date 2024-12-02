@@ -1,6 +1,5 @@
-import { ObjectId } from "mongodb";
-import { dbConnection, closeConnection } from "../config/mongoConnection.js";
-import {users} from "../config/mongoCollections.js"
+import { users } from "../config/mongoCollections.js";
+import { dbConnection } from "../config/mongoConnection.js";
 import * as helpers from "../helpers.js";
 import bcrypt from 'bcrypt';
 const saltRounds = 16;

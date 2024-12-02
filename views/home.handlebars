@@ -1,32 +1,29 @@
 <link rel="stylesheet" href="/public/css/style.css">
 <header> 
-  <h1> Welcome to WiFly NYC</h1>
+  <h1>Welcome to WiFly NYC</h1>
 </header>
 <main>
-  <p> Here we say who we are.</p>
+  <p>Here we say who we are.</p>
   
-  <form>
-    <label>
-      Wi-Fi
-      <input type="checkbox" id="wifiCheckbox" name="wifi" />
-    </label>
-  </form>
+  <div class="checkbox-container">
+    <form>
+      <label>
+        Wi-Fi
+        <input type="checkbox" id="wifiCheckbox" name="wifi" />
+      </label>
+    </form>
 
-  <div id="wifiLocations">
-    {{#if wifiLocations}}
-      <ul>
-        {{#each wifiLocations}}
-          <li>
-            <strong>{{lookup this 'Wifi name'}}</strong><br>
-            Place: {{this.Place}}<br>
-            Neighborhood: {{this.Neighborhood}}<br>
-            Latitude: {{this.Latitude}}<br>
-            Longitude: {{this.Longitude}}
-          </li>
-        {{/each}}
-      </ul>
-    {{/if}}
+    <form>
+      <label>
+        Coffee
+        <input type="checkbox" id="coffeeCheckBox" name="coffee" />
+      </label>
+    </form>
   </div>
+
+  <div id="wifiLocations"></div>
+  <div id="coffeeLocations"></div>
 </main>
 
 <script src="/public/js/wifi.js"></script>
+<script src="/public/js/coffee.js"></script>
