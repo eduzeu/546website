@@ -37,12 +37,19 @@
                             //     }
                             // },
                             icon: {
-                                url: 'https://i.imgur.com/xgIzHcA.png',
+                                // url: 'https://i.imgur.com/xgIzHcA.png',
+                                url: 'https://i.imgur.com/WOMqoD8.png',
                                 scaledSize: new google.maps.Size(28, 34), // Scaled size (width, height in pixels)
                                 origin: new google.maps.Point(0, 0), // Origin point (0, 0 by default)
                                 anchor: new google.maps.Point(16, 32) // Anchor point (adjust if needed)
                             },
-                            content: `Name: ${entry['Wifi name']}, Place: ${entry.Place}, Neighborhood: ${entry.Neighborhood}` // ADD THE NECESSARY THINGS HERE
+                            // content: `Name: ${entry['Wifi name']}, Place: ${entry.Place}, Neighborhood: ${entry.Neighborhood}` // ADD THE NECESSARY THINGS HERE
+                            content:
+                            `<div>
+                                <strong>Name:</strong> ${entry['Wifi name'] || "Unnamed Wifi Location"}<br>
+                                <strong>Place:</strong> ${entry.Place || "No place provided"}<br>
+                                <strong>Neighborhood:</strong> ${entry.Neighborhood || "No neighborhood provided"}<br>
+                            </div>`
                         });
                         wifi_markers.push(marker);
                     } else {
@@ -85,12 +92,19 @@
                             //     }
                             // },
                             icon: {
-                                url: 'https://i.imgur.com/Q0lGgUU.png',
+                                // url: 'https://i.imgur.com/Q0lGgUU.png',
+                                url: 'https://i.imgur.com/CU43Ymm.png',
                                 scaledSize: new google.maps.Size(28, 34), // Scaled size (width, height in pixels)
                                 origin: new google.maps.Point(0, 0), // Origin point (0, 0 by default)
                                 anchor: new google.maps.Point(16, 32) // Anchor point (adjust if needed)
                             },
-                            content: `Name: ${entry.tags.name}, Address: ${entry.tags["addr:street"] || "No address provided"}` // ADD THE NECESSARY THINGS HERE
+                            content: 
+                            `<div>
+                                <strong>Name:</strong> ${entry.tags.name || "Unnamed Coffee Shop"}<br>
+                                <strong>Address:</strong> ${entry.tags["addr:street"] || "No address provided"}<br>
+                                <a href="/coffeeShop/${entry.id}" target="_blank">View Details</a>
+                            </div>`
+                            // content: `Name: ${entry.tags.name}, Address: ${entry.tags["addr:street"] || "No address provided"}` // ADD THE NECESSARY THINGS HERE
                         });
                         coffee_markers.push(marker);
                     } else {
