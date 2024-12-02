@@ -4,10 +4,6 @@ import { getWifiLocations } from "../data/locations.js";
 const router = Router()
 
 router.route('/').get(async (req, res) => {
-  res.render('../views/account');
-});
-
-router.route('/home').get(async (req, res) => {
   res.render('../views/home');
 });
 

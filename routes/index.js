@@ -7,14 +7,13 @@ import loginRoutes from './login.js';
 import homeRoutes from './home.js';
 
 const constructorMethod = (app) => {
-
-  app.use("/",homeRoutes );
+  app.use("/", loginRoutes);
+  app.use('/home', homeRoutes);
   app.use('/feed', feedRoutes);
   app.use('/events', eventRoutes);
   app.use('/about', aboutRoutes);
-  app.use('/login', loginRoutes);
+  app.use('/newAccount', loginRoutes);
   app.use('/locate', locateRoutes);
-  
   app.use('/public', staticDir('public'));
   app.use('*', (req, res) => {
     res.status(404).json({error: 'Resource not found'});
