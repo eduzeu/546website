@@ -7,6 +7,7 @@ import homeRoutes from './home.js';
 import locationRoutes from './location.js';
 import loginRoutes from './login.js';
 import reviewRoutes from './review.js';
+import mapRoutes from './map.js';
 
 const constructorMethod = (app) => {
 
@@ -19,6 +20,7 @@ const constructorMethod = (app) => {
   app.use('/review', reviewRoutes);
   app.use('/location', locationRoutes);
   app.use('/coffeeShop', coffeeShopRoutes);
+  app.use('/map', mapRoutes);
   
   app.use('/public', staticDir('public'));
 
