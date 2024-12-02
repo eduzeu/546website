@@ -38,7 +38,7 @@
                             // },
                             icon: {
                                 // url: 'https://i.imgur.com/xgIzHcA.png',
-                                url: 'https://i.imgur.com/WOMqoD8.png',
+                                url: 'https://i.imgur.com/pDk8HOg.png',
                                 scaledSize: new google.maps.Size(28, 34), // Scaled size (width, height in pixels)
                                 origin: new google.maps.Point(0, 0), // Origin point (0, 0 by default)
                                 anchor: new google.maps.Point(16, 32) // Anchor point (adjust if needed)
