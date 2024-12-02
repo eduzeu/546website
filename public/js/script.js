@@ -15,6 +15,10 @@
 
     document.getElementById('wifi-checkbox').addEventListener('change', async function () {
         if (this.checked) {
+            coffee_markers.forEach(marker => {
+                map._removeMarker(marker);
+            });
+            coffee_markers = [];
             try {
                 console.log("Fetching WiFi data...");
                 const response = await fetch(wifi_url);
@@ -65,6 +69,10 @@
     });
     document.getElementById('coffee-checkbox').addEventListener('change', async function () {
         if (this.checked) {
+            wifi_markers.forEach(marker => {
+                map._removeMarker(marker);
+            });
+            wifi_markers = [];
             try
             {
                 console.log("Fetching Coffee Shop data...");

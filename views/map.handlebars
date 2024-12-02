@@ -18,13 +18,14 @@
 
                 <fieldset>
                     <legend>Filters:</legend>
-                    <label><input id="coffee-checkbox" type="checkbox" name="filter" value="coffee"> Coffee</label>
-                    <label><input id="wifi-checkbox" type="checkbox" name="filter" value="wifi"> Wifi</label>
+                    <label><input id="coffee-checkbox" type="radio" name="filter" value="coffee"> Coffee</label>
+                    <label><input id="wifi-checkbox" type="radio" name="filter" value="wifi"> Wifi</label>
                 </fieldset>
             </section>
 
             <section class="places-feed">
-                here eduardo and chris's stuff will go 
+                <div id="wifiLocations"></div>
+                <div id="coffeeLocations"></div>
             </section>
         </div>
         <aside class="sidebar">
@@ -50,5 +51,7 @@
     <script src="/public/js/Mapster.js"></script>
     <script src="/public/js/map-options.js"></script>
     <script src="/public/js/script.js"></script>
+    <script src="/public/js/wifi.js"></script>
+    <script src="/public/js/coffee.js"></script>
     {{!-- <script src="/public/js/map-display.js"></script> --}}
 </body>

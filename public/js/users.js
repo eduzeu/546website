@@ -28,22 +28,18 @@ if (form) {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(credentials),
             });
-
             if (!response.ok) {
                 const result = await response.json();
                 throw new Error(result.error || 'Something went wrong');
             }
-
             if (isRegistration) {
-                window.location.href = '/'; // Redirect to login page after registration
+                window.location.href = '/';
             } else {
-                window.location.href = '/home'; // Redirect to dashboard after login
+                window.location.href = '/home';
             }
         } catch (err) {
-            // Display error message
             error.textContent = err.message;
         } finally {
-            // Clear input fields
             username.value = '';
             password.value = '';
             if (isRegistration) email.value = '';
