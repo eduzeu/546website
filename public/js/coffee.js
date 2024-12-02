@@ -1,6 +1,7 @@
-document.getElementById('coffeeCheckBox').addEventListener('change', async function () {
+document.getElementById('coffee-checkbox').addEventListener('change', async function () {
   if (this.checked) {
     try {
+      document.getElementById('wifiLocations').innerHTML = '';
       const response = await fetch("../location/coffeeShop");
       const data = await response.json();
 
@@ -86,7 +87,7 @@ document.getElementById('coffeeCheckBox').addEventListener('change', async funct
 
           const seeReviews = document.createElement('p');
           seeReviews.style.marginTop = '10px';
-          seeReviews.innerHTML = `<a href="/reviews/${location.id}">See Reviews</a>`;
+          // seeReviews.innerHTML = `<a href="/reviews/${location.id}">See Reviews</a>`;
 
           const coffeeReview = document.createElement('p');
           coffeeReview.style.marginTop = '10px';
@@ -101,10 +102,10 @@ document.getElementById('coffeeCheckBox').addEventListener('change', async funct
           // Append row to the table body
           tbody.appendChild(row);
 
-          seeReviews.querySelector('a').addEventListener('click', (event) => {
-            event.preventDefault();
-            showReviews(allReviews);
-          });
+          // seeReviews.querySelector('a').addEventListener('click', (event) => {
+          //   event.preventDefault();
+          //   showReviews(allReviews);
+          // });
 
           coffeeReview.querySelector('a').addEventListener('click', (event) => {
             event.preventDefault();
