@@ -1,22 +1,9 @@
 
-/**
- * to convert to ES6 syntax: 
- * 1. function declaration 
- * 2. get rid of var -> const | let
- * 3. arrow funcitons
- * 4. use fetch 
- * */
-
 // this works and is in ES6 syntax
-
-// import { getWifiLocations , fetchCoffeeShops } from "../../data/locations.js";
-
-// const wifiLocations = await getWifiLocations();
-// const coffeeLocations = await fetchCoffeeShops();
-
 (async (window, mapster) => {
     // map options
-    const wifi_url = 'https://data.cityofnewyork.us/resource/npnk-wrj8.json';
+    const wifi_url = '/location/wifi';
+    const coffee_url = '/location/coffeeShop';
 
     const options = mapster.MAP_OPTIONS;
     const element = document.getElementById('map-canvas');
@@ -29,28 +16,33 @@
     document.getElementById('wifi-checkbox').addEventListener('change', async function () {
         if (this.checked) {
             try {
+                console.log("Fetching WiFi data...");
                 const response = await fetch(wifi_url);
                 const data = await response.json();
-                data.forEach(entry => {
-                    if (entry.latitude && entry.longitude) {
+                console.log("WiFi data fetched successfully:", data);
+
+                const wifi_entries = Object.values(data);
+
+                wifi_entries.forEach(entry => {
+                    if (entry.Latitude && entry.Longitude) {
                         let marker = map.addMarker({
-                            lat: parseFloat(entry.latitude),
-                            lng: parseFloat(entry.longitude),
-                            title: entry.public_space_open_space_name || "Unnamed Location",
-                            event: {
-                                name: "click",
-                                callback: function () {
-                                    alert("You clicked on " + (entry.public_space_open_space_name || "Unnamed Location"));
-                                }
-                            },
+                            lat: parseFloat(entry.Latitude),
+                            lng: parseFloat(entry.Longitude),
+                            title: entry['Wifi name'] || "Unnamed Location",
+                            // FIX EVENT
+                            // event: {
+                            //     name: "click",
+                            //     callback: function () {
+                            //         alert("You clicked on " + (entry['Wifi name'] || "Unnamed Location"));
+                            //     }
+                            // },
                             icon: {
-                                // url: 'https://cdn4.iconfinder.com/data/icons/small-n-flat/24/map-marker-512.png', // URL of the custom icon
-                                url: 'https://cdn-icons-png.flaticon.com/128/14090/14090489.png',
-                                scaledSize: new google.maps.Size(32, 32), // Scaled size (width, height in pixels)
+                                url: 'https://i.imgur.com/xgIzHcA.png',
+                                scaledSize: new google.maps.Size(28, 34), // Scaled size (width, height in pixels)
                                 origin: new google.maps.Point(0, 0), // Origin point (0, 0 by default)
                                 anchor: new google.maps.Point(16, 32) // Anchor point (adjust if needed)
                             },
-                            content: `space type: ${entry.public_space_open_space}` // ADD THE NECESSARY THINGS HERE
+                            content: `Name: ${entry['Wifi name']}, Place: ${entry.Place}, Neighborhood: ${entry.Neighborhood}` // ADD THE NECESSARY THINGS HERE
                         });
                         wifi_markers.push(marker);
                     } else {
@@ -75,45 +67,47 @@
         if (this.checked) {
             try
             {
-                const response = await fetch(wifi_url);
+                console.log("Fetching Coffee Shop data...");
+                const response = await fetch(coffee_url);
                 const data = await response.json();
-                data.forEach(entry => {
-                    if (entry.latitude && entry.longitude) {
+                console.log("Coffee Shop data fetched successfully:", data);
+                data.elements.forEach(entry => {
+                    if (entry.lat && entry.lon) {
                         let marker = map.addMarker({
-                            lat: parseFloat(entry.latitude),
-                            lng: parseFloat(entry.longitude),
-                            title: entry.public_space_open_space_name || "Unnamed Location",
-                            event: {
-                                name: "click",
-                                callback: function () {
-                                    alert("You clicked on " + (entry.public_space_open_space_name || "Unnamed Location"));
-                                }
-                            },
+                            lat: parseFloat(entry.lat),
+                            lng: parseFloat(entry.lon),
+                            title: entry.tags.name || "Unnamed Coffee Shop",
+                            // TODO: FIX EVENT
+                            // event: {
+                            //     name: "click",
+                            //     callback: function () {
+                            //         alert("You clicked on " + (entry.tags.name || "Unnamed Coffee Shop"));
+                            //     }
+                            // },
                             icon: {
-                                // url: 'https://cdn4.iconfinder.com/data/icons/small-n-flat/24/map-marker-512.png', // URL of the custom icon
-                                url: 'https://cdn-icons-png.flaticon.com/128/14090/14090489.png',
-                                scaledSize: new google.maps.Size(32, 32), // Scaled size (width, height in pixels)
+                                url: 'https://i.imgur.com/Q0lGgUU.png',
+                                scaledSize: new google.maps.Size(28, 34), // Scaled size (width, height in pixels)
                                 origin: new google.maps.Point(0, 0), // Origin point (0, 0 by default)
                                 anchor: new google.maps.Point(16, 32) // Anchor point (adjust if needed)
                             },
-                            content: `space type: ${entry.public_space_open_space}` // ADD THE NECESSARY THINGS HERE
+                            content: `Name: ${entry.tags.name}, Address: ${entry.tags["addr:street"] || "No address provided"}` // ADD THE NECESSARY THINGS HERE
                         });
-                        wifi_markers.push(marker);
+                        coffee_markers.push(marker);
                     } else {
                         console.warn("Missing coordinates for entry:", entry);
                     }
                 });
             }catch(error)
             {
-                console.error("Error fetching WiFi locations:", error);
+                console.error("Error fetching Coffee Shop locations:", error);
             }
         }
         else
         {
-            wifi_markers.forEach(marker => {
+            coffee_markers.forEach(marker => {
                 map._removeMarker(marker);
             });
-            wifi_markers = [];
+            coffee_markers = [];
         }
     });
 
