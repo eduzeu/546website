@@ -7,11 +7,12 @@ import homeRoutes from './home.js';
 import locationRoutes from './location.js';
 import loginRoutes from './login.js';
 import reviewRoutes from './review.js';
+import mapRoutes from './map.js';
 
 const constructorMethod = (app) => {
 
   app.use("/", loginRoutes);
-  app.use("/home", homeRoutes);
+  // app.use("/home", homeRoutes);
   app.use('/feed', feedRoutes);
   app.use('/events', eventRoutes);
   app.use('/about', aboutRoutes);
@@ -19,6 +20,7 @@ const constructorMethod = (app) => {
   app.use('/review', reviewRoutes);
   app.use('/location', locationRoutes);
   app.use('/coffeeShop', coffeeShopRoutes);
+  app.use('/home', mapRoutes);
   
   app.use('/public', staticDir('public'));
 
