@@ -73,7 +73,7 @@ export const getPlaceOfTheDay = async () => {
   const time = Date.now();
 
   if(!store || time >= storeTime){
-    let wifiObject = await getWifiLocations();
+    let wifiObject = await fetchCoffeeShops();
     let wifiArray = Object.values(wifiObject);
     let random = Math.floor(Math.random() * wifiArray.length);
     let response = wifiArray[random];

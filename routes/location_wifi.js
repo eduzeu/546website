@@ -17,7 +17,7 @@ router.route('/')
 router.route('/place')
     .get(async(req, res) => {
         try{
-            const placeOfDay = await getPlaceOfTheDay();
+            const placeOfDay = await fetchCoffeeShops();
             // console.log(placeOfDay)
             res.json(placeOfDay);
         }catch(e){

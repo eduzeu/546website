@@ -242,24 +242,37 @@ const createReview = (id, type) => {
   document.getElementById('closeButton').addEventListener('click', () => {
     document.body.removeChild(structure); // Close the review form
   });
+
+
 };
 
 const displayPlaceOfTheDay = async () => {
-  try{
-    const response = await fetch('../wifi/place');
-    if(!response.ok){
-      throw new Error("Failed to fetch place of the day.");
+  try {
+    let store = JSON.parse(localStorage.getItem("placeOfTheDay"));
+    let storeTime = localStorage.getItem("nextUpdateTime");
+    const time = Date.now();
+
+    storeTime = parseInt(storeTime, 10);
+
+    if (!store || !storeTime || time >= storeTime) {
+      const response = await fetch('../location/wifi/place');
+      const placeInfo = await response.json();
+      console.log(placeInfo);
+
+      localStorage.setItem('placeOfTheDay', JSON.stringify(placeInfo));
+      localStorage.setItem('nextUpdateTime', (time + 24 * 60 * 60 * 1000).toString());
+      
+      store = placeInfo;
     }
-    const placeOfDay = await response.json();
-    console.log(placeOfDay)
-
-    document.getElementById('place-name').textContent = placeOfDay.name || "No name available";
-    document.getElementById('place-address').textContent = placeOfDay.address || "No address available";
-    document.getElementById('place-type').textContent = placeOfDay.type || "No type available";
-    document.getElementById('place-info-link').setAttribute('href', `/place-info/${placeOfDay.id}`);
-
-  }catch(e){
-    console.error("Error fetching place of day.")
+  
+    document.getElementById('place-name').textContent = store.Neighborhood || "No name available";
+    document.getElementById('place-address').textContent = store.Place || "No address available";
+    document.getElementById('place-type').textContent = "Wifi";
+ 
+  } catch(e) {
+    console.error('Error displaying place of the day:', e);
   }
 }
-window.onload = displayPlaceOfTheDay
+
+// Attach the function to window load
+window.onload = displayPlaceOfTheDay;
