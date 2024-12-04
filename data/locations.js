@@ -1,4 +1,8 @@
 import * as helpers from "../helpers.js";
+import { LocalStorage } from 'node-localstorage';
+
+const localStorage = new LocalStorage('./scratch');
+
 
 export let fetchCoffeeShops = async () => {
   const query = `
@@ -62,3 +66,29 @@ export const getWifiLocations = async () => {
   }
   return wifiInfo;
 };
+
+export const getPlaceOfTheDay = async () => { 
+  let store = JSON.parse(localStorage.getItem("placeOfTheDay"));
+  let storeTime = localStorage.getItem("nextUpdatedTime");
+  const time = Date.now();
+
+  if(!store || time >= storeTime){
+    let wifiObject = await getWifiLocations();
+    let wifiArray = Object.values(wifiObject);
+    let random = Math.floor(Math.random() * wifiArray.length);
+    let response = wifiArray[random];
+
+    localStorage.setItem('placeOfTheDay', JSON.stringify(response));
+    localStorage.setItem('nextUpdateTime', time + 24 * 60 * 60 * 1000);
+
+    return response;
+
+  }
+
+  return store;
+
+};
+
+// (async () => {
+//   console.log(await getPlaceOfTheDay());
+// })();

@@ -21,8 +21,8 @@ document.getElementById('wifi-checkbox').addEventListener('change', async functi
         const thead = document.createElement('thead');
         thead.innerHTML = `
           <tr>
-            <th style="border: 1px solid black; padding: 10px;">Wi-Fi Location</th>
-            <th style="border: 1px solid black; padding: 10px;">Ratings & Reviews</th>
+            <th style="border: 1px solid black; padding: 20px;">Wi-Fi Location</th>
+            <th style="border: 1px solid black; padding: 20px;">Ratings & Reviews</th>
           </tr>
         `;
         table.appendChild(thead);
@@ -243,3 +243,23 @@ const createReview = (id, type) => {
     document.body.removeChild(structure); // Close the review form
   });
 };
+
+const displayPlaceOfTheDay = async () => {
+  try{
+    const response = await fetch('../wifi/place');
+    if(!response.ok){
+      throw new Error("Failed to fetch place of the day.");
+    }
+    const placeOfDay = await response.json();
+    console.log(placeOfDay)
+
+    document.getElementById('place-name').textContent = placeOfDay.name || "No name available";
+    document.getElementById('place-address').textContent = placeOfDay.address || "No address available";
+    document.getElementById('place-type').textContent = placeOfDay.type || "No type available";
+    document.getElementById('place-info-link').setAttribute('href', `/place-info/${placeOfDay.id}`);
+
+  }catch(e){
+    console.error("Error fetching place of day.")
+  }
+}
+window.onload = displayPlaceOfTheDay

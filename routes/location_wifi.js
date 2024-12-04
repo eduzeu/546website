@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { getWifiLocations } from "../data/locations.js";
+import { getPlaceOfTheDay } from "../data/locations.js";
 
 const router = Router()
 
@@ -10,6 +11,17 @@ router.route('/')
             res.json(wifiLocations);
         } catch (e) {
             res.status(500).json({ error: 'Failed to fetch Wi-Fi locations' });
+        }
+    });
+
+router.route('/place')
+    .get(async(req, res) => {
+        try{
+            const placeOfDay = await getPlaceOfTheDay();
+            // console.log(placeOfDay)
+            res.json(placeOfDay);
+        }catch(e){
+            res.status(500).json({error: 'Failed to fetch place of the day.'})
         }
     });
 
