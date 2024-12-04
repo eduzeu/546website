@@ -1,8 +1,32 @@
+<link rel="stylesheet" href="/public/css/styles.css">
 <header> 
-  <h1> Welcome to WiFly NYC</h1>
+  <h1>Welcome to WiFly NYC</h1>
 </header>
 <main>
+  <p>Here we say who we are.</p>
+  
+  <div class="checkbox-container">
+    <form>
+      <label>
+        Wi-Fi
+        <input type="checkbox" id="wifiCheckbox" name="wifi" />
+      </label>
+    </form>
+
+    <form>
+      <label>
+        Coffee
+        <input type="checkbox" id="coffeeCheckBox" name="coffee" />
+      </label>
+    </form>
+  </div>
+
+  <div id="wifiLocations"></div>
+  <div id="coffeeLocations"></div>
   <p> Here we say who we are.</p>
 
   <a href="events">events Page</a>
 </main>
+
+<script src="/public/js/wifi.js"></script>
+<script src="/public/js/coffee.js"></script>

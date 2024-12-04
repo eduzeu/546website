@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feed Page</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Feed Page</h1>
+    </header>
+    <main>
+        <aside class="sidebar">
+            <div class="map">
+                <p>Map goes here</p>
+            </div>
+            <section class="place-of-the-day">
+                <h2>Place of the Day</h2>
+                <p>Name: Amazing Spot</p>
+                <p>Address: 123 Somewhere St.</p>
+                <p>Type: Park</p>
+                <p>Ratings: ★★★★☆</p>
+            </section>
+            <div class="user-feed-link">
+                <a href="#">Go to User Feed</a>
+            </div>
+        </aside>
+        <div class="content">
+            <section class="input-section">
+                <label for="starting-address">Starting Address:</label>
+                <input type="text" id="starting-address" placeholder="Enter starting address">
+
+                <label for="radius">Radius (miles):</label>
+                <select id="radius">
+                    <option value="5">5 miles</option>
+                    <option value="10">10 miles</option>
+                    <option value="20">20 miles</option>
+                </select>
+
+                <fieldset>
+                    <legend>Filters:</legend>
+                    <label><input type="checkbox" name="filter" value="coffee"> Coffee</label>
+                    <label><input type="checkbox" name="filter" value="wifi"> Wifi</label>
+                    <label><input type="checkbox" name="filter" value="park"> Park</label>
+                    <label><input type="checkbox" name="filter" value="event"> Event</label>
+                </fieldset>
+            </section>
+
+            <section class="places-feed">
+                <div class="place-item">
+                    <h3>Place Name 1</h3>
+                    <p>Address: 456 Anywhere Ave.</p>
+                    <p>Type: Museum</p>
+                    <p>Reviews: 12</p>
+                </div>
+                <div class="place-item">
+                    <h3>Place Name 2</h3>
+                    <p>Address: 789 Everywhere Blvd.</p>
+                    <p>Type: Coffee Shop</p>
+                    <p>Reviews: 8</p>
+                </div>
+                <div class="place-item">
+                    <h3>Place Name 3</h3>
+                    <p>Address: poopy Street.</p>
+                    <p>Type: Coffee Shop</p>
+                    <p>Reviews: 10  </p>
+                </div>
+            </section>
+        </div>
+    </main>
+    <footer>
+        <p>© 2024 Feed Page</p>
+    </footer>
+</body>
+</html>
