@@ -1,0 +1,52 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    
+    <meta charset="utf-8">
+    <title>{{title}}</title>
+    <link rel="stylesheet" type ="text/css" href ="../public/css/events.css">
+  </head>
+  <body>
+    <h1> {{title}} </h1>    
+
+    <header>
+        <!-- https://www.w3schools.com/howto/howto_css_dropdown_navbar.asp  -->
+        <div class="navbar">
+        <a href="/">Home Page</a>
+        <div class="dropdown">
+
+          <button class="dropbtn">Events
+            <i class="fa fa-caret-down"></i>
+          </button>
+
+          <div class="dropdown-content">
+            <a href="/events">All Events</a>
+            <a href="/events/city">Search by Borough</a>
+            <a href="/events/date">Search by Date</a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main> 
+
+      <div>
+        {{#each events}}
+          <div class="event">
+            <ul> 
+              <li><h4>{{this.event_name}}</h2>
+                  <p>Hosts: {{this.event_agency}} </p>
+                  <p>Borough: {{this.event_borough}}</p>
+                  <p>Date: {{this.start_date_time}}</p>
+                  <p>Location: {{this.event_location}}</p>
+                  <p>Type: {{this.event_type}}</p>
+              </li>
+            </ul>
+          </div>
+        {{/each}}
+      </div>
+    </main>
+  </body>
+</html>
