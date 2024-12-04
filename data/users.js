@@ -10,6 +10,8 @@ export const addNewUser = async (username, email, password) => {
     username = helpers.stringChecker(username);
     email = helpers.stringChecker(email);
     password = helpers.stringChecker(password);
+    email = email.toLowerCase();
+    username = username.toLowerCase();
     const eUser = await userCollection.findOne({email: email});
     const uUser = await userCollection.findOne({username: username});
     if(eUser || uUser){
@@ -39,5 +41,11 @@ export const checkUser = async (username, password) => {
     if(!user){
         throw "Invalid Login";
     }
-    return bcrypt.compare(password, user.password);
+    let isValid = bcrypt.compare(password, user.password);
+    if(isValid){
+        return user._id;
+    }
+    else{
+        throw 'Invalid Login';
+    }
 }
