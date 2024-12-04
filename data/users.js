@@ -7,9 +7,9 @@ const saltRounds = 16;
 const db = await dbConnection();
 const userCollection = await users();
 export const addNewUser = async (username, email, password) => {
-    username = helpers.stringChecker(username);
-    email = helpers.stringChecker(email);
-    password = helpers.stringChecker(password);
+    username = helpers.validateString(username);
+    email = helpers.validateString(email);
+    password = helpers.validateString(password);
     const eUser = await userCollection.findOne({email: email});
     const uUser = await userCollection.findOne({username: username});
     if(eUser || uUser){
@@ -32,8 +32,8 @@ export const addNewUser = async (username, email, password) => {
     return insertInfo;
 };
 export const checkUser = async (username, password) => {
-    username = helpers.stringChecker(username);
-    password = helpers.stringChecker(password);
+    username = helpers.validateString(username);
+    password = helpers.validateString(password);
     username = username.toLowerCase();
     const user = await userCollection.findOne({username: username});
     if(!user){
