@@ -1,15 +1,13 @@
 import { users } from "../config/mongoCollections.js";
-import { dbConnection } from "../config/mongoConnection.js";
 import * as helpers from "../helpers.js";
 import bcrypt from 'bcrypt';
 const saltRounds = 16;
 
-const db = await dbConnection();
-const userCollection = await users();
 export const addNewUser = async (username, email, password) => {
     username = helpers.validateString(username);
     email = helpers.validateString(email);
     password = helpers.validateString(password);
+    const userCollection = await users();
     const eUser = await userCollection.findOne({email: email});
     const uUser = await userCollection.findOne({username: username});
     if(eUser || uUser){
@@ -35,6 +33,7 @@ export const checkUser = async (username, password) => {
     username = helpers.validateString(username);
     password = helpers.validateString(password);
     username = username.toLowerCase();
+    const userCollection = await users();
     const user = await userCollection.findOne({username: username});
     if(!user){
         throw "Invalid Login";
