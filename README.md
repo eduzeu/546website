@@ -13,11 +13,14 @@ To get started with WiFly NYC locally, clone the repository and install the depe
 git clone https://github.com/eduzeu/546website.git
 cd 546website
 npm install
-npm install express
-npm install mongodb
-npm install axios
-npm install express-handlebars 
 ```
+
+## Cloudinary API Credentials
+To use the image saving functionality of WiFly, you will need [Cloudinary](https://cloudinary.com) credentials.
+
+You can sign up for free and get the required API information.
+
+Rename `.env.example` to `.env` and update the values of `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, and `CLOUDINARY_API_SECRET` with your credentials.
 
 ## Running the Application
 
