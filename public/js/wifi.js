@@ -44,6 +44,7 @@ document.getElementById('wifi-checkbox').addEventListener('change', async functi
           `;
           const ratingsCell = document.createElement('td');
           ratingsCell.style.border = '1px solid black';
+          ratingsCell.setAttribute('data-location-id',location.place_id);
 
           const locationReviews = revData.filter(rev => rev.id === location.place_id);
         
@@ -144,6 +145,64 @@ const callReview = async (score, text, id, type) => {
     throw new Error('Failed to submit the review'); 
   }
 };
+const updateReview = async (id) => {
+  try {
+    const data = await fetch(`../review/wifi/${id}`);
+    const reviews = await data.json();
+  
+    console.log("Reviews data:", reviews); // Log the structure of the reviews
+  
+    const locationRow = document.getElementById('wifiLocations').querySelector(`td[data-location-id="${id}"]`); // Target the correct location by place_id
+  
+    if (locationRow) {
+      const reviewCell = locationRow;
+  
+      // Initialize rating calculation variables
+      let total = 0;
+      let ratingCount = 0;
+  
+      // Handle the reviews object: reviews.rating is an array of ratings
+      if (Array.isArray(reviews.rating)) {
+        reviews.rating.forEach((rating) => {
+          total += rating;
+          ratingCount++;
+        });
+      } else {
+        console.error("Reviews.rating is not an array.");
+        return; // Exit early if reviews.rating is not an array
+      }
+  
+      // Update the rating display
+      if (ratingCount > 0) {
+        const avg = total / ratingCount;
+        reviewCell.innerHTML = `
+          <strong>Average Rating:</strong> ${avg.toFixed(1)} (${ratingCount} reviews)<br>
+        `;
+      } else {
+        reviewCell.innerHTML = `
+          <strong>Rating:</strong> Not rated yet<br>
+          <strong>Reviews:</strong> No reviews yet
+        `;
+      }
+  
+     const seeReviews = document.createElement('p');
+    seeReviews.style.marginTop = '10px';
+    seeReviews.innerHTML =  `<a href="/reviews/${id}">See Reviews</a>`;
+    reviewCell.appendChild(seeReviews);
+    
+     seeReviews.querySelector('a').addEventListener('click', (event) => {
+      event.preventDefault();
+      showReviews(reviews.text); // Pass the reviews for this location
+  });
+  
+    } else {
+      console.error(`Couldn't find row for location ID: ${id}`);
+    }
+  } catch (e) {
+    console.error("Error updating reviews:", e);
+  }
+};
+  
 
 const showReviews = (revs) => {
   const structure = document.createElement('div');
@@ -233,6 +292,7 @@ const createReview = (id, type) => {
     try {
       await callReview(selectedRating, userText, id, type);
       document.body.removeChild(structure); // Close the review form
+      updateReview(id);
     } catch (error) {
       console.error('Error submitting review:', error);
       alert('There was an error submitting your review.');
