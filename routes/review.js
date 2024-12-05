@@ -22,8 +22,8 @@ router.route('/')
         }
 
         try {
-            const wifiReview = await createReview(score, text, id, reviewType);
-            return res.json(wifiReview);
+            const review = await createReview(score, text, id, reviewType);
+            return res.json(review);
 
         } catch (e) {
             return res.status(500).json({ error: e });
