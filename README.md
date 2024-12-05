@@ -15,6 +15,12 @@ cd 546website
 npm install
 ```
 
+If it doesn't run on the first try, then do the following command on the terminal: 
+```bash
+npm i
+```
+
+
 ## Cloudinary API Credentials
 To use the image saving functionality of WiFly, you will need [Cloudinary](https://cloudinary.com) credentials.
 
