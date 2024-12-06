@@ -7,7 +7,19 @@ import * as uuid from "uuid";
 const router = Router()
 
 router.route('/').get(async (req, res) => {
-    res.render('../views/account');
+    try{
+        let token;
+        try{
+          token = req.cookies["session_token"];//gets the sessionId
+        } catch{
+          throw 'no cookie';
+        }
+        token = await sessionTokenFunctions.sessionChecker(token);//checks if sessionId is valid
+        res.redirect('/home/');
+    } catch(e){
+        console.log(e);
+        res.render('../views/account');
+    }
 })
 
 router.route('/').post(async (req, res) => {
@@ -18,7 +30,7 @@ router.route('/').post(async (req, res) => {
         const expiresAt = new Date();
         expiresAt.setMinutes(expiresAt.getMinutes() + 30);
         const token = await sessionTokenFunctions.addSessionToken(sessionId, user, expiresAt);
-        res.cookie("session_token", sessionId, {maxAge: expiresAt});
+        res.cookie("session_token", sessionId, {maxAge: 30*60*1000, httpOnly: true});
         res.status(200).json(true);
     } catch (error) {
         res.status(400).json({ error: error.toString() });
