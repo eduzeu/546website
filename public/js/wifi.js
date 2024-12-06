@@ -185,16 +185,18 @@ const updateReview = async (id, type) => {
         `;
       }
 
-      const seeReviews = document.createElement('p');
-      seeReviews.style.marginTop = '10px';
-      seeReviews.innerHTML = `<a href="/reviews/${id}">See Reviews</a>`;
-      reviewCell.appendChild(seeReviews);
-
-      seeReviews.querySelector('a').addEventListener('click', (event) => {
-        event.preventDefault();
-        showReviews(reviews.text); // Pass the reviews for this location
-      });
-
+      if(type === 'wifi'){
+        const seeReviews = document.createElement('p');
+        seeReviews.style.marginTop = '10px';
+        seeReviews.innerHTML = `<a href="/reviews/${id}">See Reviews</a>`;
+        reviewCell.appendChild(seeReviews);
+        seeReviews.querySelector('a').addEventListener('click', (event) => {
+          event.preventDefault();
+          showReviews(reviews.text); // Pass the reviews for this location
+        });
+      }
+     
+     
     } else {
       console.error(`Couldn't find row for location ID: ${id}`);
     }

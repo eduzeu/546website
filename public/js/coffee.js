@@ -85,29 +85,20 @@ document.getElementById('coffee-checkbox').addEventListener('change', async func
               <strong>Reviews:</strong> No reviews yet
             `;
           }
-
-          const seeReviews = document.createElement('p');
-          seeReviews.style.marginTop = '10px';
-          // seeReviews.innerHTML = `<a href="/reviews/${location.id}">See Reviews</a>`;
-
+          
           const coffeeReview = document.createElement('p');
           coffeeReview.style.marginTop = '10px';
           coffeeReview.innerHTML = `<a class="review" href="#">Been here? Write a review</a>`;
 
-          // Append cells to the row
+          // Append the "Write a review" link
           coffeeDetailsCell.appendChild(coffeeReview);
-          ratingsCell.appendChild(seeReviews);
           row.appendChild(coffeeDetailsCell);
           row.appendChild(ratingsCell);
 
           // Append row to the table body
           tbody.appendChild(row);
 
-          // seeReviews.querySelector('a').addEventListener('click', (event) => {
-          //   event.preventDefault();
-          //   showReviews(allReviews);
-          // });
-
+          // Attach event listener to the review link
           coffeeReview.querySelector('a').addEventListener('click', (event) => {
             event.preventDefault();
             createReview(location.id, "coffee");
