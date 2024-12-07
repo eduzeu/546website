@@ -162,8 +162,7 @@
                 map._removeMarker(marker);
             });
             wifi_markers = [];
-            try
-            {
+            try {
                 console.log("Fetching Coffee Shop data...");
                 const response = await fetch(coffee_url);
                 const data = await response.json();

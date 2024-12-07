@@ -24,15 +24,25 @@
   </div>
 </header>
 
-<main>
-  <div class="searchbar">
-    <form class="searchform" action="/events/date" method="POST">
-      <label for="searchByDate">Date:</label>
-      <input type="text" id="searchByDate" name="searchByDate" required placeholder="mm/dd/year"
-        title="Please enter a valid date">
-      <input type="submit" value="Search">
-    </form>
-  </div>
+<section>
+  <div>
+    {{#if events}}
+      {{#each events}}
+        <div class="event">
+          <ul>
+            <li>
+              <h4>{{this.event_name}}</h2>
+                <p>Hosts: {{this.event_agency}} </p>
+                <p>Borough: {{this.event_borough}}</p>
+                <p>Date: {{this.start_date_time}}</p>
+                <p>Location: {{this.event_location}}</p>
+                <p>Type: {{this.event_type}}</p>
+            </li>
+          </ul>
+        </div>
+      {{/each}}
+    {{else}}
+    <p>No Results</p>
+    {{/if}}
 
-
-</main>
+</section>

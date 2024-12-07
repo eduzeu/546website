@@ -1,12 +1,12 @@
 import { ObjectId } from "mongodb";
 import { reviews } from "../config/mongoCollections.js";
-import * as helpers from "../helpers.js";
+import { validateNumber, validateRating, validateReviewType, validateString } from "../helpers.js";
 
 export const createReview = async (rating, text, id, type) => {
-    rating = helpers.validateRating(rating, "Review Rating");
-    text = helpers.validateString(text, "Review Text");
-    id = helpers.validateNumber(id, "Location ID");
-    type = helpers.validateReviewType(type, "Review Type");
+    rating = validateRating(rating, "Rating");
+    text = validateString(text, "Review Text");
+    id = validateNumber(id, "Location ID");
+    type = validateReviewType(type, "Review Type");
 
     const reviewCollection = await reviews();
     const existingReview = await reviewCollection.findOne({ id, type });
@@ -38,8 +38,8 @@ export const getReviews = async (type) => {
     let findParams = {};
 
     if (type !== undefined) {
-        type = helpers.validateReviewType(type, "Review Type");
-        findParams = {type: type}
+        type = validateReviewType(type, "Review Type");
+        findParams = { type: type }
     }
 
     try {
@@ -53,8 +53,8 @@ export const getReviews = async (type) => {
 };
 
 export const getReviewById = async (id, type) => {
-    id = helpers.validateNumber(id, "Location ID");
-    type = helpers.validateReviewType(type, "Review Type");
+    id = validateNumber(id, "Location ID");
+    type = validateReviewType(type, "Review Type");
 
     try {
         const reviewCollection = await reviews();

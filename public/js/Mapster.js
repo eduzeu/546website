@@ -24,8 +24,8 @@
         return this.gMap.getZoom();
       }
     }
-    _on({obj,event,callback}) {
-      google.maps.event.addListener(obj, event, (e)=>callback.call(this, e));
+    _on({ obj, event, callback }) {
+      google.maps.event.addListener(obj, event, (e) => callback.call(this, e));
     }
     addMarker(opts) {
       opts.position = {
@@ -95,4 +95,4 @@
     }
   }
   window.Mapster = Mapster;
-})(window,google);
+})(window, google);
