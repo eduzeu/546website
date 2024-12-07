@@ -9,15 +9,20 @@
     <main>
         <div class="content">
             <section class="input-section">
-                <label for="starting-address">Starting Address:</label>
-                <input type="text" id="starting-address" placeholder="Enter starting address">
+                {{!-- <label for="starting-address">Starting Address:</label>
+                <input id="starting-address" type="text" placeholder="Enter a location" /> --}}
+                <input id="searchTextField" type="text" placeholder="Enter a specific address" size="50">
 
-                <label for="radius">Radius (miles):</label>
-                <select id="radius">
-                    <option value="5">5 miles</option>
-                    <option value="10">10 miles</option>
-                    <option value="20">20 miles</option>
-                </select>
+                <form id="radius-value">
+                    <label for="radius">Radius (miles):</label>
+                    <select id="radius" onchange="radiusSubmit()">
+                        <option disabled selected value> -- select an option -- </option>
+                        <option value="1">1 mile</option>
+                        <option value="2">2 miles</option>
+                        <option value="5">5 miles</option>
+                        <option value="10">10 miles</option>
+                    </select>
+                </form>
 
                 <fieldset>
                     <legend>Filters:</legend>
@@ -46,7 +51,13 @@
 
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key="></script>
+    {{!--
+    <script type="text/javascript"
+        src="https://maps.googleapis.com/maps/api/js?key=&libraries=places&callback=initMap"></script> --}}
+    <script type="text/javascript"
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyChIdMPrp5hO5iGxXaPp83MRojZSMRKgkA&libraries=places&callback=initMap"></script>
+    {{!--
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=&libraries=places"></script> --}}
     <script src="/public/js/List.js"></script>
     <script src="/public/js/Mapster.js"></script>
     <script src="/public/js/map-options.js"></script>

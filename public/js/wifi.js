@@ -145,6 +145,7 @@ const callReview = async (score, text, id, type) => {
     throw new Error('Failed to submit the review');
   }
 };
+
 const updateReview = async (id, type) => {
   try {
     const data = await fetch(`../review/${type}/${id}`);
