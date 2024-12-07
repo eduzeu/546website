@@ -14,6 +14,8 @@
     constructor(element, opts) {
       this.gMap = new google.maps.Map(element, opts);
       this.markers = [];
+      // this will track the info window opened
+      this.currentInfoWindow = null;
     }
     zoom(level) {
       if (level) {
@@ -44,15 +46,27 @@
           obj: marker,
           event: 'click',
           callback: () => {
+            // close the window that was open
+            this._closeCurrentInfoWindow();
+            // open new window on marker clicked
             const infoWindow = new google.maps.InfoWindow({
               content: opts.content
             });
 
             infoWindow.open(this.gMap, marker);
+
+            //set it to currentInfoWindow
+            this.currentInfoWindow = infoWindow;
           }
         })
       }
       return marker;
+    }
+    _closeCurrentInfoWindow() {
+      if (this.currentInfoWindow) {
+        this.currentInfoWindow.close();
+        this.currentInfoWindow = null;
+      }
     }
     _addMarker(marker) {
       this.markers.push(marker);
