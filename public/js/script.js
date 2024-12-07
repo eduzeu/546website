@@ -11,30 +11,24 @@
     // map
     const map = mapster.create(element, options);
 
-    // https://developers.google.com/maps/documentation/javascript/examples/places-searchbox#maps_places_searchbox-javascript
-    // const input = document.getElementById("starting-address");
-    // const search_bar = new google.maps.places.Autocomplete(input,{
-    //     types: ['address'],
-    //     componentRestrictions: { country: 'us'}
-    // });
+    const initialLatLng = { 'lat': null, 'lng': null };
 
-    // search_bar.bindTo("bounds", map);
-
-    // search_bar.addListener("place_changed", function() {
-    //     const place = search_bar.getPlace();
-    //     if (!place.geometry) {
-    //         console.log(`Not found`);
-    //         return;
-    //     }
-    //     map.setCenter(place.geometry.location);
-    //     map.setZoom(13);
-    // });
+    const nycBounds = new google.maps.LatLngBounds(
+        new google.maps.LatLng(40.477399, -74.259090),
+        new google.maps.LatLng(40.917577, -73.700272)
+    );
 
     function initialize() {
         let input = document.getElementById('searchTextField');
         let search_bar = new google.maps.places.Autocomplete(input, {
+            bounds: nycBounds,
+            strictBounds: true,
             types: ['address'],
             componentRestrictions: { country: 'us' }
+        });
+        search_bar.setComponentRestrictions({
+            country: ['us'],
+            administrativeArea: 'New York City'
         });
         // search_bar.bindTo("bounds", map);
 
@@ -52,47 +46,70 @@
 
 
         search_bar.addListener("place_changed", () => {
-            // console.log("place changed!");
             const place = search_bar.getPlace();
-            console.log(`The place gotten is: `);
-            console.log(place);
 
-            if (!place.geometry) {
-                console.log(`Not found`);
+            if (!place.geometry || !nycBounds.contains(place.geometry.location)) {
+                alert('Please select an address within New York City.');
+                input.value = '';
+                return;
+            }
+            const addressComponents = place.address_components;
+            const isInNYC = addressComponents.some(component =>
+                component.long_name === 'New York' &&
+                (component.types.includes('locality') || component.types.includes('administrative_area_level_1'))
+            );
+
+            if (!isInNYC) {
+                alert('Please select an address within New York City.');
+                input.value = '';
                 return;
             }
 
+            console.log(`The place gotten is: `);
+            console.log(place);
+
             const lat = place.geometry.location.lat();
             const lng = place.geometry.location.lng();
+            initialLatLng['lat'] = lat;
+            initialLatLng['lng'] = lng;
             console.log(`lat: ${lat}, lng: ${lng}.`);
 
             map.gMap.setCenter({ lat: lat, lng: lng });
-            map.gMap.setZoom(13);
+            map.gMap.setZoom(15);
             position_marker.setPosition({ lat: lat, lng: lng });
             position_marker.setVisible(true);
         });
     }
 
     google.maps.event.addDomListener(window, 'load', initialize);
+    let currCircle = null;
 
-    // const radiusCircle = google.maps.Circle({
-    //     strokeColor: "##85beff",
-    //     strokeOpacity: 0.8,
-    //     strokeWeight: 2,
-    //     fillColor: "##85beff",
-    //     fillOpacity: 0.35,
-    //     map,
-    //     center: citymap[city].center,
-    //     // radius is in meters apparently so multiply the miles by 1609.34
-    //     radius: Math.sqrt(citymap[city].population) * 100,
-    // });
-
-    window.radiusSubmit = function() {
+    window.radiusSubmit = function () {
+        if (initialLatLng['lat'] === null || initialLatLng['lng'] === null) {
+            console.log('Please enter an address first.');
+            alert('Please enter an address first.');
+            return;
+        }
         const selectedRadius = document.getElementById('radius');
-        const radiusValue = radiusSelect.value;
+        const radiusValue = selectedRadius.value;
         console.log('Radius selected:', radiusValue + ' miles');
-    }
 
+        if (currCircle) {
+            currCircle.setMap(null);
+        }
+
+        currCircle = new google.maps.Circle({
+            strokeColor: "#85beff",
+            strokeOpacity: 0.8,
+            strokeWeight: 2,
+            fillColor: "#85beff",
+            fillOpacity: 0.35,
+            map: map.gMap,
+            center: { lat: initialLatLng['lat'], lng: initialLatLng['lng'] },
+            // radius is in meters apparently so multiply the miles by 1609.34
+            radius: radiusValue * 1609.34,
+        });
+    }
 
     let wifi_markers = [];
     let coffee_markers = [];
@@ -162,8 +179,7 @@
                 map._removeMarker(marker);
             });
             wifi_markers = [];
-            try
-            {
+            try {
                 console.log("Fetching Coffee Shop data...");
                 const response = await fetch(coffee_url);
                 const data = await response.json();
