@@ -49,7 +49,7 @@ document.getElementById('coffee-checkbox').addEventListener('change', async func
 
 
           const locationReviews = revData.filter(rev => rev.id === location.id);
-
+        
           let allReviews = [];
           locationReviews.forEach(review => {
             review.text.forEach(rev => {
@@ -87,19 +87,28 @@ document.getElementById('coffee-checkbox').addEventListener('change', async func
             `;
           }
 
+          const seeReviews = document.createElement('p');
+          seeReviews.style.marginTop = '10px';
+          // seeReviews.innerHTML = `<a href="/reviews/${location.id}">See Reviews</a>`;
+
           const coffeeReview = document.createElement('p');
           coffeeReview.style.marginTop = '10px';
           coffeeReview.innerHTML = `<a class="review" href="#">Been here? Write a review</a>`;
 
-          // Append the "Write a review" link
+          // Append cells to the row
           coffeeDetailsCell.appendChild(coffeeReview);
+          ratingsCell.appendChild(seeReviews);
           row.appendChild(coffeeDetailsCell);
           row.appendChild(ratingsCell);
 
           // Append row to the table body
           tbody.appendChild(row);
 
-          // Attach event listener to the review link
+          // seeReviews.querySelector('a').addEventListener('click', (event) => {
+          //   event.preventDefault();
+          //   showReviews(allReviews);
+          // });
+
           coffeeReview.querySelector('a').addEventListener('click', (event) => {
             event.preventDefault();
             createReview(location.id, "coffee");
@@ -119,6 +128,3 @@ document.getElementById('coffee-checkbox').addEventListener('change', async func
     document.getElementById('coffeeLocations').innerHTML = '';
   }
 });
-
-
-
