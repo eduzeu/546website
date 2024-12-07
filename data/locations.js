@@ -1,5 +1,5 @@
 import { LocalStorage } from 'node-localstorage';
-import { fetchFromOverpass, validateNumber } from '../helpers.js';
+import { fetch, fetchFromOverpass, validateNumber } from '../helpers.js';
 
 const localStorage = new LocalStorage('./scratch');
 
