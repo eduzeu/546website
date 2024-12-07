@@ -30,6 +30,8 @@
     //     map.setZoom(13);
     // });
 
+    const initialLatLng = {'lat': null, 'lng':null};
+
     function initialize() {
         let input = document.getElementById('searchTextField');
         let search_bar = new google.maps.places.Autocomplete(input, {
@@ -64,10 +66,12 @@
 
             const lat = place.geometry.location.lat();
             const lng = place.geometry.location.lng();
+            initialLatLng['lat'] = lat;
+            initialLatLng['lng'] = lng;
             console.log(`lat: ${lat}, lng: ${lng}.`);
 
             map.gMap.setCenter({ lat: lat, lng: lng });
-            map.gMap.setZoom(13);
+            map.gMap.setZoom(15);
             position_marker.setPosition({ lat: lat, lng: lng });
             position_marker.setVisible(true);
         });
@@ -75,22 +79,29 @@
 
     google.maps.event.addDomListener(window, 'load', initialize);
 
-    // const radiusCircle = google.maps.Circle({
-    //     strokeColor: "##85beff",
-    //     strokeOpacity: 0.8,
-    //     strokeWeight: 2,
-    //     fillColor: "##85beff",
-    //     fillOpacity: 0.35,
-    //     map,
-    //     center: citymap[city].center,
-    //     // radius is in meters apparently so multiply the miles by 1609.34
-    //     radius: Math.sqrt(citymap[city].population) * 100,
-    // });
-
     window.radiusSubmit = function() {
+        if (initialLatLng['lat'] === null || initialLatLng['lng'] === null) {
+            console.log('Please enter an address first.');
+            alert('Please enter an address first.');
+            return;
+        }
         const selectedRadius = document.getElementById('radius');
-        const radiusValue = radiusSelect.value;
+        const radiusValue = selectedRadius.value;
         console.log('Radius selected:', radiusValue + ' miles');
+
+        const radiusCircle = new google.maps.Circle({
+            strokeColor: "#85beff",
+            strokeOpacity: 0.8,
+            strokeWeight: 2,
+            fillColor: "#85beff",
+            fillOpacity: 0.35,
+            map: map.gMap,
+            // lat: 40.74863940474718,
+            // lng: -73.98568893470194
+            center: { lat: initialLatLng['lat'], lng: initialLatLng['lng']},
+            // radius is in meters apparently so multiply the miles by 1609.34
+            radius: radiusValue * 1609.34,
+        });
     }
 
 
