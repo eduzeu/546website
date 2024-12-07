@@ -21,8 +21,8 @@ document.getElementById('wifi-checkbox').addEventListener('change', async functi
         const thead = document.createElement('thead');
         thead.innerHTML = `
           <tr>
-            <th style="border: 1px solid black; padding: 10px;">Wi-Fi Location</th>
-            <th style="border: 1px solid black; padding: 10px;">Ratings & Reviews</th>
+            <th style="border: 1px solid black; padding: 20px;">Wi-Fi Location</th>
+            <th style="border: 1px solid black; padding: 20px;">Ratings & Reviews</th>
           </tr>
         `;
         table.appendChild(thead);
@@ -44,6 +44,7 @@ document.getElementById('wifi-checkbox').addEventListener('change', async functi
           `;
           const ratingsCell = document.createElement('td');
           ratingsCell.style.border = '1px solid black';
+          ratingsCell.setAttribute('data-location-id',location.place_id);
 
           const locationReviews = revData.filter(rev => rev.id === location.place_id);
         
@@ -144,6 +145,64 @@ const callReview = async (score, text, id, type) => {
     throw new Error('Failed to submit the review'); 
   }
 };
+const updateReview = async (id) => {
+  try {
+    const data = await fetch(`../review/wifi/${id}`);
+    const reviews = await data.json();
+  
+    console.log("Reviews data:", reviews); // Log the structure of the reviews
+  
+    const locationRow = document.getElementById('wifiLocations').querySelector(`td[data-location-id="${id}"]`); // Target the correct location by place_id
+  
+    if (locationRow) {
+      const reviewCell = locationRow;
+  
+      // Initialize rating calculation variables
+      let total = 0;
+      let ratingCount = 0;
+  
+      // Handle the reviews object: reviews.rating is an array of ratings
+      if (Array.isArray(reviews.rating)) {
+        reviews.rating.forEach((rating) => {
+          total += rating;
+          ratingCount++;
+        });
+      } else {
+        console.error("Reviews.rating is not an array.");
+        return; // Exit early if reviews.rating is not an array
+      }
+  
+      // Update the rating display
+      if (ratingCount > 0) {
+        const avg = total / ratingCount;
+        reviewCell.innerHTML = `
+          <strong>Average Rating:</strong> ${avg.toFixed(1)} (${ratingCount} reviews)<br>
+        `;
+      } else {
+        reviewCell.innerHTML = `
+          <strong>Rating:</strong> Not rated yet<br>
+          <strong>Reviews:</strong> No reviews yet
+        `;
+      }
+  
+     const seeReviews = document.createElement('p');
+    seeReviews.style.marginTop = '10px';
+    seeReviews.innerHTML =  `<a href="/reviews/${id}">See Reviews</a>`;
+    reviewCell.appendChild(seeReviews);
+    
+     seeReviews.querySelector('a').addEventListener('click', (event) => {
+      event.preventDefault();
+      showReviews(reviews.text); // Pass the reviews for this location
+  });
+  
+    } else {
+      console.error(`Couldn't find row for location ID: ${id}`);
+    }
+  } catch (e) {
+    console.error("Error updating reviews:", e);
+  }
+};
+  
 
 const showReviews = (revs) => {
   const structure = document.createElement('div');
@@ -185,8 +244,6 @@ const showReviews = (revs) => {
 const createReview = (id, type) => {
   const structure = document.createElement('div');
   structure.className = 'modal';
-
-  // Add star rating and review form HTML
   structure.innerHTML = `
     <div style="text-align: center;">
       <p style="font-size: 1.2rem;">Rate this location:</p>
@@ -202,27 +259,18 @@ const createReview = (id, type) => {
     <button id="submitReviewButton">Submit</button>
     <button id="closeButton">Close</button>
   `;
-
   document.body.appendChild(structure);
-
-  // Star rating functionality
   const stars = structure.querySelectorAll('.star');
   let selectedRating = 0;
-
   stars.forEach((star) => {
     star.addEventListener('click', () => {
-      // Remove 'selected' class from all stars
       stars.forEach((s) => s.classList.remove('selected'));
-
-      // Add 'selected' class to clicked star and all previous stars
       star.classList.add('selected');
       let current = star.previousElementSibling;
       while (current) {
         current.classList.add('selected');
         current = current.previousElementSibling;
       }
-
-      // Update the selected rating
       selectedRating = parseInt(star.getAttribute('data-value'), 10);
     });
   });
@@ -244,6 +292,7 @@ const createReview = (id, type) => {
     try {
       await callReview(selectedRating, userText, id, type);
       document.body.removeChild(structure); // Close the review form
+      updateReview(id);
     } catch (error) {
       console.error('Error submitting review:', error);
       alert('There was an error submitting your review.');
@@ -253,49 +302,37 @@ const createReview = (id, type) => {
   document.getElementById('closeButton').addEventListener('click', () => {
     document.body.removeChild(structure); // Close the review form
   });
+
+
 };
-// const createReview = (id, type) => {
-//   const structure = document.createElement('div');
-//   structure.className = 'modal';
 
+const displayPlaceOfTheDay = async () => {
+  try {
+    let store = JSON.parse(localStorage.getItem("placeOfTheDay"));
+    let storeTime = localStorage.getItem("nextUpdateTime");
+    const time = Date.now();
 
-//   structure.innerHTML = `
-//     <input type="number" id="reviewScore" placeholder="Enter score (1-5)" min="1" max="5" style="margin-bottom: 10px; width: 90%;"><br>
-//     <textarea  id="reviewText" rows="4" cols="30" placeholder="Enter your review here"></textarea><br><br>
-//     <button id="submitReviewButton">Submit</button>
-//     <button id="closeButton">Close</button>
-//   `;
+    storeTime = parseInt(storeTime, 10);
 
-//   document.body.appendChild(structure);
+    if (!store || !storeTime || time >= storeTime) {
+      const response = await fetch('../location/wifi/place');
+      const placeInfo = await response.json();
+      console.log(placeInfo);
 
-//   document.getElementById('submitReviewButton').addEventListener('click', async () => {
-//     let userScore = document.getElementById('reviewScore').value;
-//     let userText = document.getElementById('reviewText').value.trim();
-
-//     // Add validation checks
-//     if (!userScore || isNaN(userScore) || userScore < 1 || userScore > 5) {
-//       alert('Please enter a valid score between 1 and 5.');
-//       return;
-//     }
-
-//     if (!userText) {
-//       alert('Please enter a review text.');
-//       return;
-//     }
-
-//     let score = parseInt(userScore, 10);
-//     let text = userText;
-
-//     try {
-//        await callReview(score, text, id, type);
+      localStorage.setItem('placeOfTheDay', JSON.stringify(placeInfo));
+      localStorage.setItem('nextUpdateTime', (time + 24 * 60 * 60 * 1000).toString());
+      
+      store = placeInfo;
+    }
+  
+    document.getElementById('place-name').textContent = store.Neighborhood || "No name available";
+    document.getElementById('place-address').textContent = store.Place || "No address available";
+    document.getElementById('place-type').textContent = "Wifi";
  
-//       document.body.removeChild(structure); // Close the review form
-//     } catch (error) {
-//       console.error('Error submitting review:', error);
-//       alert('There was an error submitting your review.');
-//     }
-//   });
-//     document.getElementById('closeButton').addEventListener('click', () => {
-//     document.body.removeChild(structure); // Close the review form
-//   });
-// };
+  } catch(e) {
+    console.error('Error displaying place of the day:', e);
+  }
+}
+
+// Attach the function to window load
+window.onload = displayPlaceOfTheDay;
