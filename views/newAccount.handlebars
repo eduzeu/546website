@@ -3,23 +3,18 @@
   <h1> Welcome to WiFly NYC</h1>
 </header>
 <main>
-
+   
   <form id="accountHandling">
     <label>
-      Login<br><br/>
+      Signup<br><br/>
         <label id='formLabel' for="loginUser">Username:</label><br>
         <input class='formText' type="text" id="loginUser" name="loginUser"><br><br/>
+        <label id='formLabel' for="loginEmail">Email:</label><br>
+        <input class='formText' type="text" id="loginEmail" name="loginEmail"><br><br/>
         <label id='formLabel' for="loginPassword">Password:</label><br>
         <input class='formText' type="password" id="loginPassword" name="loginPassword"><br><br/>
-        <input class="submit" type="submit" value="Login">
+        <input class="submit" type="submit" value="Create account">
     </label>
   </form>
   <p id="error"></p>
-  <br><br/>
-  <Label>
-      Don't have an account?
-      <button class="newAccount" onclick="window.location.href='/newAccount'">
-      Create a new account
-      </button>
-  </Label>
   <script src="../public/js/users.js"></script>

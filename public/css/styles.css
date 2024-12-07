@@ -1,73 +1,124 @@
 .coffeeShopDetail {
-  margin-bottom: 20px;
-}
-
-.coffeeShopDetail p,
-.coffeeShopDetail strong {
-  padding: 0;
-  margin: 0;
-}
-
-#wifiLocations table {
+    margin-bottom: 20px;
+  }
+  
+  .coffeeShopDetail p,
+  .coffeeShopDetail strong {
+    padding: 0;
+    margin: 0;
+  }
+  
+  #wifiLocations table {
+    text-align: center;
+    color: #EFEBCE;
+    background-color: #BB8588;
+  
+  }
+  
+.label{ 
   text-align: center;
-  color: #EFEBCE;
-  background-color: #BB8588;
+  justify-content: center;
 
 }
+  #coffeeLocations table {
+    text-align: center;
+    color: #EFEBCE;
+    background-color: #BB8588;
+  }
+  
+  #wifiLocations table th,
+  #wifiLocations table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+  }
+  
+  #coffeeLocations table th,
+  #coffeeLocations table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+  }
+  
+  
+  #wifiLocations table tr:hover {
+    background-color: #d68c8c;
+  }
+  
+  #coffeeLocations table tr:hover {
+    background-color: #d68c8c;
+  }
+  
+  /* Hover effect for individual table cells */
+  #wifiLocations table th:hover,
+  #wifiLocations table td:hover {
+    background-color: #d68c8c;
+  }
+  
+  #coffeLocations table th:hover,
+  #coffeLocationsn table td:hover {
+    background-color: #d68c8c;
+  }
+  
+  body {
+    font-family: monospace;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #D6CE93;
+    padding: 0;
+  }
+  main {
+    text-align: center;
+    margin: 10px;
+  }
+  form {
+    display: inline-block;
+    width: 310px;
+    height: auto;
+    text-align: center;  
+    padding: 20px;
+    border: 1px solid #EFEBCE;
+    border-radius: 10px;
+    background-color: #EFEBCE;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  .submit, .newAccount {
+    display: block;
+    margin: 10px auto;
+    padding: 10px 20px;
+    background-color: #754100;
+    color: #EFEBCE;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  .submit:hover, .newAccount:hover {
+    background-color: #754100;
+  }
 
-#coffeeLocations table {
-  text-align: center;
-  color: #EFEBCE;
-  background-color: #BB8588;
-}
-
-#wifiLocations table th,
-#wifiLocations table td {
-  border: 1px solid #ddd;
-  padding: 8px;
-}
-
-#coffeeLocations table th,
-#coffeeLocations table td {
-  border: 1px solid #ddd;
-  padding: 8px;
-}
-
-
-#wifiLocations table tr:hover {
-  background-color: #d68c8c;
-}
-
-#coffeeLocations table tr:hover {
-  background-color: #d68c8c;
-}
-
-/* Hover effect for individual table cells */
-#wifiLocations table th:hover,
-#wifiLocations table td:hover {
-  background-color: #d68c8c;
-}
-
-#coffeLocations table th:hover,
-#coffeLocationsn table td:hover {
-  background-color: #d68c8c;
-}
-
-
-.modal {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: #EFEBCE;
-  padding: 20px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  border-radius: 10px;
-  width: 300px;
-  text-align: center;
-  z-index: 1000;
-}
-
+  .modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #EFEBCE;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    width: 300px;
+    text-align: center;
+    z-index: 1000;
+  }
+  
+  main {
+    justify-items: center;
+    align-items: center;
+    justify-content: center;
+  }
+  
 .exit-button {
   margin-bottom: 10px;
   padding: 5px 10px;

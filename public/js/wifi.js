@@ -1,7 +1,8 @@
 
-document.getElementById('wifiCheckbox').addEventListener('change', async function () {
+document.getElementById('wifi-checkbox').addEventListener('change', async function () {
   if (this.checked) {
     try {
+      document.getElementById('coffeeLocations').innerHTML = '';
       const response = await fetch('../location/wifi');
       const data = await response.json();
 
@@ -107,7 +108,6 @@ document.getElementById('wifiCheckbox').addEventListener('change', async functio
           seeReviews.querySelector('a').addEventListener('click', () => {
             event.preventDefault();
             showReviews(allReviews);
-
           })
 
           wifiReview.querySelector('a').addEventListener('click', () => {
@@ -186,23 +186,53 @@ const createReview = (id, type) => {
   const structure = document.createElement('div');
   structure.className = 'modal';
 
-
+  // Add star rating and review form HTML
   structure.innerHTML = `
-    <input type="number" id="reviewScore" placeholder="Enter score (1-5)" min="1" max="5" style="margin-bottom: 10px; width: 90%;"><br>
-    <textarea  id="reviewText" rows="4" cols="30" placeholder="Enter your review here"></textarea><br><br>
+    <div style="text-align: center;">
+      <p style="font-size: 1.2rem;">Rate this location:</p>
+      <div class="star-rating" id="starRating">
+        <span class="star" data-value="1">&#9733;</span>
+        <span class="star" data-value="2">&#9733;</span>
+        <span class="star" data-value="3">&#9733;</span>
+        <span class="star" data-value="4">&#9733;</span>
+        <span class="star" data-value="5">&#9733;</span>
+      </div>
+    </div>
+    <textarea id="reviewText" rows="4" cols="30" placeholder="Enter your review here" style="margin-top: 20px;"></textarea><br><br>
     <button id="submitReviewButton">Submit</button>
     <button id="closeButton">Close</button>
   `;
 
   document.body.appendChild(structure);
 
+  // Star rating functionality
+  const stars = structure.querySelectorAll('.star');
+  let selectedRating = 0;
+
+  stars.forEach((star) => {
+    star.addEventListener('click', () => {
+      // Remove 'selected' class from all stars
+      stars.forEach((s) => s.classList.remove('selected'));
+
+      // Add 'selected' class to clicked star and all previous stars
+      star.classList.add('selected');
+      let current = star.previousElementSibling;
+      while (current) {
+        current.classList.add('selected');
+        current = current.previousElementSibling;
+      }
+
+      // Update the selected rating
+      selectedRating = parseInt(star.getAttribute('data-value'), 10);
+    });
+  });
+
   document.getElementById('submitReviewButton').addEventListener('click', async () => {
-    let userScore = document.getElementById('reviewScore').value;
-    let userText = document.getElementById('reviewText').value.trim();
+    const userText = document.getElementById('reviewText').value.trim();
 
     // Add validation checks
-    if (!userScore || isNaN(userScore) || userScore < 1 || userScore > 5) {
-      alert('Please enter a valid score between 1 and 5.');
+    if (selectedRating === 0) {
+      alert('Please select a rating.');
       return;
     }
 
@@ -211,19 +241,61 @@ const createReview = (id, type) => {
       return;
     }
 
-    let score = parseInt(userScore, 10);
-    let text = userText;
-
     try {
-       await callReview(score, text, id, type);
- 
+      await callReview(selectedRating, userText, id, type);
       document.body.removeChild(structure); // Close the review form
     } catch (error) {
       console.error('Error submitting review:', error);
       alert('There was an error submitting your review.');
     }
   });
-    document.getElementById('closeButton').addEventListener('click', () => {
+
+  document.getElementById('closeButton').addEventListener('click', () => {
     document.body.removeChild(structure); // Close the review form
   });
 };
+// const createReview = (id, type) => {
+//   const structure = document.createElement('div');
+//   structure.className = 'modal';
+
+
+//   structure.innerHTML = `
+//     <input type="number" id="reviewScore" placeholder="Enter score (1-5)" min="1" max="5" style="margin-bottom: 10px; width: 90%;"><br>
+//     <textarea  id="reviewText" rows="4" cols="30" placeholder="Enter your review here"></textarea><br><br>
+//     <button id="submitReviewButton">Submit</button>
+//     <button id="closeButton">Close</button>
+//   `;
+
+//   document.body.appendChild(structure);
+
+//   document.getElementById('submitReviewButton').addEventListener('click', async () => {
+//     let userScore = document.getElementById('reviewScore').value;
+//     let userText = document.getElementById('reviewText').value.trim();
+
+//     // Add validation checks
+//     if (!userScore || isNaN(userScore) || userScore < 1 || userScore > 5) {
+//       alert('Please enter a valid score between 1 and 5.');
+//       return;
+//     }
+
+//     if (!userText) {
+//       alert('Please enter a review text.');
+//       return;
+//     }
+
+//     let score = parseInt(userScore, 10);
+//     let text = userText;
+
+//     try {
+//        await callReview(score, text, id, type);
+ 
+//       document.body.removeChild(structure); // Close the review form
+//     } catch (error) {
+//       console.error('Error submitting review:', error);
+//       alert('There was an error submitting your review.');
+//     }
+//   });
+//     document.getElementById('closeButton').addEventListener('click', () => {
+//     document.body.removeChild(structure); // Close the review form
+//   });
+// };
