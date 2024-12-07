@@ -54,13 +54,11 @@
                     }
                 });
             }
-            catch(error)
-            {
+            catch (error) {
                 console.error("Error fetching WiFi locations:", error);
             }
         }
-        else
-        {
+        else {
             wifi_markers.forEach(marker => {
                 map._removeMarker(marker);
             });
@@ -73,8 +71,7 @@
                 map._removeMarker(marker);
             });
             wifi_markers = [];
-            try
-            {
+            try {
                 console.log("Fetching Coffee Shop data...");
                 const response = await fetch(coffee_url);
                 const data = await response.json();
@@ -105,13 +102,11 @@
                         console.warn("Missing coordinates for entry:", entry);
                     }
                 });
-            }catch(error)
-            {
+            } catch (error) {
                 console.error("Error fetching Coffee Shop locations:", error);
             }
         }
-        else
-        {
+        else {
             coffee_markers.forEach(marker => {
                 map._removeMarker(marker);
             });

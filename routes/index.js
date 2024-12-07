@@ -26,7 +26,7 @@ const constructorMethod = (app) => {
       Preset: JSON.stringify(process.env.CLOUDINARY_UPLOAD_PRESET)
     });
   });
-  
+
   app.use("/", loginRoutes);
 
   app.use('*', (req, res) => {

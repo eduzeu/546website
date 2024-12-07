@@ -1,4 +1,5 @@
 import axios from "axios";
+import date from 'date-and-time';
 
 export const validateString = (str, strName) => {
   if (typeof str === "undefined")
@@ -59,6 +60,26 @@ export const validateReviewType = (reviewType, typeName) => {
   }
 
   return reviewType
+}
+
+export const validateDateString = (dateStr, dateName) => {
+  dateStr = validateString(dateStr, dateName);
+
+  let components = dateTrim.split("/");
+
+  if (components.length !== 3) {
+    throw `${dateName || "Provided string"} is not MM/DD/YYYY format.`
+  }
+
+  if (components[0].length !== 2 || components[1].length !== 2 || components[2].length !== 4) {
+    throw `${dateName || "Provided string"} is not MM/DD/YYYY format.`
+  }
+
+  if (!date.isValid(dateTrim, "MM/DD/YYYY")) {
+    throw `${dateName || "Provided string"} is not a valid date.`
+  }
+
+  return dateStr;
 }
 
 export const fetch = async (url) => {

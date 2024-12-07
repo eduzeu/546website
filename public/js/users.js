@@ -9,7 +9,7 @@ if (form) {
         e.preventDefault();
 
         let isRegistration = true;
-        if(email == null){
+        if (email == null) {
             isRegistration = false;
         }
         const endpoint = isRegistration ? '/newAccount' : '/';

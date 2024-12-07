@@ -185,7 +185,7 @@ const updateReview = async (id, type) => {
         `;
       }
 
-      if(type === 'wifi'){
+      if (type === 'wifi') {
         const seeReviews = document.createElement('p');
         seeReviews.style.marginTop = '10px';
         seeReviews.innerHTML = `<a href="/reviews/${id}">See Reviews</a>`;
@@ -195,8 +195,8 @@ const updateReview = async (id, type) => {
           showReviews(reviews.text); // Pass the reviews for this location
         });
       }
-     
-     
+
+
     } else {
       console.error(`Couldn't find row for location ID: ${id}`);
     }

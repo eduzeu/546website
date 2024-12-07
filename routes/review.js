@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { createReview, getReviewById, getReviews } from "../data/reviews.js";
-import * as helpers from "../helpers.js";
+import { validateNumber, validateRating, validateReviewType, validateString } from "../helpers.js";
 
 const router = Router()
 
@@ -12,10 +12,10 @@ router.route('/')
         let reviewType = req.body.type;
 
         try {
-            score = helpers.validateRating(score, "Review Rating");
-            text = helpers.validateString(text, "Review Text");
-            id = helpers.validateNumber(id, "Location ID");
-            reviewType = helpers.validateReviewType(reviewType, "Review Type")
+            score = validateRating(score, "Review Rating");
+            text = validateString(text, "Review Text");
+            id = validateNumber(id, "Location ID");
+            reviewType = validateReviewType(reviewType, "Review Type")
 
         } catch (e) {
             return res.status(400).json({ error: e });
@@ -46,7 +46,7 @@ router.route('/:type')
         let reviewType = req.params.type;
 
         try {
-            reviewType = helpers.validateReviewType(reviewType, "Review Type")
+            reviewType = validateReviewType(reviewType, "Review Type")
         } catch (e) {
             return res.status(400).json({ error: e });
         }
@@ -65,8 +65,8 @@ router.route("/:type/:id")
         let id = req.params.id;
 
         try {
-            reviewType = helpers.validateReviewType(reviewType, "Review Type");
-            id = helpers.validateNumericId(id, "Location ID");
+            reviewType = validateReviewType(reviewType, "Review Type");
+            id = validateNumericId(id, "Location ID");
         } catch (e) {
             return res.status(400).json({ error: e });
         }

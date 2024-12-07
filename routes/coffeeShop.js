@@ -1,13 +1,13 @@
 import { Router } from "express";
 import { fetchCoffeeShopById } from "../data/locations.js";
 import { getReviewById } from "../data/reviews.js";
-import * as helpers from "../helpers.js";
+import { validateNumericId } from "../helpers.js";
 
 const router = Router()
 
 router.get("/:id", async (req, res) => {
     try {
-        req.params.id = helpers.validateNumericId(req.params.id, "Coffee Shop ID");
+        req.params.id = validateNumericId(req.params.id, "Coffee Shop ID");
     } catch (e) {
         return res.render("error", {
             title: "Error",

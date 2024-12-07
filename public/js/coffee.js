@@ -85,7 +85,7 @@ document.getElementById('coffee-checkbox').addEventListener('change', async func
               <strong>Reviews:</strong> No reviews yet
             `;
           }
-          
+
           const coffeeReview = document.createElement('p');
           coffeeReview.style.marginTop = '10px';
           coffeeReview.innerHTML = `<a class="review" href="#">Been here? Write a review</a>`;
