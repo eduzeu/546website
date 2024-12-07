@@ -45,6 +45,8 @@ document.getElementById('coffee-checkbox').addEventListener('change', async func
 
           const ratingsCell = document.createElement('td');
           ratingsCell.style.border = '1px solid black';
+          ratingsCell.setAttribute('data-location-id', location.id);
+
 
           const locationReviews = revData.filter(rev => rev.id === location.id);
         
@@ -110,6 +112,7 @@ document.getElementById('coffee-checkbox').addEventListener('change', async func
           coffeeReview.querySelector('a').addEventListener('click', (event) => {
             event.preventDefault();
             createReview(location.id, "coffee");
+            updateReview(location.id, "coffee");
           });
         });
 
@@ -125,3 +128,5 @@ document.getElementById('coffee-checkbox').addEventListener('change', async func
     document.getElementById('coffeeLocations').innerHTML = '';
   }
 });
+
+
