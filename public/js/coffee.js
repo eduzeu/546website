@@ -2,11 +2,9 @@ document.getElementById('coffee-checkbox').addEventListener('change', async func
   if (this.checked) {
     try {
       document.getElementById('wifiLocations').innerHTML = '';
-      const response = await fetch("../location/coffeeShop");
-      const data = await response.json();
 
-      const reviews = await fetch('../review/coffee');
-      const revData = await reviews.json();
+      const data = await fetchFrom("../location/coffeeShop");
+      const revData = await fetchFrom("../review/coffee");
 
       const locationContainer = document.getElementById('coffeeLocations');
       locationContainer.innerHTML = '';

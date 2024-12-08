@@ -6,7 +6,7 @@ const router = Router();
 
 router.route("/")
   .get(async (req, res) => {
-    res.render("../views/account");
+    res.render("../views/account", { title: "Welcome to WiFly NYC" });
   })
   .post(async (req, res) => {
     let { username, password } = req.body;
@@ -35,13 +35,13 @@ router.route("/")
 
 router.route("/newAccount")
   .get(async (req, res) => {
-    res.render("../views/newAccount");
+    res.render("../views/newAccount", { title: "Welcome to WiFly NYC" });
   })
   .post(async (req, res) => {
     let { username, email, password } = req.body;
     try {
       username = validateString(username, "Username").toLowerCase();
-      email = validateString(email, "Email");
+      email = validateEmailAddress(email, "Email");
       password = validateString(password, "Password");
 
     } catch (error) {

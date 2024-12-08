@@ -33,6 +33,16 @@ export const validateNumber = (num, numName) => {
   return num;
 }
 
+export const validateEmailAddress = (email, emailName) => {
+  email = validateString(email, emailName);
+  
+  // regex source: https://www.geeksforgeeks.org/javascript-program-to-validate-an-email-address/
+  const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
+  if (!regex.test(email)) {
+      throw `${emailName || "Provided string"} is not a valid email address.`
+  }
+}
+
 export const validateRating = (rating, ratingName) => {
   validateNumber(Number(rating), ratingName);
 
@@ -82,7 +92,7 @@ export const validateDateString = (dateStr, dateName) => {
   return dateStr;
 }
 
-export const fetch = async (url) => {
+export const fetchFrom = async (url) => {
   try {
     let { data } = await axios.get(url);
     return data

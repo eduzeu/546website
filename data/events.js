@@ -1,7 +1,7 @@
-import { fetch, validateDateString, validateString } from '../helpers.js';
+import { fetchFrom, validateDateString, validateString } from '../helpers.js';
 
 export const getAllEvents = async () => {
-    let data = await fetch('https://data.cityofnewyork.us/resource/tvpp-9vvx.json');
+    let data = await fetchFrom('https://data.cityofnewyork.us/resource/tvpp-9vvx.json');
     let results = []
 
     for (const event of data) {
@@ -26,7 +26,7 @@ export const getAllEvents = async () => {
 export const getEventbyBorough = async (borough) => {
     validateString(borough, "Search Borough")
 
-    let data = await fetch('https://data.cityofnewyork.us/resource/tvpp-9vvx.json');
+    let data = await fetchFrom('https://data.cityofnewyork.us/resource/tvpp-9vvx.json');
     let events_in_borough = [];
 
     for (const event of data) {
@@ -54,7 +54,7 @@ export const getEventbyBorough = async (borough) => {
 export const getEventbyDate = async (date) => {
     validateDateString(date, "Search Date");
 
-    let data = await fetch('https://data.cityofnewyork.us/resource/tvpp-9vvx.json');
+    let data = await fetchFrom('https://data.cityofnewyork.us/resource/tvpp-9vvx.json');
     let events_in_date = [];
 
     for (const event of data) {
