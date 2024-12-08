@@ -1,11 +1,11 @@
 import bcrypt from 'bcrypt';
 import { users } from "../config/mongoCollections.js";
-import { validateString } from "../helpers.js";
+import { validateEmailAddress, validateString } from "../helpers.js";
 const saltRounds = 16;
 
 export const addNewUser = async (username, email, password) => {
     username = validateString(username, "Username")
-    email = validateString(email, "Email");
+    email = validateEmailAddress(email, "Email");
     password = validateString(password, "Password");
     const userCollection = await users();
     const eUser = await userCollection.findOne({ email: email });

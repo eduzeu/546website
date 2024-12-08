@@ -122,8 +122,7 @@
             coffee_markers = [];
             try {
                 console.log("Fetching WiFi data...");
-                const response = await fetch(wifi_url);
-                const data = await response.json();
+                const data = await fetchFrom(wifi_url);
                 console.log("WiFi data fetched successfully:", data);
 
                 const wifi_entries = Object.values(data);
@@ -181,8 +180,7 @@
             wifi_markers = [];
             try {
                 console.log("Fetching Coffee Shop data...");
-                const response = await fetch(coffee_url);
-                const data = await response.json();
+                const data = await fetchFrom(coffee_url);
                 console.log("Coffee Shop data fetched successfully:", data);
                 data.elements.forEach(entry => {
                     if (entry.lat && entry.lon) {
