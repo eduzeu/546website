@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { createReview, getReviewById, getReviews } from "../data/reviews.js";
-import { validateNumber, validateRating, validateReviewType, validateString } from "../helpers.js";
+import { validateNumber, validateRating, validateReviewType, validateString, validateNumericId} from "../helpers.js";
 
 const router = Router()
 
@@ -63,7 +63,7 @@ router.route("/:type/:id")
     .get(async (req, res) => {
         let reviewType = req.params.type;
         let id = req.params.id;
-
+        console.log(reviewType, id);
         try {
             reviewType = validateReviewType(reviewType, "Review Type");
             id = validateNumericId(id, "Location ID");
