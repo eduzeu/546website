@@ -20,7 +20,8 @@ export const addNewUser = async (username, email, password) => {
         password: hashedPass,
         favoriteHotspots: [],
         favoriteEvents: [],
-        favoriteCoffeeShops: []
+        favoriteCoffeeShops: [],
+        reviews: []
     };
     const insertInfo = await userCollection.insertOne(userObj);
     console.log(insertInfo);

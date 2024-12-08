@@ -21,6 +21,7 @@
 
 }
 
+
 #coffeeLocations table {
   text-align: center;
   color: #EFEBCE;
@@ -28,6 +29,10 @@
   width: 50%;
   margin: 0 auto;
   ;
+}
+
+.hidden {
+  display: none;
 }
 
 #wifiLocations table th,
@@ -137,6 +142,7 @@ main {
   border-radius: 5px;
   cursor: pointer;
 }
+
 
 .review-container {
   max-height: 200px;
