@@ -41,6 +41,8 @@ export const validateEmailAddress = (email, emailName) => {
   if (!regex.test(email)) {
       throw `${emailName || "Provided string"} is not a valid email address.`
   }
+
+  return email;
 }
 
 export const validateRating = (rating, ratingName) => {

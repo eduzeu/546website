@@ -14,10 +14,10 @@ if (form) {
         let emailValue = email ? email.value : null;
 
         try {
-            username = validateString(usernameValue, 'Username');
-            password = validateString(passwordValue, 'Password');
+            usernameValue = validateString(usernameValue, 'Username');
+            passwordValue = validateString(passwordValue, 'Password');
             if (emailValue) {
-                email = validateEmailAddress(email.value, 'Email');
+                emailValue = validateEmailAddress(email.value, 'Email');
                 isRegistration = true;
             };
 
