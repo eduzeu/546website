@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { createReview, getReviewById, getReviews } from "../data/reviews.js";
-import { validateNumber, validateRating, validateReviewType, validateString } from "../helpers.js";
+import { validateNumber, validateNumericId, validateRating, validateReviewType, validateString } from "../helpers.js";
 
 const router = Router()
 

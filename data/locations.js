@@ -1,5 +1,5 @@
 import { LocalStorage } from 'node-localstorage';
-import { fetch, fetchFromOverpass, validateNumber } from '../helpers.js';
+import { fetchFrom, fetchFromOverpass, validateNumber } from '../helpers.js';
 
 const localStorage = new LocalStorage('./scratch');
 
@@ -47,7 +47,7 @@ export const fetchCoffeeShopById = async (id) => {
 }
 
 export const getWifiLocations = async () => {
-  let data = await fetch("https://data.cityofnewyork.us/resource/npnk-wrj8.json");
+  let data = await fetchFrom("https://data.cityofnewyork.us/resource/npnk-wrj8.json");
 
   let wifiInfo = {};
 
