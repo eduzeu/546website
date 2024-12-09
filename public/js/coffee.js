@@ -2,11 +2,9 @@ document.getElementById('coffee-checkbox').addEventListener('change', async func
   if (this.checked) {
     try {
       document.getElementById('wifiLocations').innerHTML = '';
-      const response = await fetch("../location/coffeeShop");
-      const data = await response.json();
 
-      const reviews = await fetch('../review/coffee');
-      const revData = await reviews.json();
+      const data = await fetchFrom("../location/coffeeShop");
+      const revData = await fetchFrom("../review/coffee");
 
       const locationContainer = document.getElementById('coffeeLocations');
       locationContainer.innerHTML = '';
@@ -45,6 +43,8 @@ document.getElementById('coffee-checkbox').addEventListener('change', async func
 
           const ratingsCell = document.createElement('td');
           ratingsCell.style.border = '1px solid black';
+          ratingsCell.setAttribute('data-location-id', location.id);
+
 
           const locationReviews = revData.filter(rev => rev.id === location.id);
         
@@ -110,6 +110,7 @@ document.getElementById('coffee-checkbox').addEventListener('change', async func
           coffeeReview.querySelector('a').addEventListener('click', (event) => {
             event.preventDefault();
             createReview(location.id, "coffee");
+            updateReview(location.id, "coffee");
           });
         });
 

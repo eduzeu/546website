@@ -1,4 +1,5 @@
 import axios from "axios";
+import date from 'date-and-time';
 
 export const validateString = (str, strName) => {
   if (typeof str === "undefined")
@@ -32,6 +33,18 @@ export const validateNumber = (num, numName) => {
   return num;
 }
 
+export const validateEmailAddress = (email, emailName) => {
+  email = validateString(email, emailName);
+  
+  // regex source: https://www.geeksforgeeks.org/javascript-program-to-validate-an-email-address/
+  const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
+  if (!regex.test(email)) {
+      throw `${emailName || "Provided string"} is not a valid email address.`
+  }
+
+  return email;
+}
+
 export const validateRating = (rating, ratingName) => {
   validateNumber(Number(rating), ratingName);
 
@@ -61,7 +74,27 @@ export const validateReviewType = (reviewType, typeName) => {
   return reviewType
 }
 
-export const fetch = async (url) => {
+export const validateDateString = (dateStr, dateName) => {
+  dateStr = validateString(dateStr, dateName);
+
+  let components = dateTrim.split("/");
+
+  if (components.length !== 3) {
+    throw `${dateName || "Provided string"} is not MM/DD/YYYY format.`
+  }
+
+  if (components[0].length !== 2 || components[1].length !== 2 || components[2].length !== 4) {
+    throw `${dateName || "Provided string"} is not MM/DD/YYYY format.`
+  }
+
+  if (!date.isValid(dateTrim, "MM/DD/YYYY")) {
+    throw `${dateName || "Provided string"} is not a valid date.`
+  }
+
+  return dateStr;
+}
+
+export const fetchFrom = async (url) => {
   try {
     let { data } = await axios.get(url);
     return data
@@ -90,14 +123,3 @@ export const fetchFromOverpass = async (query) => {
       throw `Error: ${e}`;
   }
 }
-
-export const stringChecker = (str) => {
-  if(typeof str != 'string'){
-    throw 'Not a string';
-  }
-  str = str.trim();
-  if(str.length < 1){
-    throw 'String is empty';
-  }
-  return str;
-};

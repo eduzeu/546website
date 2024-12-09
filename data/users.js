@@ -1,20 +1,16 @@
-import { users } from "../config/mongoCollections.js";
-import { dbConnection } from "../config/mongoConnection.js";
-import * as helpers from "../helpers.js";
 import bcrypt from 'bcrypt';
+import { users } from "../config/mongoCollections.js";
+import { validateEmailAddress, validateString } from "../helpers.js";
 const saltRounds = 16;
 
-const db = await dbConnection();
-const userCollection = await users();
 export const addNewUser = async (username, email, password) => {
-    username = helpers.stringChecker(username);
-    email = helpers.stringChecker(email);
-    password = helpers.stringChecker(password);
-    email = email.toLowerCase();
-    username = username.toLowerCase();
-    const eUser = await userCollection.findOne({email: email});
-    const uUser = await userCollection.findOne({username: username});
-    if(eUser || uUser){
+    username = validateString(username, "Username")
+    email = validateEmailAddress(email, "Email");
+    password = validateString(password, "Password");
+    const userCollection = await users();
+    const eUser = await userCollection.findOne({ email: email });
+    const uUser = await userCollection.findOne({ username: username });
+    if (eUser || uUser) {
         throw "Account exists!";
     }
     const hashedPass = await bcrypt.hash(password, saltRounds);
@@ -24,21 +20,26 @@ export const addNewUser = async (username, email, password) => {
         password: hashedPass,
         favoriteHotspots: [],
         favoriteEvents: [],
-        favoriteCoffeeShops: []
+        favoriteCoffeeShops: [],
+        reviews: []
     };
     const insertInfo = await userCollection.insertOne(userObj);
-    console.log(insertInfo);
-    if(!insertInfo.acknowledged || !insertInfo.insertedId){
+    //console.log(insertInfo);
+    if (!insertInfo.acknowledged || !insertInfo.insertedId) {
         throw 'Failed to insert user';
     }
     return insertInfo;
 };
+
+// console.log(await addNewUser("user123", "ed@gmail.com", "545454"));
+
 export const checkUser = async (username, password) => {
-    username = helpers.stringChecker(username);
-    password = helpers.stringChecker(password);
+    username = validateString(username);
+    password = validateString(password);
     username = username.toLowerCase();
-    const user = await userCollection.findOne({username: username});
-    if(!user){
+    const userCollection = await users();
+    const user = await userCollection.findOne({ username: username });
+    if (!user) {
         throw "Invalid Login";
     }
     let isValid = bcrypt.compare(password, user.password);

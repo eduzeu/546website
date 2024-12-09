@@ -3,6 +3,7 @@ import { fetchCoffeeShopById } from "../data/locations.js";
 import { getReviewById } from "../data/reviews.js";
 import * as helpers from "../helpers.js";
 import * as sessionTokens from "../data/sessionTokens.js";
+import { validateNumericId } from "../helpers.js";
 
 const router = Router()
 
@@ -20,7 +21,7 @@ router.get("/:id", async (req, res) => {
     //     res.status(401).render('../views/invalidLogin', { error: e });
     // }
     try {
-        req.params.id = helpers.validateNumericId(req.params.id, "Coffee Shop ID");
+        req.params.id = validateNumericId(req.params.id, "Coffee Shop ID");
     } catch (e) {
         return res.render("error", {
             title: "Error",

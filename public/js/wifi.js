@@ -3,14 +3,11 @@ document.getElementById('wifi-checkbox').addEventListener('change', async functi
   if (this.checked) {
     try {
       document.getElementById('coffeeLocations').innerHTML = '';
-      const response = await fetch('../location/wifi');
-      const data = await response.json();
-
-      const reviews = await fetch('../review/wifi');
-      const revData = await reviews.json();
+      const data = await fetchFrom('../location/wifi');
+      const revData = await fetchFrom('../review/wifi');
 
       const locationContainer = document.getElementById('wifiLocations');
-      locationContainer.innerHTML = ''; 
+      locationContainer.innerHTML = '';
 
       // Display locations if any are returned
       if (Object.keys(data).length > 0) {
@@ -21,8 +18,8 @@ document.getElementById('wifi-checkbox').addEventListener('change', async functi
         const thead = document.createElement('thead');
         thead.innerHTML = `
           <tr>
-            <th style="border: 1px solid black; padding: 10px;">Wi-Fi Location</th>
-            <th style="border: 1px solid black; padding: 10px;">Ratings & Reviews</th>
+            <th style="border: 1px solid black; padding: 20px;">Wi-Fi Location</th>
+            <th style="border: 1px solid black; padding: 20px;">Ratings & Reviews</th>
           </tr>
         `;
         table.appendChild(thead);
@@ -44,9 +41,10 @@ document.getElementById('wifi-checkbox').addEventListener('change', async functi
           `;
           const ratingsCell = document.createElement('td');
           ratingsCell.style.border = '1px solid black';
+          ratingsCell.setAttribute('data-location-id', location.place_id);
 
           const locationReviews = revData.filter(rev => rev.id === location.place_id);
-        
+
           let allReviews = [];
           locationReviews.forEach(review => {
             review.text.forEach(rev => {
@@ -90,7 +88,7 @@ document.getElementById('wifi-checkbox').addEventListener('change', async functi
           seeReviews.style.marginTop = '10px';
           seeReviews.innerHTML = `<a href="/reviews/${location.place_id}">See Reviews</a>`;
 
-    
+
           const wifiReview = document.createElement('p');
           wifiReview.style.marginTop = '10px';
           wifiReview.innerHTML = `<a class="review" href="#">Been here? Write a review</a>`;
@@ -129,117 +127,33 @@ document.getElementById('wifi-checkbox').addEventListener('change', async functi
   }
 });
 
-const callReview = async (score, text, id, type) => {
-  const numericScore = Number(score);
+const displayPlaceOfTheDay = async () => {
   try {
-    const response = await fetch('../review', {
-      method: 'POST', 
-      headers: {
-        'Content-Type': 'application/json',   
-      },
-      body: JSON.stringify({ rating: numericScore , text: text, id: id, type: type }),  
-    });   
-    // console.log(response);
-  } catch (error) {
-    throw new Error('Failed to submit the review'); 
+    let store = JSON.parse(localStorage.getItem("placeOfTheDay"));
+    let storeTime = localStorage.getItem("nextUpdateTime");
+    const time = Date.now();
+
+    storeTime = parseInt(storeTime, 10);
+
+    if (!store || !storeTime || time >= storeTime) {
+      const response = await fetchFrom('../location/wifi/place');
+      const placeInfo = await response.json();
+      console.log(placeInfo);
+
+      localStorage.setItem('placeOfTheDay', JSON.stringify(placeInfo));
+      localStorage.setItem('nextUpdateTime', (time + 24 * 60 * 60 * 1000).toString());
+
+      store = placeInfo;
+    }
+
+    document.getElementById('place-name').textContent = store.Neighborhood || "No name available";
+    document.getElementById('place-address').textContent = store.Place || "No address available";
+    document.getElementById('place-type').textContent = "Wifi";
+
+  } catch (e) {
+    console.error('Error displaying place of the day:', e);
   }
-};
+}
 
-const showReviews = (revs) => {
-  const structure = document.createElement('div');
-  structure.className = 'modal';
-
-  const exit = document.createElement('button');
-  exit.textContent = 'Exit';
-  exit.className = 'exit-button';
-
-  exit.addEventListener('click', () => {
-    document.body.removeChild(structure);
-  });
-
-  const reviewContainer = document.createElement('div');
-  reviewContainer.className = 'review-container';
-
-  if (revs.length === 0) {
-    // If no reviews, display a message
-    const noReviewsMessage = document.createElement('p');
-    noReviewsMessage.textContent = 'No reviews added yet!';
-    noReviewsMessage.className = 'review-text';
-    reviewContainer.appendChild(noReviewsMessage);
-  } else {
-    // If reviews exist, display them
-    revs.forEach((rev) => {
-      const revText = document.createElement('p');
-      revText.textContent = rev;
-      revText.className = 'review-text';
-      reviewContainer.appendChild(revText);
-    });
-  }
-
-  structure.appendChild(exit);
-  structure.appendChild(reviewContainer);
-
-  document.body.appendChild(structure);
-};
-
-const createReview = (id, type) => {
-  const structure = document.createElement('div');
-  structure.className = 'modal';
-  structure.innerHTML = `
-    <div style="text-align: center;">
-      <p style="font-size: 1.2rem;">Rate this location:</p>
-      <div class="star-rating" id="starRating">
-        <span class="star" data-value="1">&#9733;</span>
-        <span class="star" data-value="2">&#9733;</span>
-        <span class="star" data-value="3">&#9733;</span>
-        <span class="star" data-value="4">&#9733;</span>
-        <span class="star" data-value="5">&#9733;</span>
-      </div>
-    </div>
-    <textarea id="reviewText" rows="4" cols="30" placeholder="Enter your review here" style="margin-top: 20px;"></textarea><br><br>
-    <button id="submitReviewButton">Submit</button>
-    <button id="closeButton">Close</button>
-  `;
-  document.body.appendChild(structure);
-  const stars = structure.querySelectorAll('.star');
-  let selectedRating = 0;
-  stars.forEach((star) => {
-    star.addEventListener('click', () => {
-      stars.forEach((s) => s.classList.remove('selected'));
-      star.classList.add('selected');
-      let current = star.previousElementSibling;
-      while (current) {
-        current.classList.add('selected');
-        current = current.previousElementSibling;
-      }
-      selectedRating = parseInt(star.getAttribute('data-value'), 10);
-    });
-  });
-
-  document.getElementById('submitReviewButton').addEventListener('click', async () => {
-    const userText = document.getElementById('reviewText').value.trim();
-
-    // Add validation checks
-    if (selectedRating === 0) {
-      alert('Please select a rating.');
-      return;
-    }
-
-    if (!userText) {
-      alert('Please enter a review text.');
-      return;
-    }
-
-    try {
-      await callReview(selectedRating, userText, id, type);
-      document.body.removeChild(structure); // Close the review form
-    } catch (error) {
-      console.error('Error submitting review:', error);
-      alert('There was an error submitting your review.');
-    }
-  });
-
-  document.getElementById('closeButton').addEventListener('click', () => {
-    document.body.removeChild(structure); // Close the review form
-  });
-};
+// Attach the function to window load
+window.onload = displayPlaceOfTheDay;

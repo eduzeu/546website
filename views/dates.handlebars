@@ -1,0 +1,34 @@
+<link rel="stylesheet" type="text/css" href="../public/css/events.css">
+
+<header>
+  <h1>{{title}}</h1>
+  <!-- https://www.w3schools.com/howto/howto_css_dropdown_navbar.asp -->
+
+  <div class="navbar">
+    <a href="/home">Home Page</a>
+    <div class="dropdown">
+      <button class="dropbtn">
+        Events
+        <i class="fa fa-caret-down"></i>
+      </button>
+      <div class="dropdown-content">
+        <a href="/events">All Events</a>
+        <a href="/events/city">Search by Borough</a>
+        <a href="/events/date">Search by Date</a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="searchbar">
+    <form class="searchform" action="/events/date" method="POST">
+      <label for="searchByDate">Date:</label>
+      <input type="text" id="searchByDate" name="searchByDate" required placeholder="mm/dd/year"
+        title="Please enter a valid date">
+      <input type="submit" value="Search">
+    </form>
+  </div>
+
+
+</main>

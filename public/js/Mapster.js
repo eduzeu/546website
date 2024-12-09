@@ -14,6 +14,8 @@
     constructor(element, opts) {
       this.gMap = new google.maps.Map(element, opts);
       this.markers = [];
+      // this will track the info window opened
+      this.currentInfoWindow = null;
     }
     zoom(level) {
       if (level) {
@@ -22,8 +24,8 @@
         return this.gMap.getZoom();
       }
     }
-    _on({obj,event,callback}) {
-      google.maps.event.addListener(obj, event, (e)=>callback.call(this, e));
+    _on({ obj, event, callback }) {
+      google.maps.event.addListener(obj, event, (e) => callback.call(this, e));
     }
     addMarker(opts) {
       opts.position = {
@@ -44,15 +46,27 @@
           obj: marker,
           event: 'click',
           callback: () => {
+            // close the window that was open
+            this._closeCurrentInfoWindow();
+            // open new window on marker clicked
             const infoWindow = new google.maps.InfoWindow({
               content: opts.content
             });
 
             infoWindow.open(this.gMap, marker);
+
+            //set it to currentInfoWindow
+            this.currentInfoWindow = infoWindow;
           }
         })
       }
       return marker;
+    }
+    _closeCurrentInfoWindow() {
+      if (this.currentInfoWindow) {
+        this.currentInfoWindow.close();
+        this.currentInfoWindow = null;
+      }
     }
     _addMarker(marker) {
       this.markers.push(marker);
@@ -81,4 +95,4 @@
     }
   }
   window.Mapster = Mapster;
-})(window,google);
+})(window, google);

@@ -1,12 +1,15 @@
 import { ObjectId } from "mongodb";
 import { reviews } from "../config/mongoCollections.js";
-import * as helpers from "../helpers.js";
+import { validateNumber, validateRating, validateReviewType, validateString } from "../helpers.js";
+import {users } from "../config/mongoCollections.js";
+
+const userCollection = await users(); 
 
 export const createReview = async (rating, text, id, type) => {
-    rating = helpers.validateRating(rating, "Review Rating");
-    text = helpers.validateString(text, "Review Text");
-    id = helpers.validateNumber(id, "Location ID");
-    type = helpers.validateReviewType(type, "Review Type");
+    rating = validateRating(rating, "Rating");
+    text = validateString(text, "Review Text");
+    id = validateNumber(id, "Location ID");
+    type = validateReviewType(type, "Review Type");
 
     const reviewCollection = await reviews();
     const existingReview = await reviewCollection.findOne({ id, type });
@@ -38,8 +41,8 @@ export const getReviews = async (type) => {
     let findParams = {};
 
     if (type !== undefined) {
-        type = helpers.validateReviewType(type, "Review Type");
-        findParams = {type: type}
+        type = validateReviewType(type, "Review Type");
+        findParams = { type: type }
     }
 
     try {
@@ -53,8 +56,8 @@ export const getReviews = async (type) => {
 };
 
 export const getReviewById = async (id, type) => {
-    id = helpers.validateNumber(id, "Location ID");
-    type = helpers.validateReviewType(type, "Review Type");
+    id = validateNumber(id, "Location ID");
+    type = validateReviewType(type, "Review Type");
 
     try {
         const reviewCollection = await reviews();
@@ -63,5 +66,38 @@ export const getReviewById = async (id, type) => {
 
     } catch (error) {
         return {};
+    }
+};
+
+export const insertUserReview = async (userId, place, review, rating) => {
+    try{
+        const newReview = {
+            place: place,
+            review: review,
+             };
+
+        const userReview = await userCollection.updateOne(
+        { _id: new ObjectId(userId) },  // Match the user by their ID
+        { $push: { reviews: newReview } },
+        );
+
+        return newReview;
+    }catch (e){
+        console.error(e);
+    };
+};
+
+// console.log(await insertUserReview("67571a0a7efa087d3782482b", "Central Park", "This is a good place", "4.0"));
+
+export const getUserFeedReviews = async (userId) => { 
+
+    try{
+        const displayReviews = await userCollection.find(
+            {userId: new ObjectId(userId)},
+            {projection: {reviews: 1} }).toArray();
+
+         return displayReviews;
+    }catch(e){
+        console.error(e)
     }
 };

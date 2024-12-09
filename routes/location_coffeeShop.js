@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { fetchCoffeeShopById, fetchCoffeeShops } from "../data/locations.js";
+import { validateNumericId } from "../helpers.js";
 import * as helpers from "../helpers.js";
 import * as sessionTokens from "../data/sessionTokens.js";
 
@@ -40,7 +41,7 @@ router.get("/:id", async (req, res) => {
         //     res.status(401).render('../views/invalidLogin', { error: e });
         //   }
     try {
-        req.params.id = helpers.validateNumericId(req.params.id, "Coffee Shop ID");
+        req.params.id = validateNumericId(req.params.id, "Coffee Shop ID");
     } catch (e) {
         return res.status(400).json({ error: e });
     }
@@ -50,7 +51,7 @@ router.get("/:id", async (req, res) => {
         return res.status(200).json(coffeeShop);
 
     } catch (e) {
-        return res.status(500).json({ error: e});
+        return res.status(500).json({ error: e });
     }
 })
 

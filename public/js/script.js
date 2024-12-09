@@ -7,8 +7,109 @@
 
     const options = mapster.MAP_OPTIONS;
     const element = document.getElementById('map-canvas');
+
     // map
     const map = mapster.create(element, options);
+
+    const initialLatLng = { 'lat': null, 'lng': null };
+
+    const nycBounds = new google.maps.LatLngBounds(
+        new google.maps.LatLng(40.477399, -74.259090),
+        new google.maps.LatLng(40.917577, -73.700272)
+    );
+
+    function initialize() {
+        let input = document.getElementById('searchTextField');
+        let search_bar = new google.maps.places.Autocomplete(input, {
+            bounds: nycBounds,
+            strictBounds: true,
+            types: ['address'],
+            componentRestrictions: { country: 'us' }
+        });
+        search_bar.setComponentRestrictions({
+            country: ['us'],
+            administrativeArea: 'New York City'
+        });
+        // search_bar.bindTo("bounds", map);
+
+        const position_marker = map.addMarker({
+            anchorPoint: new google.maps.Point(0, -29),
+            visible: false,
+            icon: {
+                // url: 'https://i.imgur.com/xgIzHcA.png',
+                url: 'https://cdn-icons-png.flaticon.com/512/1783/1783356.png',
+                scaledSize: new google.maps.Size(30, 30), // Scaled size (width, height in pixels)
+                origin: new google.maps.Point(0, 0), // Origin point (0, 0 by default)
+                anchor: new google.maps.Point(16, 32) // Anchor point (adjust if needed)
+            }
+        });
+
+
+        search_bar.addListener("place_changed", () => {
+            const place = search_bar.getPlace();
+
+            if (!place.geometry || !nycBounds.contains(place.geometry.location)) {
+                alert('Please select an address within New York City.');
+                input.value = '';
+                return;
+            }
+            const addressComponents = place.address_components;
+            const isInNYC = addressComponents.some(component =>
+                component.long_name === 'New York' &&
+                (component.types.includes('locality') || component.types.includes('administrative_area_level_1'))
+            );
+
+            if (!isInNYC) {
+                alert('Please select an address within New York City.');
+                input.value = '';
+                return;
+            }
+
+            console.log(`The place gotten is: `);
+            console.log(place);
+
+            const lat = place.geometry.location.lat();
+            const lng = place.geometry.location.lng();
+            initialLatLng['lat'] = lat;
+            initialLatLng['lng'] = lng;
+            console.log(`lat: ${lat}, lng: ${lng}.`);
+
+            map.gMap.setCenter({ lat: lat, lng: lng });
+            map.gMap.setZoom(15);
+            position_marker.setPosition({ lat: lat, lng: lng });
+            position_marker.setVisible(true);
+        });
+    }
+
+    google.maps.event.addDomListener(window, 'load', initialize);
+    let currCircle = null;
+
+    window.radiusSubmit = function () {
+        if (initialLatLng['lat'] === null || initialLatLng['lng'] === null) {
+            console.log('Please enter an address first.');
+            alert('Please enter an address first.');
+            return;
+        }
+        const selectedRadius = document.getElementById('radius');
+        const radiusValue = selectedRadius.value;
+        console.log('Radius selected:', radiusValue + ' miles');
+
+        if (currCircle) {
+            currCircle.setMap(null);
+        }
+
+        currCircle = new google.maps.Circle({
+            strokeColor: "#85beff",
+            strokeOpacity: 0.8,
+            strokeWeight: 2,
+            fillColor: "#85beff",
+            fillOpacity: 0.35,
+            map: map.gMap,
+            center: { lat: initialLatLng['lat'], lng: initialLatLng['lng'] },
+            // radius is in meters apparently so multiply the miles by 1609.34
+            radius: radiusValue * 1609.34,
+        });
+    }
 
     let wifi_markers = [];
     let coffee_markers = [];
@@ -21,8 +122,7 @@
             coffee_markers = [];
             try {
                 console.log("Fetching WiFi data...");
-                const response = await fetch(wifi_url);
-                const data = await response.json();
+                const data = await fetchFrom(wifi_url);
                 console.log("WiFi data fetched successfully:", data);
 
                 const wifi_entries = Object.values(data);
@@ -41,12 +141,19 @@
                             //     }
                             // },
                             icon: {
-                                url: 'https://i.imgur.com/xgIzHcA.png',
+                                // url: 'https://i.imgur.com/xgIzHcA.png',
+                                url: 'https://i.imgur.com/pDk8HOg.png',
                                 scaledSize: new google.maps.Size(28, 34), // Scaled size (width, height in pixels)
                                 origin: new google.maps.Point(0, 0), // Origin point (0, 0 by default)
                                 anchor: new google.maps.Point(16, 32) // Anchor point (adjust if needed)
                             },
-                            content: `Name: ${entry['Wifi name']}, Place: ${entry.Place}, Neighborhood: ${entry.Neighborhood}` // ADD THE NECESSARY THINGS HERE
+                            // content: `Name: ${entry['Wifi name']}, Place: ${entry.Place}, Neighborhood: ${entry.Neighborhood}` // ADD THE NECESSARY THINGS HERE
+                            content:
+                                `<div>
+                                <strong>Name:</strong> ${entry['Wifi name'] || "Unnamed Wifi Location"}<br>
+                                <strong>Place:</strong> ${entry.Place || "No place provided"}<br>
+                                <strong>Neighborhood:</strong> ${entry.Neighborhood || "No neighborhood provided"}<br>
+                            </div>`
                         });
                         wifi_markers.push(marker);
                     } else {
@@ -54,13 +161,11 @@
                     }
                 });
             }
-            catch(error)
-            {
+            catch (error) {
                 console.error("Error fetching WiFi locations:", error);
             }
         }
-        else
-        {
+        else {
             wifi_markers.forEach(marker => {
                 map._removeMarker(marker);
             });
@@ -73,11 +178,9 @@
                 map._removeMarker(marker);
             });
             wifi_markers = [];
-            try
-            {
+            try {
                 console.log("Fetching Coffee Shop data...");
-                const response = await fetch(coffee_url);
-                const data = await response.json();
+                const data = await fetchFrom(coffee_url);
                 console.log("Coffee Shop data fetched successfully:", data);
                 data.elements.forEach(entry => {
                     if (entry.lat && entry.lon) {
@@ -93,25 +196,30 @@
                             //     }
                             // },
                             icon: {
-                                url: 'https://i.imgur.com/Q0lGgUU.png',
+                                // url: 'https://i.imgur.com/Q0lGgUU.png',
+                                url: 'https://i.imgur.com/CU43Ymm.png',
                                 scaledSize: new google.maps.Size(28, 34), // Scaled size (width, height in pixels)
                                 origin: new google.maps.Point(0, 0), // Origin point (0, 0 by default)
                                 anchor: new google.maps.Point(16, 32) // Anchor point (adjust if needed)
                             },
-                            content: `Name: ${entry.tags.name}, Address: ${entry.tags["addr:street"] || "No address provided"}` // ADD THE NECESSARY THINGS HERE
+                            content:
+                                `<div>
+                                <strong>Name:</strong> ${entry.tags.name || "Unnamed Coffee Shop"}<br>
+                                <strong>Address:</strong> ${entry.tags["addr:street"] || "No address provided"}<br>
+                                <a href="/coffeeShop/${entry.id}" target="_blank">View Details</a>
+                            </div>`
+                            // content: `Name: ${entry.tags.name}, Address: ${entry.tags["addr:street"] || "No address provided"}` // ADD THE NECESSARY THINGS HERE
                         });
                         coffee_markers.push(marker);
                     } else {
                         console.warn("Missing coordinates for entry:", entry);
                     }
                 });
-            }catch(error)
-            {
+            } catch (error) {
                 console.error("Error fetching Coffee Shop locations:", error);
             }
         }
-        else
-        {
+        else {
             coffee_markers.forEach(marker => {
                 map._removeMarker(marker);
             });

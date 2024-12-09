@@ -1,20 +1,29 @@
 <link rel="stylesheet" href="/public/css/styles.css">
-<header> 
+<header>
   <h1> Welcome to WiFly NYC</h1>
 </header>
 <main>
-   
+
   <form id="accountHandling">
-    <label>
-      Signup<br><br/>
-        <label id='formLabel' for="loginUser">Username:</label><br>
-        <input class='formText' type="text" id="loginUser" name="loginUser"><br><br/>
-        <label id='formLabel' for="loginEmail">Email:</label><br>
-        <input class='formText' type="text" id="loginEmail" name="loginEmail"><br><br/>
-        <label id='formLabel' for="loginPassword">Password:</label><br>
-        <input class='formText' type="password" id="loginPassword" name="loginPassword"><br><br/>
-        <input class="submit" type="submit" value="Create account">
-    </label>
+    Signup<br><br>
+    <label class='formLabel' for="loginUser">
+      Username:<br>
+      <input class='formText' type="text" id="loginUser" name="loginUser">
+    </label><br><br>
+
+    <label class='formLabel' for="loginEmail">
+      Email:<br>
+      <input class='formText' type="email" id="loginEmail" name="loginEmail">
+    </label><br><br>
+
+    <label class='formLabel' for="loginPassword">
+      Password:<br>
+      <input class='formText' type="password" id="loginPassword" name="loginPassword">
+    </label><br><br>
+
+    <button class="submit" type="submit">Create Account</button>
   </form>
   <p id="error"></p>
   <script src="../public/js/users.js"></script>
+  <script src="/public/js/helpers.js"></script>
+</main>
