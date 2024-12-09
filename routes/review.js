@@ -1,4 +1,5 @@
 import { Router } from "express";
+import xss from "xss";
 import { createReview, getReviewById, getReviews } from "../data/reviews.js";
 import { validateNumber, validateNumericId, validateRating, validateReviewType, validateString } from "../helpers.js";
 
@@ -20,6 +21,9 @@ router.route('/')
         } catch (e) {
             return res.status(400).json({ error: e });
         }
+
+        text = xss(text);
+        reviewType = xss(reviewType);
 
         try {
             const review = await createReview(score, text, id, reviewType);
