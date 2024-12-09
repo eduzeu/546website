@@ -25,7 +25,7 @@ router.route("/city")
     })
     .post(async (req, res) => {
         let searchBorough = req.body.searchByBorough;
-        
+
         try {
             searchBorough = validateString(searchBorough, 'Search Borough');
 
@@ -65,11 +65,12 @@ router.route("/date")
 
         try {
             searchDate = validateDateString(searchDate, "Search Date");
-            searchDate = xss(searchDate);
 
         } catch (e) {
             return res.status(400).send(e);
         }
+
+        searchDate = xss(searchDate);
 
         try {
             const events = await getEventbyDate(searchDate);
