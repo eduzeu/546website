@@ -74,14 +74,30 @@ export const insertUserReview = async (userId, place, review, rating) => {
         const newReview = {
             place: place,
             review: review,
-            rating: rating,
              };
 
         const userReview = await userCollection.updateOne(
-        { _id: userId },  
-        { $push: { reviews: newReview } }  
+        { _id: new ObjectId(userId) },  // Match the user by their ID
+        { $push: { reviews: newReview } },
         );
+
+        return newReview;
     }catch (e){
         console.error(e);
+    };
+};
+
+// console.log(await insertUserReview("67571a0a7efa087d3782482b", "Central Park", "This is a good place", "4.0"));
+
+export const getUserFeedReviews = async (userId) => { 
+
+    try{
+        const displayReviews = await userCollection.find(
+            {userId: new ObjectId(userId)},
+            {projection: {reviews: 1} }).toArray();
+
+         return displayReviews;
+    }catch(e){
+        console.error(e)
     }
-}
+};

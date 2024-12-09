@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { insertUserReview } from "../data/reviews";
+import { insertUserReview, getUserFeedReviews} from "../data/reviews.js";
 
 const router = Router();
 
@@ -12,19 +12,39 @@ router.route("/")
     }
   });
 
-router.route("/:review")
+  
+ //insertUserReview(placeName, reviewText, rating) //inserts review to database
+ 
+router.route("/review")
   .post(async (req, res) => { 
     try{
-      let review = req.body.reviw; 
-      let rating = req.body.rating;
-      let place = req.body.place; 
+      let rating = req.body.reviewText;
+      let place = req.body.placename;
+      let sessionId = req.cookies["session_token"];
+
       //find way to get id
       let userId;
 
-      const postReview = await insertUserReview(userId, review, rating, place)
+      const postReview = await insertUserReview(userId, review, rating, place);
+      return postReview;
+
     }catch(e){
       console.error(e);
+      return res.status(400).send(e);
     }
   });
+
+
+router.route("/:id")
+.get(async (req, res) => {
+  try{
+    let userId = req.body.userId;
+
+    const getReviews = await getUserFeedReviews(userId);
+    return getReviews;
+  }catch(e){
+    return res.status(400).send(e);
+  }
+});
 
 export default router;
