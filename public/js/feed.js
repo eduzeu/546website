@@ -1,4 +1,3 @@
-import { fetchFrom } from "../../helpers";
 
 // Get references to the necessary elements
 const postButton = document.getElementById('postButton');
@@ -38,6 +37,13 @@ const InsertReview = async (object) => {
   await fetch("/userFeed/review", {
     method: "POST",
     headers: {"Content-Type": "application/json"},
-    body: JSON.stringify(revObject)
+    body: JSON.stringify(object)
+  });
+};
+
+const displayReviews = async () => { 
+  await fetch("/userFeed/getReviews", {
+    method: "GET",
+    headers: {"Content-Type": "application/json"},
   });
 };

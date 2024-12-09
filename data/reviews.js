@@ -69,7 +69,7 @@ export const getReviewById = async (id, type) => {
     }
 };
 
-export const insertUserReview = async (userId, place, review, rating) => {
+export const insertUserReview = async (userId, review, place ) => {
     try{
         const newReview = {
             place: place,

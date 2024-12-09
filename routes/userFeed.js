@@ -18,14 +18,15 @@ router.route("/")
 router.route("/review")
   .post(async (req, res) => { 
     try{
-      let rating = req.body.reviewText;
+      let review = req.body.reviewText;
       let place = req.body.placename;
-      let sessionId = req.cookies["session_token"];
-
+      //let sessionId = req.cookies["session_token"];
+      console.log("calling insert user rev route");
+      console.log(review, place);
       //find way to get id
       let userId;
 
-      const postReview = await insertUserReview(userId, review, rating, place);
+      const postReview = await insertUserReview(userId, review, place);
       return postReview;
 
     }catch(e){
@@ -35,7 +36,7 @@ router.route("/review")
   });
 
 
-router.route("/:id")
+router.route("/getReviews")
 .get(async (req, res) => {
   try{
     let userId = req.body.userId;
