@@ -15,7 +15,8 @@ router.route('/').get(async (req, res) => {
           throw 'no cookie';
         }
         token = await sessionTokenFunctions.sessionChecker(token);//checks if sessionId is valid
-        res.redirect('/home/');
+        res.render('../views/account')
+       // res.redirect('/home/');
     } catch(e){
         console.log(e);
         res.render('../views/account');
