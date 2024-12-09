@@ -1,4 +1,5 @@
 import { Router } from "express";
+import xss from "xss";
 import { getAllEvents, getEventbyBorough, getEventbyDate } from '../data/events.js';
 import { validateDateString, validateString } from "../helpers.js";
 
@@ -24,11 +25,15 @@ router.route("/city")
     })
     .post(async (req, res) => {
         let searchBorough = req.body.searchByBorough;
+        
         try {
             searchBorough = validateString(searchBorough, 'Search Borough');
+
         } catch (e) {
             return res.status(400).send(e);
         }
+
+        searchBorough = xss(searchBorough);
 
         try {
             const events = await getEventbyBorough(searchBorough);
@@ -60,6 +65,8 @@ router.route("/date")
 
         try {
             searchDate = validateDateString(searchDate, "Search Date");
+            searchDate = xss(searchDate);
+
         } catch (e) {
             return res.status(400).send(e);
         }
