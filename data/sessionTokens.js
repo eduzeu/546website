@@ -18,7 +18,14 @@ export const addSessionToken = async (sessionId, userId, expiresAt) => {
     return inserted;
 }
 export const findUserFromSessionToken= async (sessionToken) => {
-    const user = await userCollection.findOne({_id: sessionToken.userId});
+    const session = await sessionTokensCollection.findOne({sessionId: sessionToken});
+    if(!session){
+        throw 'Invalid sessionId';
+    }
+    const user = await userCollection.findOne({_id: session.userId});
+    if(!user){
+        throw 'No matching user for session';
+    }
     return user;
 }
 export const sessionChecker = async (sessionToken) => {
@@ -39,3 +46,13 @@ export const sessionChecker = async (sessionToken) => {
     }
     return sessionToken;
   }
+export const deleteSessionToken = async (sessionToken) => {
+    if(sessionToken == null) {
+        throw 'You need to be logged in to log out';
+    }
+    const result = await sessionTokensCollection.deleteOne({sessionId: sessionToken});
+    if(result.deletedCount == 0){
+        throw 'Token not found';
+    }
+    return true;
+}

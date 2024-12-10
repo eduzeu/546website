@@ -22,11 +22,11 @@ router.route('/').get(async (req, res) => {
 // POST / route for login
 router.route('/').post(async (req, res) => {
     try {
-        const { username, password } = req.body;
-        const user = await userFunctions.checkUser(username, password);
-        const sessionId = uuid.v4();
+        const { username, password } = req.body; //get username and password from request
+        const user = await userFunctions.checkUser(username, password);//isvalid login
+        const sessionId = uuid.v4();//unique sessionid
         const expiresAt = new Date();
-        expiresAt.setMinutes(expiresAt.getMinutes() + 30);
+        expiresAt.setMinutes(expiresAt.getMinutes() + 30);//expires in 30 min from creation time
         await sessionTokenFunctions.addSessionToken(sessionId, user, expiresAt);
         res.cookie("session_token", sessionId, { maxAge: 30 * 60 * 1000, httpOnly: true });
         return res.status(200).json(true); // Send response on successful login
@@ -53,10 +53,29 @@ router.route("/newAccount")
       console.log("user inserted sucesfully.")
       res.status(200).redirect('/');
     } catch (error) {
-      // const errorMessage = error && error.message ? error.message : "Unknown error";
-      // return res.status(errorMessage.includes("validation") ? 400 : 500).json({ error: errorMessage });    
-      console.log(error);
+      const errorMessage = error && error.message ? error.message : "Unknown error";
+      return res.status(errorMessage.includes("validation") ? 400 : 500).json({ error: errorMessage });    
     }
   });
+
+router.route("/logout")
+  .get(async (req, res) => {
+    try {
+        const token = req.cookies["session_token"];
+        let isDeleted = false;
+        if (token) {
+          isDeleted = await sessionTokenFunctions.deleteSessionToken(token);
+        }
+        res.clearCookie("session_token", { httpOnly: true });
+        if(isDeleted){
+            return res.redirect("/");
+        }
+        else{
+            throw 'Failed to delete session';
+        }
+      } catch (error) {
+        return res.status(500).send("An error occurred during logout.");
+      }
+  })
 
 export default router;
