@@ -136,8 +136,7 @@ const displayPlaceOfTheDay = async () => {
     storeTime = parseInt(storeTime, 10);
 
     if (!store || !storeTime || time >= storeTime) {
-      const response = await fetchFrom('../location/wifi/place');
-      const placeInfo = await response.json();
+      const placeInfo = await fetchFrom('../location/wifi/place');
       console.log(placeInfo);
 
       localStorage.setItem('placeOfTheDay', JSON.stringify(placeInfo));

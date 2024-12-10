@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getWifiLocations } from "../data/locations.js";
+import { fetchCoffeeShops, getWifiLocations } from "../data/locations.js";
 
 const router = Router()
 
