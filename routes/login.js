@@ -1,4 +1,5 @@
 import { Router } from "express";
+import xss from "xss";
 import * as userFunctions from "../data/users.js";
 import * as sessionTokenFunctions from "../data/sessionTokens.js";
 import cookieParser from "cookie-parser";
@@ -22,7 +23,15 @@ router.route('/').get(async (req, res) => {
 // POST / route for login
 router.route('/').post(async (req, res) => {
     try {
-        const { username, password } = req.body; //get username and password from request
+        let { username, password } = req.body; //get username and password from request
+        try {
+            username = validateString(username, "Username").toLowerCase();
+            password = validateString(password, "Password");
+        } catch (error) {
+            res.status(400).json({ error: error.toString() });
+        }
+        username = xss(username);
+        password = xss(password);
         const user = await userFunctions.checkUser(username, password);//isvalid login
         const sessionId = uuid.v4();//unique sessionid
         const expiresAt = new Date();
@@ -41,14 +50,24 @@ router.route("/newAccount")
     res.render("../views/newAccount", { title: "Welcome to WiFly NYC" });
   })
   .post(async (req, res) => {
-    let { username, email, password } = req.body;
+    let username = req.body.username;
+    let email = req.body.email;
+    let password = req.body.password;
+
     try {
       // Validate inputs
       username = validateString(username, "Username").toLowerCase();
       email = validateEmailAddress(email, "Email");
       password = validateString(password, "Password");
+    } catch (error) {
+      return res.status(400).json({ error: error.toString() });
+    }
 
-      // Create new user
+    username = xss(username);
+    email = xss(email);
+    password = xss(password);
+
+    try {
       const result = await userFunctions.addNewUser(username, email, password);
       console.log("user inserted sucesfully.")
       res.status(200).redirect('/');
