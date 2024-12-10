@@ -1,61 +1,21 @@
-(function ($) {
-    let form = $('#accountHandling');
-    let username = $('#loginUser');
-    let password = $('#loginPassword');
-    let email = $('#loginEmail');
-    let error = $('#error');
+const form = document.getElementById('accountHandling');
+const username = document.getElementById('loginUser');
+const password = document.getElementById('loginPassword');
+const email = document.getElementById('loginEmail');
+const error = document.getElementById('error');
 
-    form.submit(function (event) {
-        event.preventDefault();
-
-        let isRegistration = false;
-        let usernameValue = username.val();
-        let passwordValue = password.val();
-        let emailValue = email ? email.val() : null;
-
+if (form) {
+    form.addEventListener('submit', async (event) => {
         try {
-            usernameValue = validateString(usernameValue, 'Username');
-            passwordValue = validateString(passwordValue, 'Password');
-            if (emailValue) {
-                emailValue = validateEmailAddress(emailValue, 'Email');
-                isRegistration = true;
+            username.value = validateString(username.value, 'Username');
+            password.value = validateString(password.value, 'Password');
+            if (email) {
+                email.value = validateEmailAddress(email.value, 'Email');
             };
 
         } catch (e) {
-            error.text(e);
-            return;
+            event.preventDefault();
+            error.textContent = e;
         }
-
-        const endpoint = isRegistration ? '/newAccount' : '/';
-        const credentials = {
-            username: usernameValue,
-            password: passwordValue,
-        };
-
-        if (isRegistration) {
-            credentials.email = emailValue;
-        }
-
-        $.ajax({
-            type: "POST",
-            url: endpoint,
-            headers: { 'Content-Type': 'application/json' },
-            data: JSON.stringify(credentials),
-            success: function (response) {
-                if (isRegistration) {
-                    window.location.href = '/';
-                } else {
-                    window.location.href = '/home';
-                }
-            },
-            error: function (err) {
-                error.text(err);
-            },
-            complete: function () {
-                username.val('');
-                password.val('');
-                if (isRegistration) email.val('');
-            }
-        })
-    })
-})(jQuery);
+    });
+}

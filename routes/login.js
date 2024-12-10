@@ -1,7 +1,7 @@
 import { Router } from "express";
 import xss from "xss";
 import * as userFunctions from "../data/users.js";
-import { validateString } from "../helpers.js";
+import { validateEmailAddress, validateString } from "../helpers.js";
 
 const router = Router();
 
@@ -10,14 +10,14 @@ router.route("/")
     res.render("../views/account", { title: "Welcome to WiFly NYC" });
   })
   .post(async (req, res) => {
-    let username = req.body.username;
-    let password = req.body.password;
+    let username = req.body.loginUser;
+    let password = req.body.loginPassword;
 
     try {
       username = validateString(username, "Username").toLowerCase();
       password = validateString(password, "Password");
     } catch (error) {
-      res.status(400).json({ error: error.toString() });
+      return res.status(400).json({ error: error.toString() });
     }
 
     username = xss(username);
@@ -27,14 +27,14 @@ router.route("/")
       const result = await userFunctions.checkUser(username, password);
 
       if (result) {
-        res.status(200).json(result);
+        return res.redirect("/home");
 
       } else {
         throw "Invalid Login";
       }
 
     } catch (error) {
-      res.status(500).json({ error: error.toString() });
+      return res.status(500).json({ error: error.toString() });
     }
   });
 
@@ -43,9 +43,9 @@ router.route("/newAccount")
     res.render("../views/newAccount", { title: "Welcome to WiFly NYC" });
   })
   .post(async (req, res) => {
-    let username = req.body.username;
-    let email = req.body.email;
-    let password = req.body.password;
+    let username = req.body.loginUser;
+    let email = req.body.loginEmail;
+    let password = req.body.loginPassword;
 
     try {
       username = validateString(username, "Username").toLowerCase();
@@ -61,7 +61,13 @@ router.route("/newAccount")
 
     try {
       const result = await userFunctions.addNewUser(username, email, password);
-      res.status(200).json(result);
+
+      if (result) {
+        res.redirect("/");
+
+      } else {
+        throw "Failed to create account";
+      }
 
     } catch (error) {
       res.status(500).json({ error: error.toString() });
