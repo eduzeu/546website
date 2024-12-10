@@ -3,7 +3,7 @@
   <h1> Welcome to WiFly NYC</h1>
 </header>
 <main>
-  <form id="accountHandling">
+  <form id="accountHandling" action="/newAccount" method="POST">
     Signup<br><br>
     <label class='formLabel' for="loginUser">
       Username:<br>
@@ -23,8 +23,6 @@
     <button class="submit" type="submit">Create Account</button>
   </form>
   <p id="error"></p>
-  <script src="https://code.jquery.com/jquery-3.6.4.js" integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E="
-    crossorigin="anonymous"></script>
   <script src="../public/js/users.js"></script>
   <script src="/public/js/helpers.js"></script>
 </main>
