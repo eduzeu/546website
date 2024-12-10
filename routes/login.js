@@ -3,26 +3,23 @@ import * as userFunctions from "../data/users.js";
 import * as sessionTokenFunctions from "../data/sessionTokens.js";
 import cookieParser from "cookie-parser";
 import * as uuid from "uuid";
+import { validateString, validateEmailAddress, validateNumber } from "../helpers.js";
 
 const router = Router();
 
+// GET / route to check session token
 router.route('/').get(async (req, res) => {
-    try{
-        let token;
-        try{
-          token = req.cookies["session_token"];//gets the sessionId
-        } catch{
-          throw 'no cookie';
-        }
-        token = await sessionTokenFunctions.sessionChecker(token);//checks if sessionId is valid
-        res.render('../views/account')
-       // res.redirect('/home/');
-    } catch(e){
+    try {
+        // let token = req.cookies["session_token"]; // Attempt to retrieve the cookie
+        // token = await sessionTokenFunctions.sessionChecker(token); // Check if sessionId is valid
+        return res.render('../views/account'); // Render the account page
+    } catch (e) {
         console.log(e);
-        res.render('../views/account');
+        return res.render('../views/account'); // Render the account page on error
     }
-})
+});
 
+// POST / route for login
 router.route('/').post(async (req, res) => {
     try {
         const { username, password } = req.body;
@@ -30,28 +27,15 @@ router.route('/').post(async (req, res) => {
         const sessionId = uuid.v4();
         const expiresAt = new Date();
         expiresAt.setMinutes(expiresAt.getMinutes() + 30);
-        const token = await sessionTokenFunctions.addSessionToken(sessionId, user, expiresAt);
-        res.cookie("session_token", sessionId, {maxAge: 30*60*1000, httpOnly: true});
-        res.status(200).json(true);
+        await sessionTokenFunctions.addSessionToken(sessionId, user, expiresAt);
+        res.cookie("session_token", sessionId, { maxAge: 30 * 60 * 1000, httpOnly: true });
+        return res.status(200).json(true); // Send response on successful login
     } catch (error) {
-      res.status(400).json({ error: error.toString() });
+        return res.status(400).json({ error: error.toString() }); // Handle login error
     }
+});
 
-    try {
-      const result = await userFunctions.checkUser(username, password);
-
-      if (result) {
-        res.status(200).json(result);
-
-      } else {
-        throw "Invalid Login";
-      }
-
-    } catch (error) {
-      res.status(500).json({ error: error.toString() });
-    }
-  });
-
+// GET and POST /newAccount for account creation
 router.route("/newAccount")
   .get(async (req, res) => {
     res.render("../views/newAccount", { title: "Welcome to WiFly NYC" });
@@ -59,21 +43,18 @@ router.route("/newAccount")
   .post(async (req, res) => {
     let { username, email, password } = req.body;
     try {
+      // Validate inputs
       username = validateString(username, "Username").toLowerCase();
       email = validateEmailAddress(email, "Email");
       password = validateString(password, "Password");
 
-    } catch (error) {
-      return res.status(400).json({ error: error.toString() });
-    }
-
-    try {
+      // Create new user
       const result = await userFunctions.addNewUser(username, email, password);
-      res.status(200).json(result);
-
+      console.log("user inserted sucesfully.")
+      return res.status(200).json({ message: "User created successfully" });
     } catch (error) {
-      res.status(500).json({ error: error.toString() });
-    }
+      const errorMessage = error && error.message ? error.message : "Unknown error";
+      return res.status(errorMessage.includes("validation") ? 400 : 500).json({ error: errorMessage });    }
   });
 
 export default router;
