@@ -8,23 +8,25 @@ if (form) {
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
 
-        let isRegistration = false;
+        let isRegistration = true;
         let usernameValue = username.value;
         let passwordValue = password.value;
         let emailValue = email ? email.value : null;
-
-        try {
-            usernameValue = validateString(usernameValue, 'Username');
-            passwordValue = validateString(passwordValue, 'Password');
-            if (emailValue) {
-                emailValue = validateEmailAddress(email.value, 'Email');
-                isRegistration = true;
-            };
-
-        } catch (e) {
-            error.textContent = e;
-            return;
+        if(email == null){
+            isRegistration = false;
         }
+        // try {
+        //     usernameValue = validateString(usernameValue, 'Username');
+        //     passwordValue = validateString(passwordValue, 'Password');
+        //     if (emailValue) {
+        //         emailValue = validateEmailAddress(email.value, 'Email');
+        //         isRegistration = true;
+        //     };
+
+        // } catch (e) {
+        //     error.textContent = e;
+        //     return;
+        // }
 
         const endpoint = isRegistration ? '/newAccount' : '/';
         const credentials = {
@@ -37,7 +39,7 @@ if (form) {
         }
 
         try {
-            const response = await fetchFrom(endpoint, {
+            const response = await fetch(endpoint, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(credentials),

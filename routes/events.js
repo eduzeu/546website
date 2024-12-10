@@ -8,7 +8,7 @@ router.route("/")
     .get(async (req, res) => {
         try {
             let allEvents = await getAllEvents();
-            res.render('events', { 'title': 'Events', 'events': allEvents });
+            res.render('../views/events', { 'title': 'Events', 'events': allEvents });
         } catch (e) {
             return res.status(400).send(e);
         }

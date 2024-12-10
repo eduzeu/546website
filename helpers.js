@@ -77,7 +77,7 @@ export const validateReviewType = (reviewType, typeName) => {
 export const validateDateString = (dateStr, dateName) => {
   dateStr = validateString(dateStr, dateName);
 
-  let components = dateTrim.split("/");
+  let components = dateStr.split("/");
 
   if (components.length !== 3) {
     throw `${dateName || "Provided string"} is not MM/DD/YYYY format.`
