@@ -1,5 +1,4 @@
 import axios from "axios";
-import date from 'date-and-time';
 
 export const validateString = (str, strName) => {
   if (typeof str === "undefined")
@@ -35,11 +34,11 @@ export const validateNumber = (num, numName) => {
 
 export const validateEmailAddress = (email, emailName) => {
   email = validateString(email, emailName);
-  
+
   // regex source: https://www.geeksforgeeks.org/javascript-program-to-validate-an-email-address/
   const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
   if (!regex.test(email)) {
-      throw `${emailName || "Provided string"} is not a valid email address.`
+    throw `${emailName || "Provided string"} is not a valid email address.`
   }
 
   return email;
@@ -77,17 +76,19 @@ export const validateReviewType = (reviewType, typeName) => {
 export const validateDateString = (dateStr, dateName) => {
   dateStr = validateString(dateStr, dateName);
 
-  let components = dateTrim.split("/");
+  let components = dateStr.split("-");
 
   if (components.length !== 3) {
-    throw `${dateName || "Provided string"} is not MM/DD/YYYY format.`
+    throw `${dateName || "Provided string"} is not YYYY-MM-DD format.`
   }
 
-  if (components[0].length !== 2 || components[1].length !== 2 || components[2].length !== 4) {
-    throw `${dateName || "Provided string"} is not MM/DD/YYYY format.`
+  if (components[0].length !== 4 || components[1].length !== 2 || components[2].length !== 2) {
+    throw `${dateName || "Provided string"} is not YYYY-MM-DD format.`
   }
 
-  if (!date.isValid(dateTrim, "MM/DD/YYYY")) {
+  let formattedDate = `${components[0]}/${components[1]}/${components[2]}`
+
+  if (new Date(formattedDate) === "Invalid Date") {
     throw `${dateName || "Provided string"} is not a valid date.`
   }
 

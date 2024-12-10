@@ -4,7 +4,7 @@ const fetchFrom = async (url, options) => {
     if (response.ok) {
         const json = await response.json();
         return json;
-    
+
     } else {
         throw `Recieved status ${response.status}: ${response.statusText}`;
     }
@@ -36,6 +36,28 @@ const validateEmailAddress = (email, emailName) => {
     }
 
     return email;
+}
+
+const validateDateString = (dateStr, dateName) => {
+    dateStr = validateString(dateStr, dateName);
+
+    let components = dateStr.split("-");
+
+    if (components.length !== 3) {
+        throw `${dateName || "Provided string"} is not YYYY-MM-DD format.`
+    }
+
+    if (components[0].length !== 4 || components[1].length !== 2 || components[2].length !== 2) {
+        throw `${dateName || "Provided string"} is not YYYY-MM-DD format.`
+    }
+
+    let formattedDate = `${components[0]}/${components[1]}/${components[2]}`
+
+    if (new Date(formattedDate) === "Invalid Date") {
+        throw `${dateName || "Provided string"} is not a valid date.`
+    }
+
+    return dateStr;
 }
 
 const validateNumber = (num, numName) => {

@@ -22,7 +22,8 @@
 
 <main>
   <div class="searchbar">
-    <form class="searchform" action="/events/city" method="POST">
+    <p id="error"></p>
+    <form class="searchform" id="searchform" action="/events/city" method="POST">
       <label for="searchByBorough">Borough:</label>
       <input type="text" id="searchByBorough" name="searchByBorough" required placeholder="Enter borough name"
         title="Please enter a valid borough name">
@@ -31,3 +32,6 @@
   </div>
 
 </main>
+
+<script src="../public/js/event.js"></script>
+<script src="/public/js/helpers.js"></script>
