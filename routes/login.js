@@ -51,9 +51,9 @@ router.route("/newAccount")
     res.render("../views/newAccount", { title: "Welcome to WiFly NYC" });
   })
   .post(async (req, res) => {
-    let username = req.body.username;
-    let email = req.body.email;
-    let password = req.body.password;
+    let username = req.body.loginUser;
+    let email = req.body.loginEmail;
+    let password = req.body.loginPassword;
 
     // try {
     //   // Validate inputs
