@@ -89,15 +89,19 @@ export const insertUserReview = async (userId, review, place ) => {
 
 // console.log(await insertUserReview("67571a0a7efa087d3782482b", "Central Park", "This is a good place", "4.0"));
 
-export const getUserFeedReviews = async (userId) => { 
-
-    try{
+export const getUserFeedReviews = async () => { 
+    try {
         const displayReviews = await userCollection.find(
-            {userId: new ObjectId(userId)},
-            {projection: {reviews: 1} }).toArray();
-
-         return displayReviews;
-    }catch(e){
-        console.error(e)
+            {
+                reviews: { $exists: true, $not: { $size: 0 } } // Ensures reviews exist and are not empty
+            },
+            {
+                projection: { username: 1, reviews: 1 } // Only include the reviews field in the result
+            }
+        ).toArray();
+        console.log(displayReviews);
+        return displayReviews;
+    } catch (e) {
+        console.error(e);
     }
 };

@@ -4,10 +4,51 @@ const postButton = document.getElementById('postButton');
 const reviewPrompt = document.getElementById('reviewPrompt');
 const cancelButton = document.getElementById('cancelButton');
 const reviewForm = document.getElementById('reviewForm');
-
+const userPosts = document.getElementById('userPosts');
 // console.log(postButton, reviewPrompt, cancelButton, reviewForm);
 
 // Event listener for the post button
+const displayReviews = async () => {
+  try {
+    const response = await fetch("../userFeed/getReviews");
+    
+    if (!response.ok) { 
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    const reviews = await response.json();
+
+    console.log("Fetched reviews:", reviews);
+
+    userPosts.innerHTML = ""; // Clear the previous content
+
+    reviews.forEach((user) => {
+      // Check if user.reviews exists and is an array
+      if (user.reviews && Array.isArray(user.reviews)) {
+        user.reviews.forEach((rev) => {
+          // Log the review to see its exact structure
+          console.log("Individual review:", rev);
+
+          const revDiv = document.createElement("div");
+          revDiv.classList.add("review");
+
+          // Adjust these based on the actual structure of your review object
+          revDiv.innerHTML = `
+            <div class="review-header">
+              <h3 class="place-name">${rev.place || 'Unknown Place'}</h3>
+              <span class="username">by ${user.username || 'Anonymous'}</span>
+            </div>
+            <p class="review-text">${rev.review|| 'No review text'}</p>
+          `;
+          userPosts.appendChild(revDiv);
+        });
+      }
+    });
+  } catch (error) {
+    console.error("Error fetching reviews:", error);
+    userPosts.innerHTML = '<p>Failed to load reviews. Please try again later.</p>';
+  }
+};
 postButton.addEventListener('click', () => {
   reviewPrompt.classList.remove('hidden');
 });
@@ -31,8 +72,15 @@ cancelButton.addEventListener('click', () => {
   
   reviewForm.reset();
   reviewPrompt.classList.add('hidden');
+
+  displayReviews();
+
 });
 
+displayReviews();
+
+
+ 
 const InsertReview = async (object) => {
   await fetch("/userFeed/review", {
     method: "POST",
@@ -41,9 +89,6 @@ const InsertReview = async (object) => {
   });
 };
 
-const displayReviews = async () => { 
-  await fetch("/userFeed/getReviews", {
-    method: "GET",
-    headers: {"Content-Type": "application/json"},
-  });
-};
+
+
+ 
