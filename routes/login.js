@@ -23,16 +23,17 @@ router.route('/').get(async (req, res) => {
 // POST / route for login
 router.route('/').post(async (req, res) => {
     try {
-        let { username, password } = req.body; //get username and password from request
-        try {
-            username = validateString(username, "Username").toLowerCase();
-            password = validateString(password, "Password");
-        } catch (error) {
-            res.status(400).json({ error: error.toString() });
-        }
-        username = xss(username);
-        password = xss(password);
-        const user = await userFunctions.checkUser(username, password);//isvalid login
+        const { username, password } = req.body; //get username and password from request
+        // try {
+        //     console.log(username);
+        //     username = validateString(userN, "Username").toLowerCase();
+        //     password = validateString(passW, "Password");
+        // } catch (error) {
+        //     res.status(400).json({ error: error.toString() });
+        // }
+        let usernam = xss(username);
+        let passwor = xss(password);
+        const user = await userFunctions.checkUser(usernam, passwor);//isvalid login
         const sessionId = uuid.v4();//unique sessionid
         const expiresAt = new Date();
         expiresAt.setMinutes(expiresAt.getMinutes() + 30);//expires in 30 min from creation time
@@ -54,14 +55,14 @@ router.route("/newAccount")
     let email = req.body.email;
     let password = req.body.password;
 
-    try {
-      // Validate inputs
-      username = validateString(username, "Username").toLowerCase();
-      email = validateEmailAddress(email, "Email");
-      password = validateString(password, "Password");
-    } catch (error) {
-      return res.status(400).json({ error: error.toString() });
-    }
+    // try {
+    //   // Validate inputs
+    //   username = validateString(username, "Username").toLowerCase();
+    //   email = validateEmailAddress(email, "Email");
+    //   password = validateString(password, "Password");
+    // } catch (error) {
+    //   return res.status(400).json({ error: error.toString() });
+    // }
 
     username = xss(username);
     email = xss(email);
