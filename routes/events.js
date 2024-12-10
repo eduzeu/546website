@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { getAllEvents, getEventbyBorough, getEventbyDate } from '../data/events.js';
 import { validateDateString, validateString } from "../helpers.js";
+import * as sessionTokens from "../data/sessionTokens.js";
 
 const router = Router()
 
@@ -46,6 +47,7 @@ router.route("/city")
             return res.status(500).send(e);
         }
     });
+    
 
 router.route("/date")
     .get(async (req, res) => {

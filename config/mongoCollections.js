@@ -16,3 +16,4 @@ const getCollectionFn = (collection) => {
 export const users = getCollectionFn('users');
 export const reviews = getCollectionFn('reviews');
 export const posts = getCollectionFn('posts');
+export const sessionTokens = getCollectionFn('sessionTokens');

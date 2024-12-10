@@ -42,5 +42,11 @@ export const checkUser = async (username, password) => {
     if (!user) {
         throw "Invalid Login";
     }
-    return bcrypt.compare(password, user.password);
+    let isValid = bcrypt.compare(password, user.password);
+    if(isValid){
+        return user._id;
+    }
+    else{
+        throw 'Invalid Login';
+    }
 }
