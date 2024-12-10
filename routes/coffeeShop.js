@@ -1,13 +1,26 @@
 import { Router } from "express";
 import { fetchCoffeeShopById } from "../data/locations.js";
 import { getReviewById } from "../data/reviews.js";
-import { validateNumericId } from "../helpers.js";
+import * as helpers from "../helpers.js";
+import * as sessionTokens from "../data/sessionTokens.js";
 
 const router = Router()
 
 router.get("/:id", async (req, res) => {
+    //used to verify that the user is logged in
+    // try{
+    //     let token;
+    //     try{
+    //       token = req.cookies["session_token"];//gets the sessionId
+    //     } catch{
+    //       throw 'no cookie';
+    //     }
+    //     token = await sessionTokens.sessionChecker(token);//checks if sessionId is valid
+    // } catch(e){
+    //     res.status(401).render('../views/invalidLogin', { error: e });
+    // }
     try {
-        req.params.id = validateNumericId(req.params.id, "Coffee Shop ID");
+        req.params.id = helpers.validateNumericId(req.params.id, "Coffee Shop ID");
     } catch (e) {
         return res.render("error", {
             title: "Error",
