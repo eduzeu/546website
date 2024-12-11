@@ -7,6 +7,8 @@ import locationRoutes from './location.js';
 import loginRoutes from './login.js';
 import reviewRoutes from './review.js';
 import mapRoutes from './map.js';
+import friendRoutes from './friends.js';
+
 
 const constructorMethod = (app) => {
   app.use('/feed', feedRoutes);
@@ -15,8 +17,9 @@ const constructorMethod = (app) => {
   app.use('/review', reviewRoutes);
   app.use('/location', locationRoutes);
   app.use('/coffeeShop', coffeeShopRoutes);
+  app.use('/friends', friendRoutes);
   app.use('/home', mapRoutes);
-  
+
   app.use('/public', staticDir('public'));
 
   app.use("/", loginRoutes);

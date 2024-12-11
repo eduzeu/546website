@@ -11,7 +11,18 @@ router.route("/")
     try {
       const { username, password } = req.body;
       const result = await userFunctions.checkUser(username, password);
+      
       if (result) {
+        const curr = await userFunctions.user(username, password);
+
+        req.session.user = {
+          username: curr.username,
+          email: curr.email,
+          favoriteHotspots: curr.favoriteHotspots,
+          favoriteEvents: curr.favoriteEvents,
+          favoriteCoffeeShops: curr.favoriteCoffeeShops,
+          friends: curr.friends
+        };
         res.status(200).json(result);
       } else {
         throw "Invalid Login";
@@ -33,6 +44,11 @@ router.route("/newAccount")
     } catch (error) {
       res.status(400).json({ error: error.toString() });
     }
+  });
+
+  router.route('/signoutuser').get(async (req, res) => {
+    req.session.destroy();
+    res.render("signoutuser",{title: "Sign Out"}); 
   });
 
 export default router;

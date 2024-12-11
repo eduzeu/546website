@@ -1,0 +1,18 @@
+
+  <body>
+    <h2>{{username}}'s {{title}}</h2>
+    <main>
+      <a href="home"> Home page</a>
+      {{#if friends.length}}
+        <ul class="friends-list">
+          {{#each friends}}
+            <li class="friend-item">
+              <span class="friend-name">{{this}}</span>
+            </li>
+          {{/each}}
+        </ul>
+      {{else}}
+        <p>You haven't added any friends yet!</p>
+      {{/if}}
+    </main>
+  </body>

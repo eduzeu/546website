@@ -20,7 +20,8 @@ export const addNewUser = async (username, email, password) => {
         password: hashedPass,
         favoriteHotspots: [],
         favoriteEvents: [],
-        favoriteCoffeeShops: []
+        favoriteCoffeeShops: [], 
+        friends:[]
     };
     const insertInfo = await userCollection.insertOne(userObj);
     console.log(insertInfo);
@@ -40,3 +41,21 @@ export const checkUser = async (username, password) => {
     }
     return bcrypt.compare(password, user.password);
 }
+
+export const user = async (username, password) => {
+    username = helpers.validateString(username);
+    password = helpers.validateString(password);
+    username = username.toLowerCase();
+    const userCollection = await users();
+    const user = await userCollection.findOne({username: username});
+    if(!user){
+        throw "Invalid Login";
+    }
+
+    if(bcrypt.compare(password, user.password)){
+        return user
+    }else{
+        return "failed log in"
+    }
+}
+
