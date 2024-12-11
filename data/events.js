@@ -66,12 +66,12 @@ export const getEventbyDate = async (date) => {
         eventDates = eventDates.split("T");
 
         eventDates = eventDates[0]
-        eventDates = eventDates.split("-");
 
-        eventDates = eventDates[1] + "/" + eventDates[2] + "/" + eventDates[0]
+        const dateSplit = eventDates.split("-");
+        const dateStr = dateSplit[1] + "/" + dateSplit[2] + "/" + dateSplit[0]
 
         if (eventDates == date) {
-            event.start_date_time = eventDates
+            event.start_date_time = dateStr;
             events_in_date.push(event);
         }
     }
