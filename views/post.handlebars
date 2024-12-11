@@ -1,0 +1,44 @@
+<link rel="stylesheet" href="/public/css/styles.css" />
+
+<header>
+  <a href="/home">Home Page</a>
+  <h1>User Feed</h1>
+</header>
+<p id="postId" class="hidden">{{post._id}}</p>
+<div class="event">
+      <h4>Post:</h4>
+      <ul>
+        <li>Place: {{post.placeName}}</li>
+        <li>Posted By: {{post.user.username}}</li>
+        <li>Body: {{post.body}}</li>
+      </ul>
+    </div>
+
+<button id="postButton">Create Comment</button>
+
+<div id="reviewPrompt" class="hidden">
+  <form id="reviewForm">
+    <h3>Leave a Comment</h3>
+    <!-- Review Textarea -->
+    <label for="reviewText">Your Comment:</label>
+    <textarea
+      id="reviewText"
+      name="reviewText"
+      rows="4"
+      cols="30"
+      placeholder="Enter your comment here"
+      required
+    ></textarea>
+
+    <!-- Buttons -->
+    <div class="buttonGroup" style="margin-top: 20px;">
+      <button type="submit" id="submitCommentButton">Submit</button>
+      <button type="button" id="cancelButton">Cancel</button>
+    </div>
+  </form>
+</div>
+<p id="error"></p>
+<div id="userComments"> </div>
+
+<script src="/public/js/helpers.js"></script>
+<script src="/public/js/post.js"></script>

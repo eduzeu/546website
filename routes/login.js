@@ -45,7 +45,7 @@ router.route('/').post(async (req, res) => {
     return res.redirect('/home'); // Redirect on successful login
 
   } catch (error) {
-    return res.status(400).json({ error: error.toString() }); // Handle login error
+    return res.status(400).render("../views/account", { error: error.toString() }); // Handle login error
   }
 });
 
@@ -65,7 +65,7 @@ router.route("/newAccount")
       email = validateEmailAddress(email, "Email");
       password = validateString(password, "Password");
     } catch (error) {
-      return res.status(400).json({ error: error.toString() });
+      return res.status(400).render("../views/newAccount", { error: error.toString() });
     }
 
     username = xss(username);
@@ -74,11 +74,10 @@ router.route("/newAccount")
 
     try {
       const result = await userFunctions.addNewUser(username, email, password);
-      console.log("user inserted sucesfully.")
       res.redirect('/');
     } catch (error) {
       const errorMessage = error && error.message ? error.message : "Unknown error";
-      return res.status(errorMessage.includes("validation") ? 400 : 500).json({ error: errorMessage });
+      return res.status(errorMessage.includes("validation") ? 400 : 500).render("../views/newAccount", { error: errorMessage });
     }
   });
 

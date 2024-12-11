@@ -1,40 +1,25 @@
 // Get references to the necessary elements
 const postButton = document.getElementById("postButton");
-const reviewPrompt = document.getElementById("reviewPrompt");
+const commentPrompt = document.getElementById("reviewPrompt");
 const cancelButton = document.getElementById("cancelButton");
 const reviewForm = document.getElementById("reviewForm");
-const userPosts = document.getElementById("userPosts");
-const uploadWidget = document.getElementById("upload_widget");
-const imagePreview = document.getElementById("imagePreview");
-const submitButton = document.getElementById("submitReviewButton");
+const userComments = document.getElementById("userComments");
+const submitButton = document.getElementById("submitCommentButton");
+const postId = document.getElementById("postId");
 // console.log(postButton, reviewPrompt, cancelButton, reviewForm);
 
 let imageUrl = undefined;
 
-var myWidget = cloudinary.createUploadWidget(
-  {
-    cloudName: "dcvqjizwy",
-    uploadPreset: "post_preset",
-    sources: ["local", "url", "camera"],
-    multiple: false,
-  },
-  (error, result) => {
-    if (!error && result && result.event === "success") {
-      imageUrl = result.info.url;
-    }
-  }
-);
-
 // Event listener for the post button
 const displayReviews = async () => {
   try {
-    const reviews = await fetchFrom("../userFeed/getPosts");
+    const id = postId.textContent;
+    const comments = await fetchFrom("/userFeed/getComments/" + id);
+    console.log("Fetched comments:", comments);
 
-    console.log("Fetched reviews:", reviews);
+    userComments.innerHTML = ""; // Clear the previous content
 
-    userPosts.innerHTML = ""; // Clear the previous content
-
-    reviews.forEach((user) => {
+    comments.forEach((user) => {
       // Check if user.reviews exists and is an array
       console.log("in for");
       if (user) {
@@ -42,7 +27,7 @@ const displayReviews = async () => {
         console.log("Individual review:", user);
 
         const revDiv = document.createElement("div");
-        revDiv.classList.add("review");
+        revDiv.classList.add("comment");
 
         // Adjust these based on the actual structure of your review object
         if (user.imageUrl) {
@@ -53,7 +38,7 @@ const displayReviews = async () => {
           </div>
           <p class="review-text">${user.body || "No review text"}</p>
           <img class="review-image" src="${user.imageUrl}" alt="Review Image">
-          <a href="/userFeed/${user._id}"></a>
+          <a href=""
         `;
         } else {
           revDiv.innerHTML = `
@@ -62,7 +47,6 @@ const displayReviews = async () => {
             <span class="username">by ${user.user.username || "Anonymous"}</span>
           </div>
           <p class="review-text">${user.body || "No review text"}</p>
-          <a href="/userFeed/post/${user._id}">View/Add Comments</a>
         `;
         }
         userPosts.appendChild(revDiv);
@@ -85,7 +69,7 @@ cancelButton.addEventListener("click", () => {
   reviewForm.reset();
 });
 
-reviewForm.addEventListener("submit", async (event) => {
+reviewForm.addEventListener(submitButton, (event) => {
   event.preventDefault();
 
   let placeName = document.getElementById("placeName").value;
@@ -106,18 +90,11 @@ reviewForm.addEventListener("submit", async (event) => {
   displayReviews();
 });
 
-uploadWidget.addEventListener(
-  "click",
-  function () {
-    myWidget.open();
-  },
-  false
-);
 
 displayReviews();
 
 const InsertReview = async (object) => {
-  await fetch("/userFeed/post", {
+  await fetch("/userFeed/", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(object),

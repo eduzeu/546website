@@ -36,13 +36,15 @@ export const addNewUser = async (username, email, password) => {
 export const checkUser = async (username, password) => {
     username = validateString(username);
     password = validateString(password);
+    console.log(password);
     username = username.toLowerCase();
     const userCollection = await users();
     const user = await userCollection.findOne({ username: username });
     if (!user) {
         throw "Invalid Login";
     }
-    let isValid = bcrypt.compare(password, user.password);
+    let isValid = await bcrypt.compare(password, user.password);
+    console.log(isValid);
     if(isValid){
         return user._id;
     }
