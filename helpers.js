@@ -94,6 +94,17 @@ export const validateDateString = (dateStr, dateName) => {
   return dateStr;
 }
 
+export const validateCloudinaryUrl = (url, urlName) => {
+  url = validateString(url, urlName);
+
+  let regex = /^http:\/\/res\.cloudinary\.com\/dcvqjizwy\/image\/upload\/v[0-9]+\/[a-z0-9]+\.jpg$/
+  if (!regex.test(url)) {
+    throw `${url || "Provided string"} is not a valid image url.`
+  }
+
+  return url;
+}
+
 export const fetchFrom = async (url) => {
   try {
     let { data } = await axios.get(url);
