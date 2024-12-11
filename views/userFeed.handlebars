@@ -1,0 +1,34 @@
+<link rel="stylesheet" href="/public/css/styles.css">
+
+<header>
+  <a href="/home">Home Page</a>
+  <h1>User Feed</h1>
+</header>
+
+<button id="postButton">Create Post</button>
+
+<div id="reviewPrompt" class="hidden">
+  <form id="reviewForm">
+    <h3>Leave a Review</h3>
+    
+    <!-- Place Name Input -->
+    <label for="placeName">Place Name:</label>
+    <input type="text" id="placeName" name="placeName" required>
+    
+    <!-- Review Textarea -->
+    <label for="reviewText">Your Review:</label>
+    <textarea id="reviewText" name="reviewText" rows="4" cols="30" placeholder="Enter your review here" required></textarea>
+    
+    
+    <!-- Buttons -->
+    <div class="buttonGroup" style="margin-top: 20px;">
+      <button type="submit" id="submitReviewButton">Submit</button>
+      <button type="button" id="cancelButton">Cancel</button>
+    </div>
+  </form>
+</div>
+
+<div id="userPosts"> </div>
+
+<script src="/public/js/helpers.js"></script>
+<script src="/public/js/feed.js"></script>

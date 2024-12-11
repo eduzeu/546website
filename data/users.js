@@ -20,15 +20,19 @@ export const addNewUser = async (username, email, password) => {
         password: hashedPass,
         favoriteHotspots: [],
         favoriteEvents: [],
-        favoriteCoffeeShops: []
+        favoriteCoffeeShops: [],
+        reviews: []
     };
     const insertInfo = await userCollection.insertOne(userObj);
-    console.log(insertInfo);
+    //console.log(insertInfo);
     if (!insertInfo.acknowledged || !insertInfo.insertedId) {
         throw 'Failed to insert user';
     }
     return insertInfo;
 };
+
+// console.log(await addNewUser("user123", "ed@gmail.com", "545454"));
+
 export const checkUser = async (username, password) => {
     username = validateString(username);
     password = validateString(password);
@@ -38,5 +42,11 @@ export const checkUser = async (username, password) => {
     if (!user) {
         throw "Invalid Login";
     }
-    return bcrypt.compare(password, user.password);
+    let isValid = bcrypt.compare(password, user.password);
+    if(isValid){
+        return user._id;
+    }
+    else{
+        throw 'Invalid Login';
+    }
 }
