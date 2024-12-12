@@ -4,9 +4,24 @@
         <h1>Main Feed Page</h1>
           <p> Here we say who we are.</p>
 
-  <a href="events">Events Page</a>
-  <a href="friends">Friends List</a>
-  <a href="signoutuser">signout</a>
+<!-- https://www.w3schools.com/howto/howto_css_dropdown_navbar.asp -->
+      <div class="navbar">
+        <a href="/home">Home Page</a>
+        <div class="dropdown">
+          <button class="dropbtn">
+            Events
+            <i class="fa fa-caret-down"></i>
+          </button>
+          <div class="dropdown-content">
+            <a href="/events">All Events</a>
+            <a href="/events/city">Search by Borough</a>
+            <a href="/events/date">Search by Date</a>
+          </div>
+        </div>
+        <a href="friends">Friends List</a>
+        <a href="signoutuser">Signout</a>
+      </div>
+          
     </header>
     <main>
         <div class="content">
@@ -27,12 +42,13 @@
                     <label><input id="wifi-checkbox" type="radio" name="filter" value="wifi"> Wifi</label>
                 </fieldset>
             </section>
-
             <section class="places-feed">
                 <div id="wifiLocations"></div>
                 <div id="coffeeLocations"></div>
-            </section>
+        </section>
+
         </div>
+
         <aside class="sidebar">
             <section class="place-of-the-day">
                 <h2>Place of the Day</h2>

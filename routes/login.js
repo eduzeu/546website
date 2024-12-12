@@ -23,6 +23,8 @@ router.route("/")
           favoriteCoffeeShops: curr.favoriteCoffeeShops,
           friends: curr.friends
         };
+        console.log(req.session.user.username)
+
         res.status(200).json(result);
       } else {
         throw "Invalid Login";

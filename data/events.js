@@ -7,7 +7,6 @@ export const getAllEvents = async ()=> {
     let results = []
 
     const now = new Date();
-    console.log(now); 
 
     let curr = now.toISOString();  //to manipluate as date as a string
     curr = curr.split("T");        
@@ -43,8 +42,6 @@ export const getEventbyBorough = async (city) => {
     let events_in_borough = [];
 
     const now = new Date();
-    console.log(now); 
-
 
     let curr = now.toISOString();  //to manipluate as date as a string
     curr = curr.split("T");        

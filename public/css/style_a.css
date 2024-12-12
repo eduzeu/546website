@@ -21,7 +21,7 @@ main {
 }
 
 .sidebar {
-    width: 30%;
+    width: 50%;
     background-color: #f1f1f1;
     padding: 1rem;
     border-right: 1px solid #ddd;
@@ -51,6 +51,7 @@ main {
 }
 
 .content {
+    width: 50%; 
     flex: 1;
     padding: 1rem;
     overflow-y: auto;
@@ -112,9 +113,10 @@ footer {
   }
   
   #wifiLocations table {
+    width:100%;
     text-align: center;
-    color: #EFEBCE;
-    background-color: #BB8588;
+    color: #A3A380;
+    background-color: #EFEBCE;
   
   }
   
@@ -124,9 +126,10 @@ footer {
 
 }
 #coffeeLocations table {
+  width:100%;
   text-align: center;
-  color: #EFEBCE;
-  background-color: #BB8588;
+  color: #A3A380;
+  background-color: #EFEBCE;
 }
 
 #wifiLocations table th,
@@ -143,22 +146,23 @@ footer {
 
 
 #wifiLocations table tr:hover {
-  background-color: #d68c8c;
+  color: #EFEBCE;
+  background-color: #A3A380;
 }
 
 #coffeeLocations table tr:hover {
-  background-color: #d68c8c;
+  color: #EFEBCE;
+  background-color: #A3A380;
 }
-
 /* Hover effect for individual table cells */
 #wifiLocations table th:hover,
 #wifiLocations table td:hover {
-  background-color: #d68c8c;
+  background-color: #a3a380;
 }
 
 #coffeLocations table th:hover,
 #coffeLocationsn table td:hover {
-  background-color: #d68c8c;
+  background-color: #a3a380;
 }
 .modal {
   position: fixed;
@@ -267,4 +271,83 @@ section.sectionSpacing {
 } */
 .star-rating .selected {
   color: #ffc107;
+}
+
+.navbar {
+  overflow: hidden;
+  background-color: #D6CE93;
+  font-family: Arial;
+  border-radius: 8px;
+}
+
+/* Links inside the navbar */
+.navbar a {
+  float: left;
+  font-size: 16px;
+  color: #8b8b65;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  
+}
+
+/* The dropdown container */
+.dropdown {
+  float: left;
+  overflow: hidden;
+}
+
+/* Dropdown button */
+.dropdown .dropbtn {
+  font-size: 16px;
+  border: none;
+  outline: none;
+  color: #8b8b65;
+  padding: 14px 16px;
+  background-color: inherit;
+  font-family: inherit; /* Important for vertical align on mobile phones */
+  margin: 0; /* Important for vertical align on mobile phones */
+}
+
+/* Add a red background color to navbar links on hover */
+.navbar a:hover, .dropdown:hover .dropbtn {
+  background-color: #EFEBCE;
+}
+
+/* Dropdown content (hidden by default) */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #EFEBCE;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+  float: none;
+  color: #8b8b65;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  text-align: left;
+}
+
+/* Add a grey background color to dropdown links on hover */
+.dropdown-content a:hover {
+  background-color: #ddd;
+}
+
+/* Show the dropdown menu on hover */
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+#friend-head {
+  color: black;
+  font-family: monospace;
+  padding: 1rem;
+  text-align: center;
+  border-bottom: 1px solid #ddd;
 }
