@@ -1,9 +1,10 @@
 import { Router } from "express";
 import xss from "xss";
-import { createReview, getReviewById, getReviews } from "../data/reviews.js";
+import { createReview, getReviewById, getReviews, getReviewFromUser } from "../data/reviews.js";
 import * as helpers from "../helpers.js";
 import * as sessionTokens from "../data/sessionTokens.js";
 import { validateNumber, validateRating, validateReviewType, validateString, validateNumericId} from "../helpers.js";
+import { findUserFromSessionToken} from "../data/sessionTokens.js";
 
 const router = Router()
 
@@ -70,6 +71,21 @@ router.route('/')
         }
     });
 
+router.route("/place/:placeId")
+    .get( async (req, res) => {
+        let placeId = req.params.placeId;
+        let sessionId = req.cookies["session_token"];
+        let userId = await findUserFromSessionToken(sessionId);
+        try{
+            console.log("I came here!!!!");
+            console.log(userId._id,placeId)
+            const isReview = await getReviewFromUser(placeId, userId._id);
+            console.log(isReview);
+            return isReview;
+        }catch(e){
+            console.error(e);
+        }
+});
 
 router.route('/:type')
     .get(async (req, res) => {

@@ -9,6 +9,7 @@ const callReview = async (score, text, id, type) => {
         throw e;
     }
 
+
     try {
         await fetchFrom('../review', {
             method: 'POST',
@@ -23,6 +24,33 @@ const callReview = async (score, text, id, type) => {
     }
 };
 
+const showPopupMessage = (message) => {
+    const popup = document.getElementById('popup-message');
+    const popupText = document.getElementById('popup-text');
+    popupText.textContent = message;
+    popup.style.display = 'block';
+  
+    const closeButton = document.getElementById('popup-close');
+    closeButton.addEventListener('click', () => {
+      popup.style.display = 'none';
+    });
+};
+
+  
+const checkForReview = async (placeId) => {
+    try {
+      const response = await fetch(`../review/place/${placeId}`);
+  
+      if (!response.ok) {
+        throw new Error(`Failed to fetch review data: ${response.statusText}`);
+      }
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error('Error checking for review:', error);
+    }
+  };
+
 const updateReview = async (id, type) => {
     try {
         id = validateNumber(id, "Location ID");
@@ -32,6 +60,7 @@ const updateReview = async (id, type) => {
         throw error;
     }
 
+    
     try {
         const reviews = await fetchFrom(`../review/${type}/${id}`);
 

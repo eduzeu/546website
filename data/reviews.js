@@ -68,4 +68,18 @@ export const getReviewById = async (id, type) => {
         return {};
     }
 };
-
+export const getReviewFromUser = async (placeId, userId) => {
+    try {
+      const user = await userCollection.findOne({ _id: userId });
+  
+      if (user && user.reviews && user.reviews.length > 0) {
+        return user.reviews.some(review => review.placeId === placeId);
+      }
+  
+      return false;
+    } catch (error) {
+      console.error("Error fetching user review:", error);
+      return false;
+    }
+  };
+console.log(await getReviewFromUser("6758e226a2ca3efbb01f9505", 1));

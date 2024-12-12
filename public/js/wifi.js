@@ -108,10 +108,22 @@ document.getElementById('wifi-checkbox').addEventListener('change', async functi
             showReviews(allReviews);
           })
 
-          wifiReview.querySelector('a').addEventListener('click', () => {
+          wifiReview.querySelector('a').addEventListener('click', async (event) => {
             event.preventDefault();
-            createReview(location.place_id, "wifi");
+            try {
+              console.log("about to check if the review is repeated");
+              const repeatedReview = await checkForReview(location.place_id);
+              console.log(repeatedReview);
+              if (repeatedReview) {
+                showPopupMessage("You have already entered a review for this place!");
+              } else {
+                createReview(location.place_id, "wifi");
+              }
+            } catch (error) {
+              console.error("Error checking for review:", error);
+            }
           });
+          
         });
 
         table.appendChild(tbody);
@@ -157,3 +169,4 @@ const displayPlaceOfTheDay = async () => {
 
 // Attach the function to window load
 window.onload = displayPlaceOfTheDay;
+

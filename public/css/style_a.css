@@ -276,3 +276,30 @@ section.sectionSpacing {
 .star-rating .selected {
   color: #ffc107;
 }
+
+.popup-message {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  padding: 20px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  z-index: 1000;
+}
+
+.popup-close {
+  margin-top: 10px;
+  padding: 8px 12px;
+  background: #007BFF;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.popup-close:hover {
+  background: #0056b3;
+}

@@ -107,10 +107,20 @@ document.getElementById('coffee-checkbox').addEventListener('change', async func
           //   showReviews(allReviews);
           // });
 
-          coffeeReview.querySelector('a').addEventListener('click', (event) => {
+         
+          coffeeReview.querySelector('a').addEventListener('click', async (event) => {
             event.preventDefault();
-            createReview(location.id, "coffee");
-            updateReview(location.id, "coffee");
+            try {
+              const repeatedReview = await checkForReview(location.id, "coffee");
+              if (repeatedReview) {
+                showPopupMessage("You have already entered a review for this place!");
+              } else {
+                createReview(location.id, "coffee");
+                updateReview(location.id, "coffee");
+              }
+            } catch (error) {
+              console.error("Error checking for review:", error);
+            }
           });
         });
 
