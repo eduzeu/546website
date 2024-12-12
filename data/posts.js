@@ -23,7 +23,7 @@ export const insertUserPost = async (user, body, imageUrl, placeName) => {
         }
         else {
             newPost = {
-                user: { userId: user._id, username: user.username },
+                poster: { userId: user._id, username: user.username },
                 placeName: placeName,
                 body: body,
                 image: null,

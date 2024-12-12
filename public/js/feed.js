@@ -66,20 +66,20 @@ const displayReviews = async () => {
           revDiv.innerHTML = `
           <div class="review-header">
             <h3 class="place-name">${user.placeName || "Unknown Place"}</h3>
-            <span class="username">by ${user.username || "Anonymous"}</span>
+            <span class="username">by ${user.poster.username || "Anonymous"}</span>
           </div>
           <p class="review-text">${user.body || "No review text"}</p>
           <img class="review-image" src="${user.image}" alt="Review Image">
-          <a href="/userFeed/${user._id}">View/Add Comments</a>
+          <a href="/userFeed/${user.poster._id}">View/Add Comments</a>
         `;
         } else {
           revDiv.innerHTML = `
           <div class="review-header">
             <h3 class="place-name">${user.placeName || "Unknown Place"}</h3>
-            <span class="username">by ${user.username || "Anonymous"}</span>
+            <span class="username">by ${user.poster.username || "Anonymous"}</span>
           </div>
           <p class="review-text">${user.body || "No review text"}</p>
-          <a href="/userFeed/post/${user._id}">View/Add Comments</a>
+          <a href="/userFeed/post/${user.poster._id}">View/Add Comments</a>
         `;
         }
         userPosts.appendChild(revDiv);
