@@ -1,5 +1,6 @@
 import axios from "axios";
-import date from 'date-and-time';
+import { ObjectId } from "mongodb";
+import * as uuid from 'uuid';
 
 export const validateString = (str, strName) => {
   if (typeof str === "undefined")
@@ -35,11 +36,11 @@ export const validateNumber = (num, numName) => {
 
 export const validateEmailAddress = (email, emailName) => {
   email = validateString(email, emailName);
-  
+
   // regex source: https://www.geeksforgeeks.org/javascript-program-to-validate-an-email-address/
   const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
   if (!regex.test(email)) {
-      throw `${emailName || "Provided string"} is not a valid email address.`
+    throw `${emailName || "Provided string"} is not a valid email address.`
   }
 
   return email;
@@ -87,11 +88,21 @@ export const validateDateString = (dateStr, dateName) => {
     throw `${dateName || "Provided string"} is not MM/DD/YYYY format.`
   }
 
-  if (!date.isValid(dateTrim, "MM/DD/YYYY")) {
-    throw `${dateName || "Provided string"} is not a valid date.`
-  }
+  const dateObj = new Date(dateStr);
+  validateDate(dateObj, dateName);
 
   return dateStr;
+}
+
+// Based on: https://stackoverflow.com/a/1353711
+export const validateDate = (date, dateName) => {
+  if (Object.prototype.toString.call(date) !== "[object Date]")
+    throw `${dateName || "Provided data"} is not a date.`
+
+  if (isNaN(date))
+    throw `${dateName || "Provided data"} is an invalid date.`
+
+  return date;
 }
 
 export const validateCloudinaryUrl = (url, urlName) => {
@@ -103,6 +114,52 @@ export const validateCloudinaryUrl = (url, urlName) => {
   }
 
   return url;
+}
+
+const validateObject = (obj, objName) => {
+  if (!obj)
+    throw `${objName || "Provided data"} was not supplied.`
+
+  if (typeof obj !== "object")
+    throw `${objName || "Provided data"} is not an object.`
+
+  if (Array.isArray(obj))
+    throw `${objName || "Provided object"} is an array.`
+
+  if (Object.keys(obj).length === 0)
+    throw `${objName || "Provided object"} is empty.`
+}
+
+export const validateUserCookie = (cookie, cookieName) => {
+  validateObject(cookie, cookieName);
+
+  if (!cookie._id || !cookie.username)
+    throw `${cookieName || "Provided object"} is missing id or username.`
+
+  if (!ObjectId.isValid(cookie._id))
+    throw `${cookieName || "Provided object"} has an invalid id.`
+
+  cookie.username = validateString(cookie.username, "Username");
+
+  return cookie;
+}
+
+export const validateUUID = (id, idName) => {
+  id = validateString(id, idName);
+
+  if (!uuid.validate(id))
+    throw `${idName || "Provided data"} is not a valid UUID.`
+
+  return id;
+}
+
+export const validateObjectId = (id, idName) => {
+  const strId = validateString(id, idName);
+
+  if (!ObjectId.isValid(strId))
+    throw `${idName || "Provided data"} is not a valid ObjectId.`
+
+  return strId;
 }
 
 export const fetchFrom = async (url) => {

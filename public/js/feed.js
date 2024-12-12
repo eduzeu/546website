@@ -17,6 +17,8 @@ var myWidget = cloudinary.createUploadWidget(
     uploadPreset: "post_preset",
     sources: ["local", "url", "camera"],
     multiple: false,
+    maxFiles: 1,
+    clientAllowedFormats: "image",
   },
   (error, result) => {
     if (!error && result && result.event === "success") {

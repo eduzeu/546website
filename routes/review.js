@@ -1,26 +1,26 @@
 import { Router } from "express";
 import xss from "xss";
 import { createReview, getReviewById, getReviews } from "../data/reviews.js";
-import * as helpers from "../helpers.js";
 import * as sessionTokens from "../data/sessionTokens.js";
-import { validateNumber, validateRating, validateReviewType, validateString, validateNumericId} from "../helpers.js";
+import { validateNumber, validateNumericId, validateRating, validateReviewType, validateString } from "../helpers.js";
 
 const router = Router()
 
 router.route('/')
     .post(async (req, res) => {
         //used to verify user is logged in
-        try{
+        try {
             let token;
-            try{
-              token = req.cookies["session_token"];//gets the sessionId
-            } catch{
-              throw 'no cookie';
+            try {
+                token = req.cookies["session_token"];//gets the sessionId
+            } catch {
+                throw 'no cookie';
             }
             token = await sessionTokens.sessionChecker(token);//checks if sessionId is valid
-          } catch(e){
+        } catch (e) {
             res.status(401).render('../views/invalidLogin', { error: e });
-          }
+        }
+
         let score = req.body.rating;
         let text = req.body.text;
         let id = req.body.id;

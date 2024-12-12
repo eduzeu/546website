@@ -1,11 +1,16 @@
-import { sessionTokens } from "../config/mongoCollections.js";
-import { users } from "../config/mongoCollections.js";
+import { sessionTokens, users } from "../config/mongoCollections.js";
 import { dbConnection } from "../config/mongoConnection.js";
+import { validateDate, validateObjectId, validateUUID } from "../helpers.js";
 
 const db = await dbConnection();
 const userCollection = await users();
 const sessionTokensCollection = await sessionTokens();
+
 export const addSessionToken = async (sessionId, userId, expiresAt) => {
+    sessionId = validateUUID(sessionId, 'Session Id')
+    userId = validateObjectId(userId, 'User Id')
+    validateDate(expiresAt, 'Expires At Date');
+
     let tokenObj = {
         sessionId: sessionId,
         userId: userId,
@@ -18,6 +23,8 @@ export const addSessionToken = async (sessionId, userId, expiresAt) => {
     return inserted;
 }
 export const findUserFromSessionToken= async (sessionToken) => {
+    sessionToken = validateUUID(sessionToken, 'Session Token');
+
     const session = await sessionTokensCollection.findOne({sessionId: sessionToken});
     if(!session){
         throw 'Invalid sessionId';
@@ -29,9 +36,12 @@ export const findUserFromSessionToken= async (sessionToken) => {
     return user;
 }
 export const sessionChecker = async (sessionToken) => {
-    if(sessionToken == null){
+    if (sessionToken == null){
         throw 'You need to be logged in to access this page! null token';
     }
+
+    sessionToken = validateUUID(sessionToken, 'Session Token');
+
     let validToken = await sessionTokensCollection.findOne({sessionId: sessionToken});
     if(!validToken){
         throw 'You need to be logged in to access this page! token not in database';
@@ -47,9 +57,12 @@ export const sessionChecker = async (sessionToken) => {
     return sessionToken;
   }
 export const deleteSessionToken = async (sessionToken) => {
-    if(sessionToken == null) {
+    if (sessionToken == null) {
         throw 'You need to be logged in to log out';
     }
+    
+    sessionToken = validateUUID(sessionToken, 'Session Token');
+
     const result = await sessionTokensCollection.deleteOne({sessionId: sessionToken});
     if(result.deletedCount == 0){
         throw 'Token not found';
