@@ -5,10 +5,16 @@ const cancelButton = document.getElementById("cancelButton");
 const reviewForm = document.getElementById("reviewForm");
 const userPosts = document.getElementById("userPosts");
 const uploadWidget = document.getElementById("upload_widget");
-const imagePreview = document.getElementById("imagePreview");
+let imagePreview = document.getElementById("imagePreview");
 const submitButton = document.getElementById("submitReviewButton");
+let errorText = document.getElementById("error");
+let placeName = document.getElementById("placeName");
+let reviewText = document.getElementById("reviewText");
+const removeImg = document.getElementById("removeImage");
 // console.log(postButton, reviewPrompt, cancelButton, reviewForm);
 
+uploadWidget.innerHTML = "Upload image"
+imagePreview.style.display = "none";
 let imageUrl = undefined;
 
 var myWidget = cloudinary.createUploadWidget(
@@ -19,10 +25,19 @@ var myWidget = cloudinary.createUploadWidget(
     multiple: false,
     maxFiles: 1,
     clientAllowedFormats: "image",
+    singleUploadAutoClose: false
   },
   (error, result) => {
     if (!error && result && result.event === "success") {
       imageUrl = result.info.url;
+      imagePreview.src = imageUrl;
+      uploadWidget.innerHTML = "Replace image";
+      imagePreview.style.display = "";
+      removeImg.removeAttribute("hidden");
+    
+    } else if (error) {
+      errorText.innerHTML = error.message;
+      errorText.classList.remove("hidden");
     }
   }
 );
@@ -47,21 +62,21 @@ const displayReviews = async () => {
         revDiv.classList.add("review");
 
         // Adjust these based on the actual structure of your review object
-        if (user.imageUrl) {
+        if (user.image) {
           revDiv.innerHTML = `
           <div class="review-header">
             <h3 class="place-name">${user.placeName || "Unknown Place"}</h3>
-            <span class="username">by ${user.user.username || "Anonymous"}</span>
+            <span class="username">by ${user.username || "Anonymous"}</span>
           </div>
           <p class="review-text">${user.body || "No review text"}</p>
-          <img class="review-image" src="${user.imageUrl}" alt="Review Image">
+          <img class="review-image" src="${user.image}" alt="Review Image">
           <a href="/userFeed/${user._id}"></a>
         `;
         } else {
           revDiv.innerHTML = `
           <div class="review-header">
             <h3 class="place-name">${user.placeName || "Unknown Place"}</h3>
-            <span class="username">by ${user.user.username || "Anonymous"}</span>
+            <span class="username">by ${user.username || "Anonymous"}</span>
           </div>
           <p class="review-text">${user.body || "No review text"}</p>
           <a href="/userFeed/post/${user._id}">View/Add Comments</a>
@@ -72,8 +87,8 @@ const displayReviews = async () => {
     });
   } catch (error) {
     console.error("Error fetching reviews:", error);
-    userPosts.innerHTML =
-      "<p>Failed to load reviews. Please try again later.</p>";
+    errorText.innerHTML = error;
+    errorText.classList.remove("hidden");
   }
 };
 
@@ -87,22 +102,43 @@ cancelButton.addEventListener("click", () => {
   reviewForm.reset();
 });
 
+removeImg.addEventListener("click", () => {
+  imageUrl = undefined;
+  imagePreview.src = "";
+  imagePreview.style.display = "none";
+  removeImg.classList.add("hidden");
+  uploadWidget.innerHTML = "Upload image"
+});
+
 reviewForm.addEventListener("submit", async (event) => {
   event.preventDefault();
+  errorText.innerHTML = "";
+  errorText.classList.add("hidden");
 
-  let placeName = document.getElementById("placeName").value;
-  let reviewText = document.getElementById("reviewText").value;
+  try {
+    placeName.value = validateString(placeName.value, "Place Name");
+    reviewText.value = validateString(reviewText.value, "Review Text");
+    if (imageUrl) { imageUrl = validateCloudinaryUrl(imageUrl, "Image URL"); }
+  } catch (e) {
+    errorText.innerHTML = e;
+    errorText.classList.remove("hidden");
+    return;
+  }
 
   // const rating = document.getElementsByClassName("star-rating").value;
   //find a way to get the id based on cookies and pass to insertUserReview
-  let revObject = { placename: placeName, reviewText: reviewText };
-  if (imageUrl) {
-    revObject["imageUrl"] = imageUrl;
-  }
+  let revObject = { placename: placeName.value, reviewText: reviewText.value };
+  if (imageUrl) { revObject["imageUrl"] = imageUrl }
+
   console.log("inserting review", revObject);
   InsertReview(revObject); //inserts review to database
 
   reviewForm.reset();
+  imageUrl = undefined;
+  imagePreview.src = "";
+  imagePreview.style.display = "none";
+  removeImg.classList.add("hidden");
+  uploadWidget.innerHTML = "Upload image"
   reviewPrompt.classList.add("hidden");
 
   displayReviews();

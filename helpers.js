@@ -108,9 +108,14 @@ export const validateDate = (date, dateName) => {
 export const validateCloudinaryUrl = (url, urlName) => {
   url = validateString(url, urlName);
 
-  let regex = /^http:\/\/res\.cloudinary\.com\/dcvqjizwy\/image\/upload\/v[0-9]+\/[a-z0-9]+\.jpg$/
-  if (!regex.test(url)) {
-    throw `${url || "Provided string"} is not a valid image url.`
+  let path = /^http:\/\/res\.cloudinary\.com\/dcvqjizwy\/image\/upload\/v[0-9]+\/[a-z0-9]+/m
+  if (!path.test(url)) {
+    throw `${urlName || "Provided string"} is not a valid image url.`
+  }
+
+  let fileExt = /\.(jpg|jpeg|png|gif|webp|bmp|heic)$/mi
+  if (!fileExt.test(url)) {
+    throw `${urlName || "Provided string"} is not a valid image url.`
   }
 
   return url;
@@ -154,12 +159,8 @@ export const validateUUID = (id, idName) => {
 }
 
 export const validateObjectId = (id, idName) => {
-  const strId = validateString(id, idName);
-
-  if (!ObjectId.isValid(strId))
+  if (!ObjectId.isValid(id))
     throw `${idName || "Provided data"} is not a valid ObjectId.`
-
-  return strId;
 }
 
 export const fetchFrom = async (url) => {

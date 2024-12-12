@@ -8,7 +8,7 @@ const sessionTokensCollection = await sessionTokens();
 
 export const addSessionToken = async (sessionId, userId, expiresAt) => {
     sessionId = validateUUID(sessionId, 'Session Id')
-    userId = validateObjectId(userId, 'User Id')
+    validateObjectId(userId, 'User Id')
     validateDate(expiresAt, 'Expires At Date');
 
     let tokenObj = {
