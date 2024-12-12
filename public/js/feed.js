@@ -70,7 +70,7 @@ const displayReviews = async () => {
           </div>
           <p class="review-text">${user.body || "No review text"}</p>
           <img class="review-image" src="${user.image}" alt="Review Image">
-          <a href="/userFeed/${user.poster._id}">View/Add Comments</a>
+          <a href="/userFeed/posts/${user._id}">View/Add Comments</a>
         `;
         } else {
           revDiv.innerHTML = `
@@ -79,7 +79,7 @@ const displayReviews = async () => {
             <span class="username">by ${user.poster.username || "Anonymous"}</span>
           </div>
           <p class="review-text">${user.body || "No review text"}</p>
-          <a href="/userFeed/post/${user.poster._id}">View/Add Comments</a>
+          <a href="/userFeed/posts/${user._id}">View/Add Comments</a>
         `;
         }
         userPosts.appendChild(revDiv);
@@ -155,7 +155,7 @@ uploadWidget.addEventListener(
 displayReviews();
 
 const InsertReview = async (object) => {
-  await fetch("/userFeed/post", {
+  await fetch("/userFeed/posts", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(object),

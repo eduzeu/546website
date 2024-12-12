@@ -1,7 +1,7 @@
 //poster({userId, username}, body, imagelink, id of comments)
 import { ObjectId } from "mongodb";
 import { posts } from "../config/mongoCollections.js";
-import { validateCloudinaryUrl, validateObjectId, validateString, validateUserCookie } from "../helpers.js";
+import { validateCloudinaryUrl, validateObjectIdString, validateString, validateUserCookie } from "../helpers.js";
 
 const postCollection = await posts();
 export const insertUserPost = async (user, body, imageUrl, placeName) => {
@@ -39,7 +39,7 @@ export const insertUserPost = async (user, body, imageUrl, placeName) => {
 };
 
 export const findPostById = async (id) => {
-    id = validateObjectId(id, 'Post Id')
+    id = validateObjectIdString(id, 'Post Id')
     console.log(id);
     const post = await postCollection.findOne({ _id: new ObjectId(id) });
     console.log(post);

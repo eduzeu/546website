@@ -2,7 +2,7 @@ import { Router } from "express";
 import xss from "xss";
 import { findPostById, getUserFeedPost, insertUserPost } from "../data/posts.js";
 import { findUserFromSessionToken } from "../data/sessionTokens.js";
-import { validateCloudinaryUrl, validateObjectId, validateString } from "../helpers.js";
+import { validateCloudinaryUrl, validateObjectIdString, validateString } from "../helpers.js";
 
 const router = Router();
 
@@ -22,7 +22,7 @@ router.route("/")
 
 //insertUserReview(placeName, reviewText, rating) //inserts review to database
 
-router.route("/post")
+router.route("/posts")
   .post(async (req, res) => {
     let review = req.body.reviewText;
     let place = req.body.placename;
@@ -52,16 +52,16 @@ router.route("/post")
     }
   });
 
-router.route("/post/:id")
+router.route("/posts/:id")
   .get(async (req, res) => {
     try {
-      req.params.id = validateObjectId(req.params.id, "Post Id");
+      req.params.id = validateObjectIdString(req.params.id, "Post Id");
     } catch (e) {
       return res.status(400).send(e);
     }
 
     try {
-      post = await findPostById(postId);
+      const post = await findPostById(req.params.id);
       return res.render('post', { post });
     } catch (e) {
       console.log(e);

@@ -163,6 +163,15 @@ export const validateObjectId = (id, idName) => {
     throw `${idName || "Provided data"} is not a valid ObjectId.`
 }
 
+export const validateObjectIdString = (id, idName) => {
+  id = validateString(id, idName);
+
+  if (!ObjectId.isValid(id))
+    throw `${idName || "Provided data"} is not a valid ObjectId.`
+
+  return id;
+}
+
 export const fetchFrom = async (url) => {
   try {
     let { data } = await axios.get(url);
