@@ -14,7 +14,7 @@ let imageUrl = undefined;
 const displayReviews = async () => {
   try {
     const id = postId.textContent;
-    const comments = await fetchFrom("/userFeed/getComments/" + id);
+    const comments = await fetchFrom("/userFeed/comments/" + id);
     console.log("Fetched comments:", comments);
 
     userComments.innerHTML = ""; // Clear the previous content

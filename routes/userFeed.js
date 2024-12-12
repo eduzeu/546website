@@ -9,7 +9,11 @@ const router = Router();
 router.route("/")
   .get(async (req, res) => {
     try {
-      res.render("userFeed");
+      res.render("userFeed", {
+        title: "User Feed",
+        cloudName: JSON.stringify(process.env.CLOUDINARY_CLOUD_NAME),
+        uploadPreset: JSON.stringify(process.env.CLOUDINARY_UPLOAD_PRESET)
+      });
     } catch (e) {
       return res.status(400).send(e);
     }
@@ -64,7 +68,7 @@ router.route("/post/:id")
       return res.status(400).json({ error: e });
     }
   })
-router.route("/getComments/:id")
+router.route("/comments/:id")
   .get(async (req, res) => {
     try {
       //get all the comments here
@@ -73,7 +77,7 @@ router.route("/getComments/:id")
       return res.status(400).send(e);
     }
   })
-router.route("/getPosts")
+router.route("/posts")
   .get(async (req, res) => {
     try {
       //console.log("GET ALL REVIEWS, came from DOM!");

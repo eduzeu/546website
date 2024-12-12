@@ -19,8 +19,8 @@ let imageUrl = undefined;
 
 var myWidget = cloudinary.createUploadWidget(
   {
-    cloudName: "dcvqjizwy",
-    uploadPreset: "post_preset",
+    cloudName: cloudinaryConfig.cloudName,
+    uploadPreset: cloudinaryConfig.uploadPreset,
     sources: ["local", "url", "camera"],
     multiple: false,
     maxFiles: 1,
@@ -45,7 +45,7 @@ var myWidget = cloudinary.createUploadWidget(
 // Event listener for the post button
 const displayReviews = async () => {
   try {
-    const reviews = await fetchFrom("../userFeed/getPosts");
+    const reviews = await fetchFrom("../userFeed/posts");
 
     console.log("Fetched reviews:", reviews);
 
@@ -70,7 +70,7 @@ const displayReviews = async () => {
           </div>
           <p class="review-text">${user.body || "No review text"}</p>
           <img class="review-image" src="${user.image}" alt="Review Image">
-          <a href="/userFeed/${user._id}"></a>
+          <a href="/userFeed/${user._id}">View/Add Comments</a>
         `;
         } else {
           revDiv.innerHTML = `
