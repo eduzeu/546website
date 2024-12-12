@@ -1,22 +1,22 @@
 import { Router } from "express";
 import { fetchCoffeeShopById } from "../data/locations.js";
 import { getReviewById } from "../data/reviews.js";
-import * as helpers from "../helpers.js";
 import * as sessionTokens from "../data/sessionTokens.js";
+import * as helpers from "../helpers.js";
 
 const router = Router()
 
 router.get("/:id", async (req, res) => {
     //used to verify that the user is logged in
-    try{
+    try {
         let token;
-        try{
-          token = req.cookies["session_token"];//gets the sessionId
-        } catch{
-          throw 'no cookie';
+        try {
+            token = req.cookies["session_token"];//gets the sessionId
+        } catch {
+            throw 'no cookie';
         }
         token = await sessionTokens.sessionChecker(token);//checks if sessionId is valid
-    } catch(e){
+    } catch (e) {
         res.status(401).render('../views/invalidLogin', { error: e });
     }
     try {

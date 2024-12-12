@@ -6,13 +6,13 @@
 </header>
 <p id="postId" class="hidden">{{post._id}}</p>
 <div class="event">
-      <h4>Post:</h4>
-      <ul>
-        <li>Place: {{post.placeName}}</li>
-        <li>Posted By: {{post.user.username}}</li>
-        <li>Body: {{post.body}}</li>
-      </ul>
-    </div>
+  <h4>Post:</h4>
+  <ul>
+    <li>Place: {{post.placeName}}</li>
+    <li>Posted By: {{post.user.username}}</li>
+    <li>Body: {{post.body}}</li>
+  </ul>
+</div>
 
 <button id="postButton">Create Comment</button>
 
@@ -21,14 +21,8 @@
     <h3>Leave a Comment</h3>
     <!-- Review Textarea -->
     <label for="reviewText">Your Comment:</label>
-    <textarea
-      id="reviewText"
-      name="reviewText"
-      rows="4"
-      cols="30"
-      placeholder="Enter your comment here"
-      required
-    ></textarea>
+    <textarea id="reviewText" name="reviewText" rows="4" cols="30" placeholder="Enter your comment here"
+      required></textarea>
 
     <!-- Buttons -->
     <div class="buttonGroup" style="margin-top: 20px;">

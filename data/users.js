@@ -45,10 +45,10 @@ export const checkUser = async (username, password) => {
     }
     let isValid = await bcrypt.compare(password, user.password);
     console.log(isValid);
-    if(isValid){
+    if (isValid) {
         return user._id;
     }
-    else{
+    else {
         throw 'Invalid Login';
     }
 }

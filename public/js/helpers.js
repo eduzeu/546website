@@ -4,7 +4,7 @@ const fetchFrom = async (url, options) => {
     if (response.ok) {
         const json = await response.json();
         return json;
-    
+
     } else {
         throw `Recieved status ${response.status}: ${response.statusText}`;
     }
