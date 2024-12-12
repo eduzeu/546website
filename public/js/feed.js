@@ -42,7 +42,6 @@ var myWidget = cloudinary.createUploadWidget(
   }
 );
 
-// Event listener for the post button
 const displayReviews = async () => {
   try {
     const reviews = await fetchFrom("../userFeed/posts");
@@ -51,43 +50,31 @@ const displayReviews = async () => {
 
     userPosts.innerHTML = ""; // Clear the previous content
 
-    reviews.forEach((user) => {
-      // Check if user.reviews exists and is an array
-      console.log("in for");
-      if (user) {
-        // Log the review to see its exact structure
-        console.log("Individual review:", user);
+    reviews.forEach((user) => {      
+      if (user && user.poster) {
+        console.log("Individual review:", user.poster);
 
         const revDiv = document.createElement("div");
         revDiv.classList.add("review");
 
-        // Adjust these based on the actual structure of your review object
-        if (user.image) {
-          revDiv.innerHTML = `
+        revDiv.innerHTML = `
           <div class="review-header">
             <h3 class="place-name">${user.placeName || "Unknown Place"}</h3>
             <span class="username">by ${user.poster.username || "Anonymous"}</span>
           </div>
           <p class="review-text">${user.body || "No review text"}</p>
-          <img class="review-image" src="${user.image}" alt="Review Image">
+          ${user.image ? `<img class="review-image" src="${user.image}" alt="Review Image">` : ""}
           <a href="/userFeed/posts/${user._id}">View/Add Comments</a>
         `;
-        } else {
-          revDiv.innerHTML = `
-          <div class="review-header">
-            <h3 class="place-name">${user.placeName || "Unknown Place"}</h3>
-            <span class="username">by ${user.poster.username || "Anonymous"}</span>
-          </div>
-          <p class="review-text">${user.body || "No review text"}</p>
-          <a href="/userFeed/posts/${user._id}">View/Add Comments</a>
-        `;
-        }
+       
         userPosts.appendChild(revDiv);
+      } else {
+        console.warn("Missing poster or user details:", user);
       }
     });
   } catch (error) {
     console.error("Error fetching reviews:", error);
-    errorText.innerHTML = error;
+    errorText.innerHTML = error.message || "An error occurred";
     errorText.classList.remove("hidden");
   }
 };
