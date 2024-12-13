@@ -1,7 +1,6 @@
 //poster({userId, username}, body, imagelink, id of comments)
-import { ObjectId } from "mongodb";
 import { posts } from "../config/mongoCollections.js";
-import { validateCloudinaryUrl, validateObjectIdString, validateString, validateUserCookie } from "../helpers.js";
+import { validateCloudinaryUrl, validateString, validateUserCookie } from "../helpers.js";
 
 const postCollection = await posts();
 export const insertUserPost = async (user, body, imageUrl, imageAltText, placeName) => {
@@ -12,9 +11,9 @@ export const insertUserPost = async (user, body, imageUrl, imageAltText, placeNa
     if (imageUrl && imageAltText) {
         imageUrl = validateCloudinaryUrl(imageUrl, 'Image URL');
         imageAltText = validateString(imageAltText, 'Image Alt Text');
-    
-    // If imageUrl exists and imageAltText doesn't (or vise versa)
-    // throw an error
+
+        // If imageUrl exists and imageAltText doesn't (or vise versa)
+        // throw an error
     } else if ((imageUrl && !imageAltText) || (!imageUrl && imageAltText)) {
         throw 'Both Image URL and Image Alt Text must be provided';
     }
@@ -50,22 +49,19 @@ export const insertUserPost = async (user, body, imageUrl, imageAltText, placeNa
     };
 };
 
-export const findPostById = async (id) => {
-    id = validateObjectIdString(id, 'Post Id')
-    console.log(id);
-    const post = await postCollection.findOne({ _id: new ObjectId(id) });
-    console.log(post);
-    if (!post) {
-        throw 'Unable to find post with matching id';
-    }
-    return post;
-}
-
 // console.log(await insertUserReview("67571a0a7efa087d3782482b", "Central Park", "This is a good place", "4.0"));
 
-export const getUserFeedPost = async () => {
+export const getUserFeedReviews = async () => {
     try {
-        const displayReviews = await postCollection.find().toArray();
+        const displayReviews = await userCollection.find(
+            {
+                reviews: { $exists: true, $not: { $size: 0 } } // Ensures reviews exist and are not empty
+            },
+            {
+                projection: { username: 1, reviews: 1 } // Only include the reviews field in the result
+            }
+        ).toArray();
+        console.log(displayReviews);
         return displayReviews;
     } catch (e) {
         console.error(e);

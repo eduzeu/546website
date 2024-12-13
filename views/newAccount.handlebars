@@ -19,9 +19,20 @@
       Password:<br>
       <input class='formText' type="password" id="loginPassword" name="loginPassword">
     </label><br><br>
+    <label class='formLabel' for="confirmPassword">
+      Confirm Password:<br>
+      <input class='formText' type="password" id="confirmPassword" name="confirmPassword">
+    </label><br><br>
 
     <button class="submit" type="submit">Create Account</button>
   </form>
+  <br><br><br>
+  <Label>
+    Already have an account?
+    <button class="newAccount" onclick="window.location.href='/'">
+      Log in
+    </button>
+  </Label>
   <p id="error"></p>
   <script src="../public/js/users.js"></script>
   <script src="/public/js/helpers.js"></script>

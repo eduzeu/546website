@@ -11,6 +11,7 @@ app.use('/public', express.static('public'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+
 app.use('/', async (req, res, next) => {
   const timestamp = new Date().toUTCString();
   const method = req.method;
@@ -26,6 +27,10 @@ app.use('/', async (req, res, next) => {
     authorizedUser = true;
   } catch (e) {
     authorizedUser = false;
+  }
+  if (authorizedUser) {
+    let didWork = await sessionTokenFunctions.updateExpiration(sessionId);
+    res.cookie("session_token", sessionId, { maxAge: 60 * 60 * 1000, httpOnly: true });
   }
   if (route == '/' || route == '/newAccount') {
     if (authorizedUser) {
