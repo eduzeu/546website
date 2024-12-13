@@ -1,15 +1,23 @@
 //poster({userId, username}, body, imagelink, id of comments)
-import { ObjectId } from "mongodb";
 import { posts } from "../config/mongoCollections.js";
 import { validateCloudinaryUrl, validateObjectIdString, validateString, validateUserCookie } from "../helpers.js";
 import {users } from "../config/mongoCollections.js";
 
 const postCollection = await posts();
-export const insertUserPost = async (user, body, imageUrl, placeName) => {
+export const insertUserPost = async (user, body, imageUrl, imageAltText, placeName) => {
     user = validateUserCookie(user, 'User');
     body = validateString(body, 'Body');
     placeName = validateString(placeName, 'Place Name');
-    if (imageUrl) { imageUrl = validateCloudinaryUrl(imageUrl, 'Image URL') }
+
+    if (imageUrl && imageAltText) {
+        imageUrl = validateCloudinaryUrl(imageUrl, 'Image URL');
+        imageAltText = validateString(imageAltText, 'Image Alt Text');
+
+        // If imageUrl exists and imageAltText doesn't (or vise versa)
+        // throw an error
+    } else if ((imageUrl && !imageAltText) || (!imageUrl && imageAltText)) {
+        throw 'Both Image URL and Image Alt Text must be provided';
+    }
 
     let newPost;
     try {
@@ -18,7 +26,10 @@ export const insertUserPost = async (user, body, imageUrl, placeName) => {
                 poster: { userId: user._id, username: user.username },
                 placeName: placeName,
                 body: body,
-                image: imageUrl,
+                image: {
+                    url: imageUrl,
+                    altText: imageAltText
+                },
                 comments: []
             };
         }

@@ -63,7 +63,7 @@ router.route("/newAccount")
       username = validateString(username, "Username").toLowerCase();
       email = validateEmailAddress(email, "Email");
       password = validateString(password, "Password");
-      if(confirmPassword !== password){
+      if (confirmPassword !== password) {
         throw 'Passwords do not match';
       }
     } catch (error) {
@@ -73,6 +73,7 @@ router.route("/newAccount")
     username = xss(username);
     email = xss(email);
     password = xss(password);
+    confirmPassword = xss(confirmPassword);
 
     try {
       const result = await userFunctions.addNewUser(username, email, password);

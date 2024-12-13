@@ -1,8 +1,6 @@
 import { sessionTokens, users } from "../config/mongoCollections.js";
-import { dbConnection } from "../config/mongoConnection.js";
 import { validateDate, validateObjectId, validateUUID } from "../helpers.js";
 
-const db = await dbConnection();
 const userCollection = await users();
 const sessionTokensCollection = await sessionTokens();
 
@@ -70,18 +68,19 @@ export const deleteSessionToken = async (sessionToken) => {
     return true;
 }
 export const updateExpiration = async (sessionToken) => {
-    if(sessionToken == null) {
+    if (sessionToken == null) {
         throw 'Not logged in';
     }
-    const result = await sessionTokensCollection.findOne({sessionId: sessionToken});
-    if(!result) {
+    sessionToken = validateUUID(sessionToken, 'Session Token');
+    const result = await sessionTokensCollection.findOne({ sessionId: sessionToken });
+    if (!result) {
         throw 'Invalid no matching object with given sessionId';
     }
     const expiresAt = new Date();
     expiresAt.setMinutes(expiresAt.getMinutes() + 30);
-    let newObj = {sessionId: sessionToken, userId: result.userId, expiresAt};
-    const insertResult = await sessionTokensCollection.findOneAndReplace({sessionId: sessionToken}, newObj);
-    if(!insertResult){
+    let newObj = { sessionId: sessionToken, userId: result.userId, expiresAt };
+    const insertResult = await sessionTokensCollection.findOneAndReplace({ sessionId: sessionToken }, newObj);
+    if (!insertResult) {
         throw 'Error inserting new object';
     }
     return true;

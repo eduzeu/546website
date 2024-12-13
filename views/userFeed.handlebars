@@ -20,7 +20,15 @@
     <textarea id="reviewText" name="reviewText" rows="4" cols="30" placeholder="Enter your review here"
       required></textarea>
 
-    <img id="imagePreview" alt="Your uploaded image">
+    <!-- Placeholder source removed upon image upload -->
+    <img id="imagePreview" src="Placeholder" alt="Your uploaded image">
+
+    <!-- Image Details -->
+    <label for="imageAltText" id="imageAltLabel">
+      Image Alt Text:
+      <textarea id="imageAltText" name="imageAltText" rows="4" cols="30"
+        placeholder="Enter alt text for your image here"></textarea>
+    </label>
 
     <button id="upload_widget" class="cloudinary-button">Upload files</button>
     <br>
@@ -39,8 +47,8 @@
 <script src="https://upload-widget.cloudinary.com/latest/global/all.js" type="text/javascript"></script>
 <script>
   const cloudinaryConfig = {
-    cloudName: {{{cloudName}}},
-    uploadPreset: {{{uploadPreset}}}
+    cloudName: {{{ cloudName }}},
+    uploadPreset: {{{ uploadPreset }}}
   }
 </script>
 <script src="/public/js/helpers.js"></script>
