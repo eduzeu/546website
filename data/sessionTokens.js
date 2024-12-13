@@ -69,3 +69,20 @@ export const deleteSessionToken = async (sessionToken) => {
     }
     return true;
 }
+export const updateExpiration = async (sessionToken) => {
+    if(sessionToken == null) {
+        throw 'Not logged in';
+    }
+    const result = await sessionTokensCollection.findOne({sessionId: sessionToken});
+    if(!result) {
+        throw 'Invalid no matching object with given sessionId';
+    }
+    const expiresAt = new Date();
+    expiresAt.setMinutes(expiresAt.getMinutes() + 30);
+    let newObj = {sessionId: sessionToken, userId: result.userId, expiresAt};
+    const insertResult = await sessionTokensCollection.findOneAndReplace({sessionId: sessionToken}, newObj);
+    if(!insertResult){
+        throw 'Error inserting new object';
+    }
+    return true;
+}

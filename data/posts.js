@@ -2,6 +2,7 @@
 import { ObjectId } from "mongodb";
 import { posts } from "../config/mongoCollections.js";
 import { validateCloudinaryUrl, validateObjectIdString, validateString, validateUserCookie } from "../helpers.js";
+import {users } from "../config/mongoCollections.js";
 
 const postCollection = await posts();
 export const insertUserPost = async (user, body, imageUrl, placeName) => {

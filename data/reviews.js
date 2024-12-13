@@ -1,6 +1,7 @@
 import { ObjectId } from "mongodb";
 import { reviews, users } from "../config/mongoCollections.js";
 import { validateNumber, validateRating, validateReviewType, validateString } from "../helpers.js";
+import {users } from "../config/mongoCollections.js";
 
 const userCollection = await users(); 
 
@@ -67,4 +68,3 @@ export const getReviewById = async (id, type) => {
         return {};
     }
 };
-
