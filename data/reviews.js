@@ -1,9 +1,6 @@
 import { ObjectId } from "mongodb";
 import { reviews } from "../config/mongoCollections.js";
 import { validateNumber, validateRating, validateReviewType, validateString } from "../helpers.js";
-import {users } from "../config/mongoCollections.js";
-
-const userCollection = await users(); 
 
 export const createReview = async (rating, text, id, type) => {
     rating = validateRating(rating, "Rating");

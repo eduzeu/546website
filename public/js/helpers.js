@@ -4,7 +4,7 @@ const fetchFrom = async (url, options) => {
     if (response.ok) {
         const json = await response.json();
         return json;
-    
+
     } else {
         throw `Recieved status ${response.status}: ${response.statusText}`;
     }
@@ -82,4 +82,20 @@ const validateReviewsArray = (arr, arrName) => {
     for (const item of arr) {
         validateString(item, `${arrName || "Array"} contains a non-string value.`)
     }
+}
+
+const validateCloudinaryUrl = (url, urlName) => {
+    url = validateString(url, urlName);
+
+    let path = /^http:\/\/res\.cloudinary\.com\/dcvqjizwy\/image\/upload\/v[0-9]+\/[a-z0-9]+/m
+    if (!path.test(url)) {
+        throw `${urlName || "Provided string"} is not a valid image url.`
+    }
+
+    let fileExt = /\.(jpg|jpeg|png|gif|webp|bmp|heic)$/mi
+    if (!fileExt.test(url)) {
+        throw `${urlName || "Provided string"} is not a valid image url.`
+    }
+
+    return url;
 }

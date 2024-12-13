@@ -42,7 +42,7 @@ router.route('/').post(async (req, res) => {
     res.cookie("session_token", sessionId, { maxAge: 60 * 60 * 1000, httpOnly: true });
     return res.redirect('/home'); // Redirect on successful login
   } catch (error) {
-    return res.status(400).json({ error: error.toString() }); // Handle login error
+    return res.status(400).render("../views/account", { error: error.toString() }); // Handle login error
   }
 });
 
@@ -63,16 +63,17 @@ router.route("/newAccount")
       username = validateString(username, "Username").toLowerCase();
       email = validateEmailAddress(email, "Email");
       password = validateString(password, "Password");
-      if(confirmPassword !== password){
+      if (confirmPassword !== password) {
         throw 'Passwords do not match';
       }
     } catch (error) {
-      return res.status(400).json({ error: error.toString() });
+      return res.status(400).render("../views/newAccount", { error: error.toString() });
     }
 
     username = xss(username);
     email = xss(email);
     password = xss(password);
+    confirmPassword = xss(confirmPassword);
 
     try {
       const result = await userFunctions.addNewUser(username, email, password);
