@@ -47,7 +47,7 @@ document.getElementById('coffee-checkbox').addEventListener('change', async func
 
 
           const locationReviews = revData.filter(rev => rev.id === location.id);
-        
+
           let allReviews = [];
           locationReviews.forEach(review => {
             review.text.forEach(rev => {

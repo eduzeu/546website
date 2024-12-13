@@ -4,18 +4,18 @@ import * as sessionTokens from "../data/sessionTokens.js";
 const router = Router()
 
 router.route('/').get(async (req, res) => {
-  try{
+  try {
     let token;
-    try{
+    try {
       token = req.cookies["session_token"];//gets the sessionId
-    } catch{
+    } catch {
       throw 'no cookie';
     }
     token = await sessionTokens.sessionChecker(token);//checks if sessionId is valid
-    if(token){
+    if (token) {
       res.render('../views/map', { title: "WiFly NYC - map" });
     }
-  } catch(e){
+  } catch (e) {
     res.status(401).render('../views/invalidLogin', { error: e });
   }
 });

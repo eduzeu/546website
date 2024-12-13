@@ -1,26 +1,26 @@
 <link rel="stylesheet" href="/public/css/styles.css">
-<header> 
+<header>
   <h1> Welcome to WiFly NYC</h1>
 </header>
 <main>
 
   {{!-- <form id="accountHandling">
     <label>
-      Login<br><br/>
-        <label id='formLabel' for="loginUser">Username:</label><br>
-        <input class='formText' type="text" id="loginUser" name="loginUser"><br><br/>
-        <label id='formLabel' for="loginPassword">Password:</label><br>
-        <input class='formText' type="password" id="loginPassword" name="loginPassword"><br><br/>
-        <input class="submit" type="submit" value="Login">
+      Login<br><br />
+      <label id='formLabel' for="loginUser">Username:</label><br>
+      <input class='formText' type="text" id="loginUser" name="loginUser"><br><br />
+      <label id='formLabel' for="loginPassword">Password:</label><br>
+      <input class='formText' type="password" id="loginPassword" name="loginPassword"><br><br />
+      <input class="submit" type="submit" value="Login">
     </label>
   </form> --}}
   <p id="error">{{error}}</p>
   <button class="newAccount" onclick="window.location.href='/'">Log In</button>
-  <br><br/>
+  <br><br />
   <Label>
-      Don't have an account?
-      <button class="newAccount" onclick="window.location.href='/newAccount'">
+    Don't have an account?
+    <button class="newAccount" onclick="window.location.href='/newAccount'">
       Create a new account
-      </button>
+    </button>
   </Label>
   <script src="../public/js/users.js"></script>

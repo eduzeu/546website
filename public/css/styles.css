@@ -272,3 +272,17 @@ section.sectionSpacing {
     max-width: 400px;
   }
 }
+
+#imagePreview {
+  width: 100%;
+  max-width: 400px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.review-image {
+  width: 100%;
+  max-width: 400px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}

@@ -17,18 +17,18 @@
     <section>
         <h2 class="coffeeDetailHeader">Reviews</h2>
         {{#if review}}
-            {{#if review.rating.length}}
-                {{#each review.rating}}
-                <div class="coffeeReview">
-                    <p class="noSpacing">{{this}} out of 5 stars</p>
-                    <p class="noSpacing">"{{lookup ../review.text @index}}"</p>
-                </div>
-                {{/each}}
-            {{else}}
-                <p class="noSpacing">No Ratings Yet.</p>
-            {{/if}}
+        {{#if review.rating.length}}
+        {{#each review.rating}}
+        <div class="coffeeReview">
+            <p class="noSpacing">{{this}} out of 5 stars</p>
+            <p class="noSpacing">"{{lookup ../review.text @index}}"</p>
+        </div>
+        {{/each}}
         {{else}}
-            <p class="noSpacing">No Ratings Yet.</p>
+        <p class="noSpacing">No Ratings Yet.</p>
+        {{/if}}
+        {{else}}
+        <p class="noSpacing">No Ratings Yet.</p>
         {{/if}}
     </section>
 

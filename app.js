@@ -1,31 +1,36 @@
 import { v2 as cloudinary } from "cloudinary";
+import cookieParser from "cookie-parser";
 import express from 'express';
 import exphbs from 'express-handlebars';
-import configRoutes from './routes/index.js';
-import cookieParser from "cookie-parser";
 import * as sessionTokenFunctions from './data/sessionTokens.js';
+import configRoutes from './routes/index.js';
 
 const app = express();
 
 app.use('/public', express.static('public'));
 app.use(express.json());
-app.use(express.urlencoded({extended: true}));
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+
 app.use('/', async (req, res, next) => {
   const timestamp = new Date().toUTCString();
   const method = req.method;
   const route = req.originalUrl;
   let authorizedUser = false;
   let sessionId;
-  try{
+  try {
     sessionId = req.cookies["session_token"];
     let checked = await sessionTokenFunctions.sessionChecker(sessionId);
-    if(checked == null){
+    if (checked == null) {
       throw 'Failed check';
     }
     authorizedUser = true;
-  } catch(e) {
+  } catch (e) {
     authorizedUser = false;
+  }
+  if(authorizedUser){
+    let didWork = await sessionTokenFunctions.updateExpiration(sessionId);
+    res.cookie("session_token", sessionId, { maxAge: 60 * 60 * 1000, httpOnly: true });
   }
   if(route == '/' || route == '/newAccount'){
     if(authorizedUser){
@@ -39,8 +44,8 @@ app.use('/', async (req, res, next) => {
   // else if(route.startsWith('/review')){
   //   return res.redirect('/home');//same as above
   // }
-  else{
-    if(!authorizedUser){
+  else {
+    if (!authorizedUser) {
       return res.redirect('/');
     }
   }

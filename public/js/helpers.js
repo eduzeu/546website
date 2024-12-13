@@ -38,6 +38,16 @@ const validateEmailAddress = (email, emailName) => {
     return email;
 }
 
+const validateDate = (date, dateName) => {
+    if (Object.prototype.toString.call(date) !== "[object Date]")
+        throw `${dateName || "Provided data"} is not a date.`
+
+    if (isNaN(date))
+        throw `${dateName || "Provided data"} is an invalid date.`
+
+    return date;
+}
+
 const validateDateString = (dateStr, dateName) => {
     dateStr = validateString(dateStr, dateName);
 
@@ -51,11 +61,8 @@ const validateDateString = (dateStr, dateName) => {
         throw `${dateName || "Provided string"} is not YYYY-MM-DD format.`
     }
 
-    let formattedDate = `${components[0]}/${components[1]}/${components[2]}`
-
-    if (new Date(formattedDate) === "Invalid Date") {
-        throw `${dateName || "Provided string"} is not a valid date.`
-    }
+    const dateObj = new Date(dateStr);
+    validateDate(dateObj, dateName);
 
     return dateStr;
 }
@@ -104,4 +111,20 @@ const validateReviewsArray = (arr, arrName) => {
     for (const item of arr) {
         validateString(item, `${arrName || "Array"} contains a non-string value.`)
     }
+}
+
+const validateCloudinaryUrl = (url, urlName) => {
+    url = validateString(url, urlName);
+
+    let path = /^http:\/\/res\.cloudinary\.com\/dcvqjizwy\/image\/upload\/v[0-9]+\/[a-z0-9]+/m
+    if (!path.test(url)) {
+        throw `${urlName || "Provided string"} is not a valid image url.`
+    }
+
+    let fileExt = /\.(jpg|jpeg|png|gif|webp|bmp|heic)$/mi
+    if (!fileExt.test(url)) {
+        throw `${urlName || "Provided string"} is not a valid image url.`
+    }
+
+    return url;
 }
