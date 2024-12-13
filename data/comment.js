@@ -1,5 +1,7 @@
 import { ObjectId } from "mongodb";
 import { comment, posts } from "../config/mongoCollections.js";
+import { validateCommenter, validateObjectIdArray, validateObjectIdString, validateParent, validateString } from "../helpers.js";
+import { findPostById } from "./posts.js";
 
 // import { reviews } from "../config/mongoCollections.js";
 // import { users } from "../config/mongoCollections.js";
@@ -10,10 +12,10 @@ import { comment, posts } from "../config/mongoCollections.js";
 
 export const createComment = async (commenter, parent, body, comments) => {
     // validate stuff
-    if (!commenter || typeof commenter !== 'string') throw 'Invalid commenter';
-    if (!parent || typeof parent !== 'object') throw 'Invalid parent';
-    if (!body || typeof body !== 'string' || body.trim().length === 0) throw 'Invalid body';
-    if (!comments || !Array.isArray(comments)) throw 'Invalid comments';
+    commenter = validateCommenter(commenter, 'Commenter')
+    parent = validateParent(parent, 'Comment Parent');
+    body = validateString(body, 'Comment Body');
+    comments = validateObjectIdArray(comments, 'Comments Array')
 
     const commentCollection = await comment();
     // create comment obj:
@@ -31,32 +33,21 @@ export const createComment = async (commenter, parent, body, comments) => {
 
     const newCommentId = insertInfo.insertedId;
 
-    // add new comment to parent's comments
-    // const parentComment = findCommentById(newComment.parent.id);
-    // change the parent's comments to add newComment
-    if (!parent.type || (parent.type !== 'comment' && parent.type !== 'post')) {
-        throw 'Parent type must be "comment" or "post"';
-    }
+    // parent.type validated in validation function
     if (parent.type === "comment") {
         await updateCommentsComment(newCommentId);
+
     } else if (parent.type === "post") {
         await updateCommentsPost(newCommentId);
-    } else {
-        throw "Invalid parent type";
     }
 
     return await findCommentById(newCommentId.toString());
 }
 
-console.log(await createComment("675b72b6f057d21224af3924", ""))
+// console.log(await createComment("675b72b6f057d21224af3924", ""))
 
 export const findCommentById = async (id) => {
-    if (!id) throw 'You must provide an id to search for';
-    if (typeof id !== 'string') throw 'Id must be a string';
-    if (id.trim().length === 0)
-        throw 'Id cannot be an empty string or just spaces';
-    id = id.trim();
-    if (!ObjectId.isValid(id)) throw 'invalid object ID';
+    id = validateObjectIdString(id, "Comment Id")
     const commentCollection = await comment();
     const comment = await commentCollection.findOne({ _id: new ObjectId(id) });
     if (comment === null) throw 'No comment with that id';
@@ -66,6 +57,8 @@ export const findCommentById = async (id) => {
 
 // used to add comments to the parent if the parent is a comment
 export const updateCommentsComment = async (commentId) => {
+    commentId = validateObjectIdString(commentId, "Comment Id");
+
     const commentCollection = await comment();
 
     const comment = await findCommentById(commentId);
@@ -84,11 +77,13 @@ export const updateCommentsComment = async (commentId) => {
 }
 // used to add comments to the parent if the parent is a post
 export const updateCommentsPost = async (commentId) => {
+    commentId = validateObjectIdString(commentId, "Comment Id");
+
     const postsCollection = await posts();
     // get the post and all its info
     const comment = await findCommentById(commentId);
     // find post by id --> FUNCTION IS NOT IMPLEMENTED YET
-    const parent_post = findPostById(comment.parent.id);
+    const parent_post = await findPostById(comment.parent.id);
     const updated_comments = [...parent_comment.comments, comment._id];
 
     const updatedInfo = await postsCollection.findOneAndUpdate(

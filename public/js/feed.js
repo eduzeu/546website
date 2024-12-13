@@ -161,7 +161,7 @@ uploadWidget.addEventListener(
 displayReviews();
 
 const InsertReview = async (object) => {
-  await fetch("/userFeed/posts", {
+  await fetchFrom("/userFeed/posts", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(object),

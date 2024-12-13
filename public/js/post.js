@@ -94,7 +94,7 @@ reviewForm.addEventListener(submitButton, (event) => {
 displayReviews();
 
 const InsertReview = async (object) => {
-  await fetch("/userFeed/", {
+  await fetchFrom("/userFeed/", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(object),

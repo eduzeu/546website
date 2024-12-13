@@ -149,6 +149,39 @@ export const validateUserCookie = (cookie, cookieName) => {
   return cookie;
 }
 
+export const validateCommenter = (commenter, comName) => {
+  validateObject(commenter, comName);
+
+  if (!commenter.id || !commenter.username)
+    throw `${comName || "Provided object"} is missing id or username.`
+
+  validateObjectIdString(commenter.id, "Commenter Id");
+  commenter.username = validateString(commenter.username, "Commenter Username");
+
+  return commenter;
+}
+
+const validateParentType = (type, typeName) => {
+  type = validateString(type, typeName);
+
+  if (type !== "comment" && type !== "post")
+    throw `${typeName || "Provided string"} is not a valid parent type.`
+
+  return type;
+}
+
+export const validateParent = (parent, parentName) => {
+  validateObject(parent, parentName);
+
+  if (!parent.id || !parent.type)
+    throw `${parentName || "Provided object"} is missing id or type.`
+
+  validateObjectIdString(parent.id, `${parentName || "Provided Parent's"} Id`);
+  parent.type = validateParentType(parent.type, `${parentName || "Provided Parent's"} Type`);
+
+  return parent;
+}
+
 export const validateUUID = (id, idName) => {
   id = validateString(id, idName);
 
@@ -170,6 +203,27 @@ export const validateObjectIdString = (id, idName) => {
     throw `${idName || "Provided data"} is not a valid ObjectId.`
 
   return id;
+}
+
+const validateArray = (arr, arrName) => {
+  if (!arr)
+    throw `${arrName || "Provided data"} was not supplied.`
+
+  if (typeof arr !== "object")
+    throw `${arrName || "Provided data"} is not an object.`
+
+  if (!Array.isArray(arr))
+    throw `${arrName || "Provided object"} is not an array.`
+}
+
+export const validateObjectIdArray = (arr, arrName) => {
+  validateArray(arr, arrName);
+
+  for (let i = 0; i < arr.length; i++) {
+    arr[i] = validateObjectIdString(arr[i], `${arrName || "Array"} contains a non-Object Id value.`)
+  }
+
+  return arr;
 }
 
 export const fetchFrom = async (url) => {

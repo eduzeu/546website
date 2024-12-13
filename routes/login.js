@@ -59,10 +59,10 @@ router.route("/newAccount")
 
     try {
       // Validate inputs
-      confirmPassword = validateString(confirmPassword, "confirmPassword");
       username = validateString(username, "Username").toLowerCase();
       email = validateEmailAddress(email, "Email");
       password = validateString(password, "Password");
+      confirmPassword = validateString(confirmPassword, "Confirm Password");
       if (confirmPassword !== password) {
         throw 'Passwords do not match';
       }
