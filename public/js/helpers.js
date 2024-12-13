@@ -38,6 +38,35 @@ const validateEmailAddress = (email, emailName) => {
     return email;
 }
 
+const validateDate = (date, dateName) => {
+    if (Object.prototype.toString.call(date) !== "[object Date]")
+        throw `${dateName || "Provided data"} is not a date.`
+
+    if (isNaN(date))
+        throw `${dateName || "Provided data"} is an invalid date.`
+
+    return date;
+}
+
+const validateDateString = (dateStr, dateName) => {
+    dateStr = validateString(dateStr, dateName);
+
+    let components = dateStr.split("-");
+
+    if (components.length !== 3) {
+        throw `${dateName || "Provided string"} is not YYYY-MM-DD format.`
+    }
+
+    if (components[0].length !== 4 || components[1].length !== 2 || components[2].length !== 2) {
+        throw `${dateName || "Provided string"} is not YYYY-MM-DD format.`
+    }
+
+    const dateObj = new Date(dateStr);
+    validateDate(dateObj, dateName);
+
+    return dateStr;
+}
+
 const validateNumber = (num, numName) => {
     if (typeof num === "undefined") {
         throw `${numName || "Provided parameter"} was not supplied.`;

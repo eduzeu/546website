@@ -78,14 +78,14 @@ export const validateReviewType = (reviewType, typeName) => {
 export const validateDateString = (dateStr, dateName) => {
   dateStr = validateString(dateStr, dateName);
 
-  let components = dateStr.split("/");
+  let components = dateStr.split("-");
 
   if (components.length !== 3) {
-    throw `${dateName || "Provided string"} is not MM/DD/YYYY format.`
+    throw `${dateName || "Provided string"} is not YYYY-MM-DD format.`
   }
 
-  if (components[0].length !== 2 || components[1].length !== 2 || components[2].length !== 4) {
-    throw `${dateName || "Provided string"} is not MM/DD/YYYY format.`
+  if (components[0].length !== 4 || components[1].length !== 2 || components[2].length !== 2) {
+    throw `${dateName || "Provided string"} is not YYYY-MM-DD format.`
   }
 
   const dateObj = new Date(dateStr);

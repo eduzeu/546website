@@ -22,13 +22,15 @@
 
 <main>
   <div class="searchbar">
-    <form class="searchform" action="/events/date" method="POST">
+    <p id="error"></p>
+    <form class="searchform" id="searchform" action="/events/date" method="POST">
       <label for="searchByDate">Date:</label>
-      <input type="text" id="searchByDate" name="searchByDate" required placeholder="mm/dd/year"
+      <input type="date" id="searchByDate" name="searchByDate" required placeholder="mm/dd/year"
         title="Please enter a valid date">
       <input type="submit" value="Search">
     </form>
   </div>
-
-
 </main>
+
+<script src="../public/js/event.js"></script>
+<script src="/public/js/helpers.js"></script>
