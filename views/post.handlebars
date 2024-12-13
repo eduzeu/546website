@@ -12,6 +12,9 @@
     <li>Posted By: {{post.poster.username}}</li>
     <li>Body: {{post.body}}</li>
   </ul>
+  {{#if post.image }}
+  <img class="review-image" src="{{post.image.url}}" alt="{{post.image.altText}}">
+  {{/if}}
 </div>
 
 <button id="postButton">Create Comment</button>

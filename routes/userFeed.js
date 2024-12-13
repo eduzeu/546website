@@ -27,11 +27,18 @@ router.route("/posts")
     let review = req.body.reviewText;
     let place = req.body.placename;
     let imageUrl = req.body.imageUrl;
+    let imageAltText = req.body.imageAltText;
 
     try {
       review = validateString(review, "Review Text");
       place = validateString(place, "Place Name");
-      if (imageUrl) { imageUrl = validateCloudinaryUrl(imageUrl, "Image URL") }
+      if (imageUrl && imageAltText) {
+        imageUrl = validateCloudinaryUrl(imageUrl, "Image URL");
+        imageAltText = validateString(imageAltText, "Image Alt Text");
+      
+      } else if ((imageUrl && !imageAltText) || (!imageUrl && imageAltText)) {
+        throw "Both image URL and image alt text must be provided";
+      }
 
     } catch (e) {
       return res.status(400).json({ error: e });
@@ -40,11 +47,12 @@ router.route("/posts")
     review = xss(review);
     place = xss(place);
     if (imageUrl) { imageUrl = xss(imageUrl) }
+    if (imageAltText) { imageAltText = xss(imageAltText) }
 
     try {
       let sessionId = req.cookies["session_token"];
       let user = await findUserFromSessionToken(sessionId);
-      const postReview = await insertUserPost(user, review, imageUrl, place);
+      const postReview = await insertUserPost(user, review, imageUrl, imageAltText, place);
       return postReview;
     } catch (e) {
       console.error(e);
@@ -62,7 +70,10 @@ router.route("/posts/:id")
 
     try {
       const post = await findPostById(req.params.id);
-      return res.render('post', { post });
+      return res.render('post', {
+        title: post.placeName,
+        post: post
+      });
     } catch (e) {
       console.log(e);
       return res.status(400).json({ error: e });
