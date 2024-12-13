@@ -48,6 +48,8 @@ export const createComment = async (commenter, parent, body, comments) => {
     return await findCommentById(newCommentId.toString());
 }
 
+console.log(await createComment("675b72b6f057d21224af3924", ""))
+
 export const findCommentById = async (id) => {
     if (!id) throw 'You must provide an id to search for';
     if (typeof id !== 'string') throw 'Id must be a string';

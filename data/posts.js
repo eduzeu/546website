@@ -5,19 +5,19 @@ import {users } from "../config/mongoCollections.js";
 
 const postCollection = await posts();
 export const insertUserPost = async (user, body, imageUrl, imageAltText, placeName) => {
-    user = validateUserCookie(user, 'User');
-    body = validateString(body, 'Body');
-    placeName = validateString(placeName, 'Place Name');
+    //user = validateUserCookie(user, 'User');
+    // body = validateString(body, 'Body');
+    // placeName = validateString(placeName, 'Place Name');
 
-    if (imageUrl && imageAltText) {
-        imageUrl = validateCloudinaryUrl(imageUrl, 'Image URL');
-        imageAltText = validateString(imageAltText, 'Image Alt Text');
+    // if (imageUrl && imageAltText) {
+    //     imageUrl = validateCloudinaryUrl(imageUrl, 'Image URL');
+    //     imageAltText = validateString(imageAltText, 'Image Alt Text');
 
-        // If imageUrl exists and imageAltText doesn't (or vise versa)
-        // throw an error
-    } else if ((imageUrl && !imageAltText) || (!imageUrl && imageAltText)) {
-        throw 'Both Image URL and Image Alt Text must be provided';
-    }
+    //     // If imageUrl exists and imageAltText doesn't (or vise versa)
+    //     // throw an error
+    // } else if ((imageUrl && !imageAltText) || (!imageUrl && imageAltText)) {
+    //     throw 'Both Image URL and Image Alt Text must be provided';
+    // }
 
     let newPost;
     try {
@@ -49,6 +49,8 @@ export const insertUserPost = async (user, body, imageUrl, imageAltText, placeNa
         console.error(e);
     };
 };
+
+// console.log(await insertUserPost("675b72b6f057d21224af3924", "this is a good place", null, null, "manhattan"));
 
 export const findPostById = async (id) => {
     id = validateObjectIdString(id, 'Post Id')
