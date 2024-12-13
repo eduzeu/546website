@@ -53,7 +53,7 @@ router.route("/posts")
       let sessionId = req.cookies["session_token"];
       let user = await findUserFromSessionToken(sessionId);
       const postReview = await insertUserPost(user, review, imageUrl, imageAltText, place);
-      return postReview;
+      return res.status(200).json(postReview);
     } catch (e) {
       console.error(e);
       return res.status(500).send(e);

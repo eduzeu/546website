@@ -1,4 +1,5 @@
 //poster({userId, username}, body, imagelink, id of comments)
+import { ObjectId } from "mongodb";
 import { posts } from "../config/mongoCollections.js";
 import { validateCloudinaryUrl, validateObjectIdString, validateString, validateUserCookie } from "../helpers.js";
 

@@ -1,169 +1,180 @@
-// Get references to the necessary elements
-const postButton = document.getElementById("postButton");
-const reviewPrompt = document.getElementById("reviewPrompt");
-const cancelButton = document.getElementById("cancelButton");
-const reviewForm = document.getElementById("reviewForm");
-const userPosts = document.getElementById("userPosts");
-const uploadWidget = document.getElementById("upload_widget");
-let imagePreview = document.getElementById("imagePreview");
-const imageAltLabel = document.getElementById("imageAltLabel");
-const imageAltText = document.getElementById("imageAltText");
-const submitButton = document.getElementById("submitReviewButton");
-let errorText = document.getElementById("error");
-let placeName = document.getElementById("placeName");
-let reviewText = document.getElementById("reviewText");
-const removeImg = document.getElementById("removeImage");
-// console.log(postButton, reviewPrompt, cancelButton, reviewForm);
+(function ($) {
+  let postButton = $("#postButton")
+  let reviewPrompt = $("#reviewPrompt")
+  let cancelButton = $("#cancelButton")
+  let reviewForm = $("#reviewForm")
+  let userPosts = $("#userPosts")
+  let uploadWidget = $("#upload_widget")
+  let imagePreview = $("#imagePreview")
+  let imageAltLabel = $("#imageAltLabel")
+  let imageAltText = $("#imageAltText")
+  let errorText = $("#errorText")
+  let placeName = $("#placeName")
+  let reviewText = $("#reviewText")
+  let removeImg = $("#removeImage")
 
-uploadWidget.innerHTML = "Upload image"
-imagePreview.style.display = "none";
-imageAltLabel.style.display = "none";
-let imageUrl = undefined;
+  uploadWidget.html("Upload image");
+  imagePreview.css("display", "none");
+  imageAltLabel.css("display", "none");
+  removeImg.css("display", "none");
 
-var myWidget = cloudinary.createUploadWidget(
-  {
-    cloudName: cloudinaryConfig.cloudName,
-    uploadPreset: cloudinaryConfig.uploadPreset,
-    sources: ["local", "url", "camera"],
-    multiple: false,
-    maxFiles: 1,
-    clientAllowedFormats: "image",
-    singleUploadAutoClose: false
-  },
-  (error, result) => {
-    if (!error && result && result.event === "success") {
-      imageUrl = result.info.url;
-      imagePreview.src = imageUrl;
-      uploadWidget.innerHTML = "Replace image";
-      imagePreview.style.display = "";
-      imageAltLabel.style.display = "";
-      removeImg.removeAttribute("hidden");
+  let imageUrl = undefined;
 
-    } else if (error) {
-      errorText.innerHTML = error.message;
-      errorText.classList.remove("hidden");
-    }
-  }
-);
+  var myWidget = cloudinary.createUploadWidget(
+      {
+          cloudName: cloudinaryConfig.cloudName,
+          uploadPreset: cloudinaryConfig.uploadPreset,
+          sources: ["local", "url", "camera"],
+          multiple: false,
+          maxFiles: 1,
+          clientAllowedFormats: "image",
+          singleUploadAutoClose: false
+      },
+      (error, result) => {
+          if (!error && result && result.event === "success") {
+              imageUrl = result.info.url;
+              imagePreview.attr("src", imageUrl);
+              uploadWidget.html("Replace image");
+              imagePreview.css("display", "");
+              imageAltLabel.css("display", "");
+              removeImg.css("display", "");
 
-const displayReviews = async () => {
-  try {
-    const reviews = await fetchFrom("../userFeed/posts");
-
-    console.log("Fetched reviews:", reviews);
-
-    userPosts.innerHTML = ""; // Clear the previous content
-
-    reviews.forEach((user) => {
-      if (user && user.poster) {
-        console.log("Individual review:", user.poster);
-
-        const revDiv = document.createElement("div");
-        revDiv.classList.add("review");
-
-        revDiv.innerHTML = `
-          <div class="review-header">
-            <h3 class="place-name">${user.placeName || "Unknown Place"}</h3>
-            <span class="username">by ${user.poster.username || "Anonymous"}</span>
-          </div>
-          <p class="review-text">${user.body || "No review text"}</p>
-          ${user.image ? `<img class="review-image" src="${user.image.url}" alt="${user.image.altText}">` : ""}
-          <a href="/userFeed/posts/${user._id}">View/Add Comments</a>
-        `;
-
-        userPosts.appendChild(revDiv);
-      } else {
-        console.warn("Missing poster or user details:", user);
+          } else if (error) {
+              errorText.html(error.message);
+              errorText.removeClass("hidden");
+          }
       }
-    });
-  } catch (error) {
-    console.error("Error fetching reviews:", error);
-    errorText.innerHTML = error.message || "An error occurred";
-    errorText.classList.remove("hidden");
-  }
-};
+  );
 
-postButton.addEventListener("click", () => {
-  reviewPrompt.classList.remove("hidden");
-});
+  const displayReviews = async () => {
+      $.ajax({
+          url: "/userFeed/posts",
+          method: "GET",
+          contentType: "application/json",
+          success: function (response) {
+              console.log("Fetched reviews:", response);
+              userPosts.html("");
 
-// Event listener for the cancel button
-cancelButton.addEventListener("click", () => {
-  reviewPrompt.classList.add("hidden");
-  reviewForm.reset();
-});
+              response.forEach(user => {
+                  if (user && user.poster) {
+                      console.log("Individual review:", user.poster);
 
-removeImg.addEventListener("click", () => {
-  imageUrl = undefined;
-  imagePreview.src = "Placeholder";
-  imageAltText.value = "";
-  imageAltLabel.style.display = "none";
-  imagePreview.style.display = "none";
-  removeImg.classList.add("hidden");
-  uploadWidget.innerHTML = "Upload image"
-});
+                      const revDiv = $("<div>").addClass("review");
 
-reviewForm.addEventListener("submit", async (event) => {
-  if (event.submitter === uploadWidget) {
-    event.preventDefault();
-    return;
-  }
+                      revDiv.html(`
+                      <div class="review-header">
+                          <h3 class="place-name">${user.placeName || "Unknown Place"}</h3>
+                          <span class="username">by ${user.poster.username || "Anonymous"}</span>
+                      </div>
+                      <p class="review-text">${user.body || "No review text"}</p>
+                      ${user.image ? `<img class="review-image" src="${user.image.url}" alt="${user.image.altText}">` : ""}
+                      <a href="/userFeed/posts/${user._id}">View/Add Comments</a>
+                      `);
 
-  event.preventDefault();
-  errorText.innerHTML = "";
-  errorText.classList.add("hidden");
+                      userPosts.append(revDiv);
 
-  try {
-    placeName.value = validateString(placeName.value, "Place Name");
-    reviewText.value = validateString(reviewText.value, "Review Text");
-    if (imageUrl) {
-      imageUrl = validateCloudinaryUrl(imageUrl, "Image URL");
-      imageAltText.value = validateString(imageAltText.value, "Image Alt Text");
-    }
-  } catch (e) {
-    errorText.innerHTML = e;
-    errorText.classList.remove("hidden");
-    return;
+                  } else {
+                      console.warn("Missing poster or user details:", user);
+                  }
+              });
+          },
+          error: function (xhr, status, error) {
+              console.error("Error fetching reviews:", e);
+              errorText.html(error);
+              errorText.removeClass("hidden");
+          }
+      });
   }
 
-  // const rating = document.getElementsByClassName("star-rating").value;
-  //find a way to get the id based on cookies and pass to insertUserReview
-  let revObject = { placename: placeName.value, reviewText: reviewText.value };
-  if (imageUrl) {
-    revObject["imageUrl"] = imageUrl;
-    revObject["imageAltText"] = imageAltText.value;
-  }
+  postButton.click(() => {
+      reviewPrompt.removeClass("hidden");
+      postButton.addClass("hidden");
+  })
 
-  console.log("inserting review", revObject);
-  InsertReview(revObject); //inserts review to database
+  cancelButton.click(() => {
+      reviewPrompt.addClass("hidden");
+      postButton.removeClass("hidden");
+      reviewForm.trigger("reset");
+  })
 
-  reviewForm.reset();
-  imageUrl = undefined;
-  imagePreview.src = "Placeholder";
-  imageAltText.value = "";
-  imagePreview.style.display = "none";
-  imageAltLabel.style.display = "none";
-  removeImg.classList.add("hidden");
-  uploadWidget.innerHTML = "Upload image"
-  reviewPrompt.classList.add("hidden");
+  removeImg.click(() => {
+      imageUrl = undefined;
+      imagePreview.attr("src", "Placeholder");
+      imageAltText.val("");
+      imageAltLabel.css("display", "none");
+      imagePreview.css("display", "none");
+      removeImg.css("display", "none");
+      uploadWidget.html("Upload image");
+  })
+
+  reviewForm.submit((event) => {
+      if (event.originalEvent.submitter === uploadWidget.get(0)) {
+          event.preventDefault();
+          return;
+      }
+
+      event.preventDefault();
+      errorText.html("");
+      errorText.addClass("hidden");
+
+      try {
+          placeName.val(validateString(placeName.val(), "Place Name"));
+          reviewText.val(validateString(reviewText.val(), "Review Text"));
+          if (imageUrl) {
+              imageUrl = validateCloudinaryUrl(imageUrl, "Image URL");
+              imageAltText.val(validateString(imageAltText.val(), "Image Alt Text"));
+          }
+      } catch (e) {
+          errorText.html(e);
+          errorText.removeClass("hidden");
+          return;
+      }
+
+      let revObject = {
+          placename: placeName.val(),
+          reviewText: reviewText.val()
+      }
+
+      if (imageUrl) {
+          revObject["imageUrl"] = imageUrl;
+          revObject["imageAltText"] = imageAltText.val();
+      }
+
+      console.log("inserting review", revObject);
+
+      $.ajax({
+          url: "/userFeed/posts",
+          method: "POST",
+          contentType: "application/json",
+          data: JSON.stringify(revObject),
+          success: function (response) {
+              console.log("Review inserted successfully:", response);
+
+              reviewForm.trigger("reset");
+              imageUrl = undefined;
+              imagePreview.attr("src", "Placeholder");
+              imageAltLabel.css("display", "none");
+              imageAltText.val("");
+              imagePreview.css("display", "none");
+              removeImg.css("display", "none");
+              uploadWidget.html("Upload image");
+              reviewPrompt.addClass("hidden");
+              postButton.removeClass("hidden");
+      
+              displayReviews();
+          },
+          error: function (xhr, status, error) {
+              console.error("Error inserting review:", error);
+              errorText.html(error);
+              errorText.removeClass("hidden");
+          }
+      });
+  })
+
+  uploadWidget.click(function () {
+      myWidget.open();
+  });
 
   displayReviews();
-});
 
-uploadWidget.addEventListener(
-  "click",
-  function () {
-    myWidget.open();
-  },
-  false
-);
-
-displayReviews();
-
-const InsertReview = async (object) => {
-  await fetchFrom("/userFeed/posts", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(object),
-  });
-};
+})(jQuery);
