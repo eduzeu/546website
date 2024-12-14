@@ -10,7 +10,7 @@ document.getElementById('wifi-checkbox').addEventListener('change', async functi
       const revData = await reviews.json();
 
       const locationContainer = document.getElementById('wifiLocations');
-      locationContainer.innerHTML = ''; 
+      locationContainer.innerHTML = '';
 
       // Display locations if any are returned
       if (Object.keys(data).length > 0) {
@@ -21,8 +21,8 @@ document.getElementById('wifi-checkbox').addEventListener('change', async functi
         const thead = document.createElement('thead');
         thead.innerHTML = `
           <tr>
-            <th style="border: 1px solid black; padding: 10px;">Wi-Fi Location</th>
-            <th style="border: 1px solid black; padding: 10px;">Ratings & Reviews</th>
+            <th style="border: 1px solid black; padding: 20px;">Wi-Fi Location</th>
+            <th style="border: 1px solid black; padding: 20px;">Ratings & Reviews</th>
           </tr>
         `;
         table.appendChild(thead);
@@ -44,9 +44,10 @@ document.getElementById('wifi-checkbox').addEventListener('change', async functi
           `;
           const ratingsCell = document.createElement('td');
           ratingsCell.style.border = '1px solid black';
+          ratingsCell.setAttribute('data-location-id', location.place_id);
 
           const locationReviews = revData.filter(rev => rev.id === location.place_id);
-        
+
           let allReviews = [];
           locationReviews.forEach(review => {
             review.text.forEach(rev => {
@@ -90,7 +91,7 @@ document.getElementById('wifi-checkbox').addEventListener('change', async functi
           seeReviews.style.marginTop = '10px';
           seeReviews.innerHTML = `<a href="/reviews/${location.place_id}">See Reviews</a>`;
 
-    
+
           const wifiReview = document.createElement('p');
           wifiReview.style.marginTop = '10px';
           wifiReview.innerHTML = `<a class="review" href="#">Been here? Write a review</a>`;
@@ -133,17 +134,77 @@ const callReview = async (score, text, id, type) => {
   const numericScore = Number(score);
   try {
     const response = await fetch('../review', {
-      method: 'POST', 
+      method: 'POST',
       headers: {
-        'Content-Type': 'application/json',   
+        'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ rating: numericScore , text: text, id: id, type: type }),  
-    });   
+      body: JSON.stringify({ rating: numericScore, text: text, id: id, type: type }),
+    });
     // console.log(response);
   } catch (error) {
-    throw new Error('Failed to submit the review'); 
+    throw new Error('Failed to submit the review');
   }
 };
+const updateReview = async (id, type) => {
+  try {
+    const data = await fetch(`../review/${type}/${id}`);
+    const reviews = await data.json();
+
+    console.log("Reviews data:", reviews); // Log the structure of the reviews
+
+    const locationRow = document.getElementById(`${type}Locations`).querySelector(`td[data-location-id="${id}"]`); // Target the correct location by place_id
+
+    if (locationRow) {
+      const reviewCell = locationRow;
+
+      // Initialize rating calculation variables
+      let total = 0;
+      let ratingCount = 0;
+
+      // Handle the reviews object: reviews.rating is an array of ratings
+      if (Array.isArray(reviews.rating)) {
+        reviews.rating.forEach((rating) => {
+          total += rating;
+          ratingCount++;
+        });
+      } else {
+        console.error("Reviews.rating is not an array.");
+        return; // Exit early if reviews.rating is not an array
+      }
+
+      // Update the rating display
+      if (ratingCount > 0) {
+        const avg = total / ratingCount;
+        reviewCell.innerHTML = `
+          <strong>Average Rating:</strong> ${avg.toFixed(1)} (${ratingCount} reviews)<br>
+        `;
+      } else {
+        reviewCell.innerHTML = `
+          <strong>Rating:</strong> Not rated yet<br>
+          <strong>Reviews:</strong> No reviews yet
+        `;
+      }
+
+      if(type === 'wifi'){
+        const seeReviews = document.createElement('p');
+        seeReviews.style.marginTop = '10px';
+        seeReviews.innerHTML = `<a href="/reviews/${id}">See Reviews</a>`;
+        reviewCell.appendChild(seeReviews);
+        seeReviews.querySelector('a').addEventListener('click', (event) => {
+          event.preventDefault();
+          showReviews(reviews.text); // Pass the reviews for this location
+        });
+      }
+     
+     
+    } else {
+      console.error(`Couldn't find row for location ID: ${id}`);
+    }
+  } catch (e) {
+    console.error("Error updating reviews:", e);
+  }
+};
+
 
 const showReviews = (revs) => {
   const structure = document.createElement('div');
@@ -233,6 +294,7 @@ const createReview = (id, type) => {
     try {
       await callReview(selectedRating, userText, id, type);
       document.body.removeChild(structure); // Close the review form
+      updateReview(id, type);
     } catch (error) {
       console.error('Error submitting review:', error);
       alert('There was an error submitting your review.');
@@ -242,4 +304,37 @@ const createReview = (id, type) => {
   document.getElementById('closeButton').addEventListener('click', () => {
     document.body.removeChild(structure); // Close the review form
   });
+
+
 };
+
+const displayPlaceOfTheDay = async () => {
+  try {
+    let store = JSON.parse(localStorage.getItem("placeOfTheDay"));
+    let storeTime = localStorage.getItem("nextUpdateTime");
+    const time = Date.now();
+
+    storeTime = parseInt(storeTime, 10);
+
+    if (!store || !storeTime || time >= storeTime) {
+      const response = await fetch('../location/wifi/place');
+      const placeInfo = await response.json();
+      console.log(placeInfo);
+
+      localStorage.setItem('placeOfTheDay', JSON.stringify(placeInfo));
+      localStorage.setItem('nextUpdateTime', (time + 24 * 60 * 60 * 1000).toString());
+
+      store = placeInfo;
+    }
+
+    document.getElementById('place-name').textContent = store.Neighborhood || "No name available";
+    document.getElementById('place-address').textContent = store.Place || "No address available";
+    document.getElementById('place-type').textContent = "Wifi";
+
+  } catch (e) {
+    console.error('Error displaying place of the day:', e);
+  }
+}
+
+// Attach the function to window load
+window.onload = displayPlaceOfTheDay;

@@ -1,3 +1,4 @@
+import { v2 as cloudinary } from "cloudinary";
 import express from 'express';
 import exphbs from 'express-handlebars';
 import configRoutes from './routes/index.js';
@@ -32,6 +33,12 @@ app.set('view engine', 'handlebars');
 
 
 configRoutes(app);
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET
+});
 
 app.listen(3000, () => {
   console.log("We've now got a server!");
