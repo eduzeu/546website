@@ -36,6 +36,7 @@ app.use('/', async (req, res, next) => {
   const method = req.method;
   const route = req.originalUrl;
   let authorizedUser = false;
+  console.log(route);
   let sessionId;
   try {
     sessionId = req.cookies["session_token"];
@@ -51,7 +52,7 @@ app.use('/', async (req, res, next) => {
     let didWork = await sessionTokenFunctions.updateExpiration(sessionId);
     res.cookie("session_token", sessionId, { maxAge: 60 * 60 * 1000, httpOnly: true });
   }
-  if(route == '/' || route == '/newAccount'){
+  if(route == '/' || route == '/signup'){
     if(authorizedUser){
       return res.redirect('/home/');
     }

@@ -45,6 +45,7 @@ router.route('/')
         let text = req.body.text;
         let id = req.body.id;
         let reviewType = req.body.type;
+        let currUser = await sessionTokens.findUserFromSessionToken(req.cookies["session_token"]);
 
         try {
             score = validateRating(score, "Review Rating");
@@ -60,7 +61,7 @@ router.route('/')
         reviewType = xss(reviewType);
 
         try {
-            const review = await createReview(score, text, id, reviewType);
+            const review = await createReview(score, text, id, reviewType, currUser);
             return res.json(review);
 
         } catch (e) {

@@ -2,34 +2,23 @@ import { ObjectId } from "mongodb";
 import { reviews } from "../config/mongoCollections.js";
 import { validateNumber, validateRating, validateReviewType, validateString } from "../helpers.js";
 
-export const createReview = async (rating, text, id, type) => {
+export const createReview = async (rating, text, id, type, currUser) => {
     rating = validateRating(rating, "Rating");
     text = validateString(text, "Review Text");
     id = validateNumber(id, "Location ID");
     type = validateReviewType(type, "Review Type");
-
+    let userReviews = currUser.reviews;
     const reviewCollection = await reviews();
-    const existingReview = await reviewCollection.findOne({ id, type });
-
-    if (existingReview) {
-        const updatedResult = await reviewCollection.updateOne(
-            { id },
-            {
-                $push: {
-                    rating: rating,
-                    text: text
-                }
-            }
-        );
-        return updatedResult;
+    if (userReviews.id) {
+        throw 'Already wrote a review';
     } else {
         const newReview = await reviewCollection.insertOne({
-            _id: new ObjectId(),
             rating: [rating],
             text: [text],
             id,
             type
         });
+        console.log(newReview);
         return newReview;
     }
 };
