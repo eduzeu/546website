@@ -55,12 +55,6 @@ app.use('/', async (req, res, next) => {
     if(authorizedUser){
       return res.redirect('/home/');
     }
-<<<<<<< HEAD
-=======
-    
-  } else if (route == "/" && authorizedUser) {
-    return res.redirect('/home');
->>>>>>> ee8a55b32a49560297cdc8409545ab35efff403d
   }
   // else if(route.startsWith('/location')){
   //   return res.redirect('/home/');//if a user tries to get to the /location routes send them to error page. MAKE ROUTE FOR /ERROR that links back to home if authorized
