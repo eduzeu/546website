@@ -7,6 +7,7 @@ import locationRoutes from './location.js';
 import loginRoutes from './login.js';
 import mapRoutes from './map.js';
 import reviewRoutes from './review.js';
+import userFeedRoutes from "./userFeed.js";
 import friendRoutes from './friends.js';
 
 
@@ -19,6 +20,7 @@ const constructorMethod = (app) => {
   app.use('/coffeeShop', coffeeShopRoutes);
   app.use('/friends', friendRoutes);
   app.use('/home', mapRoutes);
+  app.use("/userFeed", userFeedRoutes)
 
   app.use('/public', staticDir('public'));
 
@@ -29,7 +31,7 @@ const constructorMethod = (app) => {
       Preset: JSON.stringify(process.env.CLOUDINARY_UPLOAD_PRESET)
     });
   });
-  
+
   app.use("/", loginRoutes);
 
   app.use('*', (req, res) => {

@@ -1,6 +1,6 @@
+import { fetchFrom, validateDateString, validateString } from '../helpers.js';
 import axios from 'axios'; 
 import { response } from 'express';
-
 export const getAllEvents = async ()=> {
     let response = await axios.get(`https://data.cityofnewyork.us/resource/tvpp-9vvx.json`);
     let data = response.data
@@ -13,7 +13,7 @@ export const getAllEvents = async ()=> {
     curr = curr[0].split("-"); 
     
     for (const event of data) {
-        if(results.length >= 50){
+        if (results.length >= 50) {
             break;
         }
         let eventDates = event.start_date_time;
@@ -36,9 +36,10 @@ export const getAllEvents = async ()=> {
     return results 
 }
 
-export const getEventbyBorough = async (city) => {
-    let response = await axios.get('https://data.cityofnewyork.us/resource/tvpp-9vvx.json');
-    let data = response.data;
+export const getEventbyBorough = async (borough) => {
+    validateString(borough, "Search Borough")
+
+    let data = await fetchFrom('https://data.cityofnewyork.us/resource/tvpp-9vvx.json');
     let events_in_borough = [];
 
     const now = new Date();
@@ -48,11 +49,11 @@ export const getEventbyBorough = async (city) => {
     curr = curr[0].split("-");     
 
     for (const event of data) {
-        if(events_in_borough.length >= 50){
+        if (events_in_borough.length >= 50) {
             break;
         }
 
-        if (event.event_borough === city) {
+        if (event.event_borough === borough) {
             let eventDates = event.start_date_time;
             let time = eventDates.split("T");
 
@@ -76,13 +77,13 @@ export const getEventbyBorough = async (city) => {
 }
 
 export const getEventbyDate = async (date) => {
-    let response = await axios.get('https://data.cityofnewyork.us/resource/tvpp-9vvx.json');
-    let data = response.data;
+    validateDateString(date, "Search Date");
+
+    let data = await fetchFrom('https://data.cityofnewyork.us/resource/tvpp-9vvx.json');
     let events_in_date = [];
 
-        
-    for (const event of data) { 
-        if(events_in_date.length >= 50){
+    for (const event of data) {
+        if (events_in_date.length >= 50) {
             break;
         }
 
@@ -90,13 +91,12 @@ export const getEventbyDate = async (date) => {
         eventDates = eventDates.split("T");
 
         eventDates = eventDates[0]
-        eventDates = eventDates.split("-");
 
-        eventDates = eventDates[1] +"/"+ eventDates[2] +"/"+ eventDates[0] 
-        
+        const dateSplit = eventDates.split("-");
+        const dateStr = dateSplit[1] + "/" + dateSplit[2] + "/" + dateSplit[0]
 
         if (eventDates == date) {
-            event.start_date_time = eventDates
+            event.start_date_time = dateStr;
             events_in_date.push(event);
         }
     }

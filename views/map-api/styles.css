@@ -82,6 +82,7 @@ main {
     border: 1px solid #ddd;
     border-radius: 4px;
 }
+
 select {
     font-family: monospace;
 }

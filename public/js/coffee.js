@@ -2,11 +2,9 @@ document.getElementById('coffee-checkbox').addEventListener('change', async func
   if (this.checked) {
     try {
       document.getElementById('wifiLocations').innerHTML = '';
-      const response = await fetch("../location/coffeeShop");
-      const data = await response.json();
 
-      const reviews = await fetch('../review/coffee');
-      const revData = await reviews.json();
+      const data = await fetchFrom("../location/coffeeShop");
+      const revData = await fetchFrom("../review/coffee");
 
       const locationContainer = document.getElementById('coffeeLocations');
       locationContainer.innerHTML = '';
@@ -47,6 +45,7 @@ document.getElementById('coffee-checkbox').addEventListener('change', async func
           ratingsCell.style.border = '1px solid black';
           ratingsCell.setAttribute('data-location-id', location.id);
 
+
           const locationReviews = revData.filter(rev => rev.id === location.id);
 
           let allReviews = [];
@@ -85,23 +84,33 @@ document.getElementById('coffee-checkbox').addEventListener('change', async func
               <strong>Reviews:</strong> No reviews yet
             `;
           }
-          
+
+          const seeReviews = document.createElement('p');
+          seeReviews.style.marginTop = '10px';
+          // seeReviews.innerHTML = `<a href="/reviews/${location.id}">See Reviews</a>`;
+
           const coffeeReview = document.createElement('p');
           coffeeReview.style.marginTop = '10px';
           coffeeReview.innerHTML = `<a class="review" href="#">Been here? Write a review</a>`;
 
-          // Append the "Write a review" link
+          // Append cells to the row
           coffeeDetailsCell.appendChild(coffeeReview);
+          ratingsCell.appendChild(seeReviews);
           row.appendChild(coffeeDetailsCell);
           row.appendChild(ratingsCell);
 
           // Append row to the table body
           tbody.appendChild(row);
 
-          // Attach event listener to the review link
+          // seeReviews.querySelector('a').addEventListener('click', (event) => {
+          //   event.preventDefault();
+          //   showReviews(allReviews);
+          // });
+
           coffeeReview.querySelector('a').addEventListener('click', (event) => {
             event.preventDefault();
             createReview(location.id, "coffee");
+            updateReview(location.id, "coffee");
           });
         });
 

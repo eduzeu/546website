@@ -23,26 +23,24 @@
           </div>
         </div>
         <a href="friends">Friends List</a>
-        <a href="signoutuser">Signout</a>
+        <a href="/logout">Signout</a>
       </div>
       
     </header>
 
-    <main>
-      <section class="events-list">
-        {{#each events}}
-          <div class="event">
-            <h4>{{this.event_name}}</h4>
-            <ul>
-              <li>Hosts: {{this.event_agency}}</li>
-              <li>Borough: {{this.event_borough}}</li>
-              <li>Date: {{this.start_date_time}}</li>
-              <li>Location: {{this.event_location}}</li>
-              <li>Type: {{this.event_type}}</li>
-            </ul>
-          </div>
-        {{/each}}
-      </section>
-    </main>
-  </body>
-</html>
+<main>
+  <section class="events-list">
+    {{#each events}}
+    <div class="event">
+      <h4>{{this.event_name}}</h4>
+      <ul>
+        <li>Hosts: {{this.event_agency}}</li>
+        <li>Borough: {{this.event_borough}}</li>
+        <li>Date: {{this.start_date_time}}</li>
+        <li>Location: {{this.event_location}}</li>
+        <li>Type: {{this.event_type}}</li>
+      </ul>
+    </div>
+    {{/each}}
+  </section>
+</main>

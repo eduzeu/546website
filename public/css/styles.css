@@ -21,6 +21,7 @@
 
 }
 
+
 #coffeeLocations table {
   text-align: center;
   color: #EFEBCE;
@@ -28,6 +29,10 @@
   width: 50%;
   margin: 0 auto;
   ;
+}
+
+.hidden {
+  display: none;
 }
 
 #wifiLocations table th,
@@ -138,6 +143,7 @@ main {
   cursor: pointer;
 }
 
+
 .review-container {
   max-height: 200px;
   overflow-y: auto;
@@ -206,6 +212,79 @@ p.noSpacing {
 
 section.sectionSpacing {
   margin-bottom: 20px;
+}
+
+#userPosts {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 100%;
+}
+
+.review {
+  width: 400px;
+  /* Fixed width */
+  margin-bottom: 15px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-sizing: border-box;
+  word-wrap: break-word;
+}
+
+.review-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.place-name {
+  margin: 0;
+  font-weight: bold;
+  max-width: 250px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.username {
+  color: #666;
+  font-size: 0.8em;
+  max-width: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.review-text {
+  margin: 0;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  max-width: 100%;
+  white-space: pre-wrap;
+}
+
+@media (max-width: 480px) {
+  .review {
+    width: 95%;
+    max-width: 400px;
+  }
+}
+
+#imagePreview {
+  width: 100%;
+  max-width: 400px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.review-image {
+  width: 100%;
+  max-width: 400px;
+  padding-top: 5px;
+  padding-bottom: 5px;
 }
 
 

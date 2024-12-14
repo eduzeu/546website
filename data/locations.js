@@ -1,5 +1,5 @@
-import * as helpers from "../helpers.js";
 import { LocalStorage } from 'node-localstorage';
+import { fetchFrom, fetchFromOverpass, validateNumber } from '../helpers.js';
 
 const localStorage = new LocalStorage('./scratch');
 
@@ -12,7 +12,7 @@ export let fetchCoffeeShops = async () => {
     out body;
     `;
 
-  const rawData = await helpers.fetchFromOverpass(query);
+  const rawData = await fetchFromOverpass(query);
 
   // While the below filtering could be expressed in the query
   // That extends the time it takes for it to be processed
@@ -29,7 +29,7 @@ export let fetchCoffeeShops = async () => {
 }
 
 export const fetchCoffeeShopById = async (id) => {
-  id = helpers.validateNumber(id);
+  id = validateNumber(id, "Coffee Shop ID");
 
   const query = `
   [out:json];
@@ -37,7 +37,7 @@ export const fetchCoffeeShopById = async (id) => {
   out body;
   `;
 
-  const rawData = await helpers.fetchFromOverpass(query);
+  const rawData = await fetchFromOverpass(query);
 
   if (rawData.elements.length === 0) {
     throw `No coffee shop found with id '${id}'.`;
@@ -47,7 +47,7 @@ export const fetchCoffeeShopById = async (id) => {
 }
 
 export const getWifiLocations = async () => {
-  let data = await helpers.fetch("https://data.cityofnewyork.us/resource/npnk-wrj8.json");
+  let data = await fetchFrom("https://data.cityofnewyork.us/resource/npnk-wrj8.json");
 
   let wifiInfo = {};
 
@@ -67,12 +67,12 @@ export const getWifiLocations = async () => {
   return wifiInfo;
 };
 
-export const getPlaceOfTheDay = async () => { 
+export const getPlaceOfTheDay = async () => {
   let store = JSON.parse(localStorage.getItem("placeOfTheDay"));
   let storeTime = localStorage.getItem("nextUpdatedTime");
   const time = Date.now();
 
-  if(!store || time >= storeTime){
+  if (!store || time >= storeTime) {
     let wifiObject = await fetchCoffeeShops();
     let wifiArray = Object.values(wifiObject);
     let random = Math.floor(Math.random() * wifiArray.length);

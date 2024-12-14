@@ -1,4 +1,6 @@
 import axios from "axios";
+import { ObjectId } from "mongodb";
+import * as uuid from 'uuid';
 
 export const validateString = (str, strName) => {
   if (typeof str === "undefined")
@@ -32,6 +34,18 @@ export const validateNumber = (num, numName) => {
   return num;
 }
 
+export const validateEmailAddress = (email, emailName) => {
+  email = validateString(email, emailName);
+
+  // regex source: https://www.geeksforgeeks.org/javascript-program-to-validate-an-email-address/
+  const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
+  if (!regex.test(email)) {
+    throw `${emailName || "Provided string"} is not a valid email address.`
+  }
+
+  return email;
+}
+
 export const validateRating = (rating, ratingName) => {
   validateNumber(Number(rating), ratingName);
 
@@ -61,7 +75,158 @@ export const validateReviewType = (reviewType, typeName) => {
   return reviewType
 }
 
-export const fetch = async (url) => {
+export const validateDateString = (dateStr, dateName) => {
+  dateStr = validateString(dateStr, dateName);
+
+  let components = dateStr.split("-");
+
+  if (components.length !== 3) {
+    throw `${dateName || "Provided string"} is not YYYY-MM-DD format.`
+  }
+
+  if (components[0].length !== 4 || components[1].length !== 2 || components[2].length !== 2) {
+    throw `${dateName || "Provided string"} is not YYYY-MM-DD format.`
+  }
+
+  const dateObj = new Date(dateStr);
+  validateDate(dateObj, dateName);
+
+  return dateStr;
+}
+
+// Based on: https://stackoverflow.com/a/1353711
+export const validateDate = (date, dateName) => {
+  if (Object.prototype.toString.call(date) !== "[object Date]")
+    throw `${dateName || "Provided data"} is not a date.`
+
+  if (isNaN(date))
+    throw `${dateName || "Provided data"} is an invalid date.`
+
+  return date;
+}
+
+export const validateCloudinaryUrl = (url, urlName) => {
+  url = validateString(url, urlName);
+
+  let path = /^http:\/\/res\.cloudinary\.com\/dcvqjizwy\/image\/upload\/v[0-9]+\/[a-z0-9]+/m
+  if (!path.test(url)) {
+    throw `${urlName || "Provided string"} is not a valid image url.`
+  }
+
+  let fileExt = /\.(jpg|jpeg|png|gif|webp|bmp|heic)$/mi
+  if (!fileExt.test(url)) {
+    throw `${urlName || "Provided string"} is not a valid image url.`
+  }
+
+  return url;
+}
+
+const validateObject = (obj, objName) => {
+  if (!obj)
+    throw `${objName || "Provided data"} was not supplied.`
+
+  if (typeof obj !== "object")
+    throw `${objName || "Provided data"} is not an object.`
+
+  if (Array.isArray(obj))
+    throw `${objName || "Provided object"} is an array.`
+
+  if (Object.keys(obj).length === 0)
+    throw `${objName || "Provided object"} is empty.`
+}
+
+export const validateUserCookie = (cookie, cookieName) => {
+  validateObject(cookie, cookieName);
+
+  if (!cookie._id || !cookie.username)
+    throw `${cookieName || "Provided object"} is missing id or username.`
+
+  if (!ObjectId.isValid(cookie._id))
+    throw `${cookieName || "Provided object"} has an invalid id.`
+
+  cookie.username = validateString(cookie.username, "Username");
+
+  return cookie;
+}
+
+export const validateCommenter = (commenter, comName) => {
+  validateObject(commenter, comName);
+
+  if (!commenter.id || !commenter.username)
+    throw `${comName || "Provided object"} is missing id or username.`
+
+  validateObjectIdString(commenter.id, "Commenter Id");
+  commenter.username = validateString(commenter.username, "Commenter Username");
+
+  return commenter;
+}
+
+const validateParentType = (type, typeName) => {
+  type = validateString(type, typeName);
+
+  if (type !== "comment" && type !== "post")
+    throw `${typeName || "Provided string"} is not a valid parent type.`
+
+  return type;
+}
+
+export const validateParent = (parent, parentName) => {
+  validateObject(parent, parentName);
+
+  if (!parent.id || !parent.type)
+    throw `${parentName || "Provided object"} is missing id or type.`
+
+  validateObjectIdString(parent.id, `${parentName || "Provided Parent's"} Id`);
+  parent.type = validateParentType(parent.type, `${parentName || "Provided Parent's"} Type`);
+
+  return parent;
+}
+
+export const validateUUID = (id, idName) => {
+  id = validateString(id, idName);
+
+  if (!uuid.validate(id))
+    throw `${idName || "Provided data"} is not a valid UUID.`
+
+  return id;
+}
+
+export const validateObjectId = (id, idName) => {
+  if (!ObjectId.isValid(id))
+    throw `${idName || "Provided data"} is not a valid ObjectId.`
+}
+
+export const validateObjectIdString = (id, idName) => {
+  id = validateString(id, idName);
+
+  if (!ObjectId.isValid(id))
+    throw `${idName || "Provided data"} is not a valid ObjectId.`
+
+  return id;
+}
+
+const validateArray = (arr, arrName) => {
+  if (!arr)
+    throw `${arrName || "Provided data"} was not supplied.`
+
+  if (typeof arr !== "object")
+    throw `${arrName || "Provided data"} is not an object.`
+
+  if (!Array.isArray(arr))
+    throw `${arrName || "Provided object"} is not an array.`
+}
+
+export const validateObjectIdArray = (arr, arrName) => {
+  validateArray(arr, arrName);
+
+  for (let i = 0; i < arr.length; i++) {
+    arr[i] = validateObjectIdString(arr[i], `${arrName || "Array"} contains a non-Object Id value.`)
+  }
+
+  return arr;
+}
+
+export const fetchFrom = async (url) => {
   try {
     let { data } = await axios.get(url);
     return data

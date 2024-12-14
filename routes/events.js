@@ -1,5 +1,7 @@
 import { Router } from "express";
-import { getAllEvents, getEventbyDate, getEventbyBorough } from '../data/events.js';
+import xss from "xss";
+import { getAllEvents, getEventbyBorough, getEventbyDate } from '../data/events.js';
+import { validateDateString, validateString } from "../helpers.js";
 
 const router = Router()
 
@@ -7,7 +9,7 @@ router.route("/")
     .get(async (req, res) => {
         try {
             let allEvents = await getAllEvents();
-            res.render('events', { 'title': 'Events', 'events': allEvents });
+            res.render('../views/events', { 'title': 'Events', 'events': allEvents });
         } catch (e) {
             return res.status(400).send(e);
         }
@@ -22,17 +24,31 @@ router.route("/city")
         }
     })
     .post(async (req, res) => {
-        const searchBorough = req.body.searchByBorough;
+        let searchBorough = req.body.searchByBorough;
+
         try {
-            if (!searchBorough) throw 'You must provide a borough to search for';
+            searchBorough = validateString(searchBorough, 'Search Borough');
+
+        } catch (e) {
+            return res.status(400).send(e);
+        }
+
+        searchBorough = xss(searchBorough);
+
+        try {
             const events = await getEventbyBorough(searchBorough);
+
+            if (events.length === 0) {
+                return res.status(404).send('No events found for the specified date.');
+            }
+
             return res.render('results', {
                 title: 'Search Events by Borough',
                 events: events,
                 searchBorough: searchBorough
             });
         } catch (e) {
-            return res.status(400).send(e);
+            return res.status(500).send(e);
         }
     });
 
@@ -45,17 +61,31 @@ router.route("/date")
         }
     })
     .post(async (req, res) => {
-        const searchDate = req.body.searchByDate;
+        let searchDate = req.body.searchByDate;
+
         try {
-            if (!searchDate) throw 'You must provide a date to search for in format mm/dd/yyyy';
+            searchDate = validateDateString(searchDate, "Search Date");
+
+        } catch (e) {
+            return res.status(400).send(e);
+        }
+
+        searchDate = xss(searchDate);
+
+        try {
             const events = await getEventbyDate(searchDate);
+
+            if (events.length === 0) {
+                return res.status(404).send('No events found for the specified date.');
+            }
+
             return res.render('results', {
                 title: 'Search Events by Date',
                 events: events,
                 searchDate: searchDate
             });
         } catch (e) {
-            return res.status(400).send(e);
+            return res.status(500).send(e);
         }
     });
 
