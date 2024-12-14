@@ -1,4 +1,3 @@
-// Get references to the necessary elements
 const postButton = document.getElementById("postButton");
 const commentPrompt = document.getElementById("reviewPrompt");
 const cancelButton = document.getElementById("cancelButton");
@@ -6,30 +5,33 @@ const reviewForm = document.getElementById("reviewForm");
 const userComments = document.getElementById("userComments");
 const submitButton = document.getElementById("submitCommentButton");
 const postId = document.getElementById("postId");
-// console.log(postButton, reviewPrompt, cancelButton, reviewForm);
 
 let imageUrl = undefined;
 
-// Event listener for the post button
+postButton.addEventListener("click", () => {
+  commentPrompt.classList.remove("hidden");
+});
+
+cancelButton.addEventListener("click", () => {
+  commentPrompt.classList.add("hidden");
+  reviewForm.reset();
+});
+
 const displayReviews = async () => {
   try {
     const id = postId.textContent;
-    const comments = await fetchFrom("/userFeed/comments/" + id);
-    console.log("Fetched comments:", comments);
+    const comments = await fetch(`/comments/${id}`);
+    if (!comments.ok) throw new Error("Failed to fetch reviews.");
+    const data = await comments.json();
+    console.log("Fetched comments:", data);
 
-    userComments.innerHTML = ""; // Clear the previous content
+    userComments.innerHTML = ""; 
 
-    comments.forEach((user) => {
-      // Check if user.reviews exists and is an array
-      console.log("in for");
+    data.forEach((user) => {
       if (user) {
-        // Log the review to see its exact structure
-        console.log("Individual review:", user);
-
         const revDiv = document.createElement("div");
         revDiv.classList.add("comment");
 
-        // Adjust these based on the actual structure of your review object
         if (user.imageUrl) {
           revDiv.innerHTML = `
           <div class="review-header">
@@ -38,8 +40,7 @@ const displayReviews = async () => {
           </div>
           <p class="review-text">${user.body || "No review text"}</p>
           <img class="review-image" src="${user.imageUrl}" alt="Review Image">
-          <a href=""
-        `;
+          `;
         } else {
           revDiv.innerHTML = `
           <div class="review-header">
@@ -49,54 +50,103 @@ const displayReviews = async () => {
           <p class="review-text">${user.body || "No review text"}</p>
         `;
         }
-        userPosts.appendChild(revDiv);
+        userComments.appendChild(revDiv);
       }
     });
   } catch (error) {
     console.error("Error fetching reviews:", error);
-    userPosts.innerHTML =
-      "<p>Failed to load reviews. Please try again later.</p>";
+    userComments.innerHTML = "<p>Failed to load reviews. Please try again later.</p>";
   }
 };
 
-postButton.addEventListener("click", () => {
-  reviewPrompt.classList.remove("hidden");
-});
+const displayComments = async (parentId) => {
+  try {
+    const commentsResponse = await fetch(`/comments/${parentId}`);
 
-// Event listener for the cancel button
-cancelButton.addEventListener("click", () => {
-  reviewPrompt.classList.add("hidden");
-  reviewForm.reset();
-});
+    if (!commentsResponse.ok) throw new Error("Failed to fetch comments.");
+    const comments = await commentsResponse.json();
 
-reviewForm.addEventListener(submitButton, (event) => {
-  event.preventDefault();
+    console.log("Fetched comments for parent:", comments);
 
-  let placeName = document.getElementById("placeName").value;
-  let reviewText = document.getElementById("reviewText").value;
-
-  // const rating = document.getElementsByClassName("star-rating").value;
-  //find a way to get the id based on cookies and pass to insertUserReview
-  let revObject = { placename: placeName, reviewText: reviewText };
-  if (imageUrl) {
-    revObject["imageUrl"] = imageUrl;
+    userComments.innerHTML = ""; 
+    comments.reverse().forEach((comment) => { 
+      const commentDiv = document.createElement("div");
+      commentDiv.classList.add("comment");
+      commentDiv.innerHTML = `
+        <div class="comment-header">
+          <span class="username">${comment.commenter.name || "Anonymous"}</span>
+        </div>
+        <p class="comment-text">${comment.body || "No comment text"}</p>
+      `;
+      userComments.appendChild(commentDiv);
+    });
+  } catch (error) {
+    console.error("Error displaying comments:", error);
+    userComments.innerHTML = "<p>Failed to load comments. Please try again later.</p>";
   }
-  console.log("inserting review", revObject);
-  InsertReview(revObject); //inserts review to database
+};
 
-  reviewForm.reset();
-  reviewPrompt.classList.add("hidden");
+const makeComment = async () => {
+  submitButton.addEventListener("click", async (event) => {
+    event.preventDefault();
+    const id = postId.textContent;
+    const reviewText = document.getElementById("reviewText").value;
 
-  displayReviews();
-});
+    if (!reviewText) {
+      alert("Please enter a comment before submitting.");
+      return;
+    }
 
+    const commentPayload = { parent: id, body: reviewText };
+    console.log("Submitting comment:", commentPayload);
 
-displayReviews();
-
-const InsertReview = async (object) => {
-  await fetchFrom("/userFeed/", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(object),
+    try {
+      await InsertComment(commentPayload);
+      reviewForm.reset();
+      commentPrompt.classList.add("hidden"); 
+      displayComments(id); 
+    } catch (error) {
+      console.error("Error submitting comment:", error);
+    }
   });
 };
+
+const InsertReview = async (object) => {
+  try {
+    const response = await fetch("/userFeed/", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(object),
+    });
+    if (!response.ok) throw new Error("Failed to insert review");
+    console.log("Review inserted successfully.");
+  } catch (error) {
+    console.error("Error inserting review:", error);
+  }
+};
+
+const InsertComment = async (object) => {
+  console.log("Inserting comment:", object);
+  try {
+    const response = await fetch("/comments/", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(object),
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to insert comment");
+    }
+
+    const data = await response.json();
+    console.log("Comment inserted successfully:", data);
+    return data;
+  } catch (error) {
+    console.error("Error inserting comment:", error);
+    throw error;
+  }
+};
+
+displayReviews();
+displayComments(postId.textContent); // Display comments on page load
+makeComment();

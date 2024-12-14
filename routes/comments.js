@@ -1,58 +1,70 @@
 import { Router } from "express";
 import xss from "xss";
-import { createComment, findCommentById } from "../data/comment.js";
-import { validateCommenter, validateObjectIdArray, validateObjectIdString, validateParent, validateString } from "../helpers.js";
-const router = Router();
+import { createComment, findCommentsByParentId } from "../data/comment.js";
+import { findPostById } from "../data/posts.js";
+import { validateCommenter, validateParent, validateString, validateObjectIdString } from "../helpers.js";
+import * as sessionTokenFunctions from '../data/sessionTokens.js';
 
+const router = Router();
 
 router.route("/")
   .post(async (req, res) => {
-    let commenter = req.body.commenter;
-    let parent = req.body.parent;
-    let body = req.body.body;
-    let comments = req.body.comment;
-
+    console.log("POST request received at /comments/");
     try {
-      commenter = validateCommenter(commenter, 'Commenter');
-      parent = validateParent(parent, 'Comment Parent');
-      body = validateString(body, 'Comment Body');
-      comments = validateObjectIdArray(comments, 'Comments Array');
+      const token = req.cookies["session_token"];
+      if (!token) {
+        return res.status(401).json({ error: "Unauthorized: No session token provided." });
+      }
 
-    } catch (e) {
-      return res.status(400).send(e);
-    }
+      const user = await sessionTokenFunctions.findUserFromSessionToken(token);
+      if (!user) {
+        return res.status(401).json({ error: "Unauthorized: Invalid session token." });
+      }
 
-    commenter.id = xss(commenter.id);
-    commenter.username = xss(commenter.username);
-    parent.id = xss(parent.id);
-    parent.type = xss(parent.type);
-    body = xss(body);
-    comments = comments.map((comment) => xss(comment));
+      const commenter = { id: xss(user._id), name: xss(user.username) };
+      const parent = { id: xss(req.body.parent), type: "Post" };
+      const body = xss(req.body.body);
 
-    try {
-      const newComment = await createComment(commenter, parent, body, comments);
-      return newComment;
-    } catch (e) {
-      return res.status(500).send(e);
+      console.log("commenter:");
+      console.log(commenter);
+      console.log("parent:");
+      console.log(parent);
+      console.log("body:");
+      console.log(body);
+
+      // Validate input
+      // try {
+      //   validateCommenter(commenter, "Commenter");
+      //   validateParent(parent, "Comment Parent");
+      //   validateString(body, "Comment Body");
+      // } catch (validationError) {
+      //   return res.status(400).json({ error: validationError.message });
+      // }
+      console.log(commenter);
+
+      const newComment = await createComment(commenter, parent, body, []);
+      return res.status(201).json(newComment);
+    } catch (error) {
+      console.error("Error processing POST /comments/:", error);
+      return res.status(500).json({ error: "Internal Server Error" });
     }
   });
 
 router.route("/:id")
   .get(async (req, res) => {
-    let id = req.params.id;
-
+    console.log(`GET request received for comment ID: ${req.params.id}`);
     try {
-      id = validateObjectIdString(id, 'Comment Id');
-    } catch (e) {
-      return res.status(400).send(e);
-    }
+      const id = xss(req.params.id);
+      const getComments = await findCommentsByParentId(id);
+      if (!getComments) {
+        return res.status(404).json({ error: "Comment not found" });
+      }
 
-    try {
-      const getComment = await findCommentById(id);
-      return getComment;
-    } catch (e) {
-      return res.status(500).send(e);
+      return res.status(200).json(getComments);
+    } catch (error) {
+      console.error("Error processing GET /comments/:id:", error);
+      return res.status(500).json({ error: "Internal Server Error" });
     }
   });
 
-
+export default router;
