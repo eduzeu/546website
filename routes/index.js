@@ -7,7 +7,6 @@ import locationRoutes from './location.js';
 import loginRoutes from './login.js';
 import mapRoutes from './map.js';
 import reviewRoutes from './review.js';
-import mapRoutes from './map.js';
 import friendRoutes from './friends.js';
 
 
