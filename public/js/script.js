@@ -206,7 +206,7 @@
                                 `<div>
                                 <strong>Name:</strong> ${entry.tags.name || "Unnamed Coffee Shop"}<br>
                                 <strong>Address:</strong> ${entry.tags["addr:street"] || "No address provided"}<br>
-                                <a href="/coffeeShop/${entry.id}" target="_blank">View Details</a>
+                                <a href="/location/coffeeShop/detail/${entry.id}" target="_blank">View Details</a>
                             </div>`
                             // content: `Name: ${entry.tags.name}, Address: ${entry.tags["addr:street"] || "No address provided"}` // ADD THE NECESSARY THINGS HERE
                         });

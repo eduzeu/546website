@@ -28,14 +28,18 @@ app.use('/', async (req, res, next) => {
   } catch (e) {
     authorizedUser = false;
   }
-  if(authorizedUser){
+  if (authorizedUser) {
     let didWork = await sessionTokenFunctions.updateExpiration(sessionId);
     res.cookie("session_token", sessionId, { maxAge: 60 * 60 * 1000, httpOnly: true });
   }
-  if(route == '/' || route == '/newAccount'){
-    if(authorizedUser){
-      return res.redirect('/home/');
+  if (route == '/signin' || route == '/signup' || route == '/signin/' || route == '/signup/') {
+    if (authorizedUser) {
+      return res.redirect('/home');
     }
+  }
+
+  if (route == "/" && authorizedUser) {
+    return res.redirect('/home');
   }
   // else if(route.startsWith('/location')){
   //   return res.redirect('/home/');//if a user tries to get to the /location routes send them to error page. MAKE ROUTE FOR /ERROR that links back to home if authorized
@@ -46,7 +50,7 @@ app.use('/', async (req, res, next) => {
   // }
   else {
     if (!authorizedUser) {
-      return res.redirect('/');
+      return res.redirect('/signin');
     }
   }
   next();

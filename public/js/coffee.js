@@ -38,7 +38,7 @@ document.getElementById('coffee-checkbox').addEventListener('change', async func
             Latitude: ${location.lat}<br>
             Longitude: ${location.lon} <br>
             Place id: ${location.id}<br>
-            <a href="../coffeeShop/${location.id}">See More</a>
+            <a href="../location/coffeeShop/detail/${location.id}">See More</a>
           `;
 
           const ratingsCell = document.createElement('td');

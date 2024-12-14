@@ -12,9 +12,9 @@
         <i class="fa fa-caret-down"></i>
       </button>
       <div class="dropdown-content">
-        <a href="/events">All Events</a>
-        <a href="/events/city">Search by Borough</a>
-        <a href="/events/date">Search by Date</a>
+        <a href="/location/events">All Events</a>
+        <a href="/location/events/city">Search by Borough</a>
+        <a href="/location/events/date">Search by Date</a>
       </div>
     </div>
   </div>
@@ -23,7 +23,7 @@
 <main>
   <div class="searchbar">
     <p id="error"></p>
-    <form class="searchform" id="searchform" action="/events/city" method="POST">
+    <form class="searchform" id="searchform" action="/location/events/city" method="POST">
       <label for="searchByBorough">Borough:</label>
       <input type="text" id="searchByBorough" name="searchByBorough" required placeholder="Enter borough name"
         title="Please enter a valid borough name">

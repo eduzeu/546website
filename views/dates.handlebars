@@ -12,9 +12,9 @@
         <i class="fa fa-caret-down"></i>
       </button>
       <div class="dropdown-content">
-        <a href="/events">All Events</a>
-        <a href="/events/city">Search by Borough</a>
-        <a href="/events/date">Search by Date</a>
+        <a href="/location/events">All Events</a>
+        <a href="/location/events/city">Search by Borough</a>
+        <a href="/location/events/date">Search by Date</a>
       </div>
     </div>
   </div>
@@ -23,7 +23,7 @@
 <main>
   <div class="searchbar">
     <p id="error"></p>
-    <form class="searchform" id="searchform" action="/events/date" method="POST">
+    <form class="searchform" id="searchform" action="/location/events/date" method="POST">
       <label for="searchByDate">Date:</label>
       <input type="date" id="searchByDate" name="searchByDate" required placeholder="mm/dd/year"
         title="Please enter a valid date">

@@ -48,7 +48,7 @@
 
   const displayReviews = async () => {
       $.ajax({
-          url: "/userFeed/posts",
+          url: "/posts",
           method: "GET",
           contentType: "application/json",
           success: function (response) {
@@ -68,7 +68,7 @@
                       </div>
                       <p class="review-text">${user.body || "No review text"}</p>
                       ${user.image ? `<img class="review-image" src="${user.image.url}" alt="${user.image.altText}">` : ""}
-                      <a href="/userFeed/posts/${user._id}">View/Add Comments</a>
+                      <a href="/posts/${user._id}">View/Add Comments</a>
                       `);
 
                       userPosts.append(revDiv);
@@ -143,7 +143,7 @@
       console.log("inserting review", revObject);
 
       $.ajax({
-          url: "/userFeed/posts",
+          url: "/posts",
           method: "POST",
           contentType: "application/json",
           data: JSON.stringify(revObject),

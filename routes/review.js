@@ -7,6 +7,26 @@ import { validateNumber, validateNumericId, validateRating, validateReviewType, 
 const router = Router()
 
 router.route('/')
+    .get(async (req, res) => {
+        //used to verify user is logged in
+        // try{
+        //     let token;
+        //     try{
+        //       token = req.cookies["session_token"];//gets the sessionId
+        //     } catch{
+        //       throw 'no cookie';
+        //     }
+        //     token = await sessionTokens.sessionChecker(token);//checks if sessionId is valid
+        //   } catch(e){
+        //     res.status(401).render('../views/invalidLogin', { error: e });
+        //   }
+        try {
+            const reviews = await getReviews();
+            res.json(reviews);
+        } catch (e) {
+            res.status(500).json({ error: e });
+        }
+    })
     .post(async (req, res) => {
         //used to verify user is logged in
         try {
@@ -47,29 +67,6 @@ router.route('/')
             return res.status(500).json({ error: e });
         }
     });
-
-router.route('/')
-    .get(async (req, res) => {
-        //used to verify user is logged in
-        // try{
-        //     let token;
-        //     try{
-        //       token = req.cookies["session_token"];//gets the sessionId
-        //     } catch{
-        //       throw 'no cookie';
-        //     }
-        //     token = await sessionTokens.sessionChecker(token);//checks if sessionId is valid
-        //   } catch(e){
-        //     res.status(401).render('../views/invalidLogin', { error: e });
-        //   }
-        try {
-            const reviews = await getReviews();
-            res.json(reviews);
-        } catch (e) {
-            res.status(500).json({ error: e });
-        }
-    });
-
 
 router.route('/:type')
     .get(async (req, res) => {

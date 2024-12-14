@@ -2,8 +2,8 @@ import { Router } from "express";
 import xss from "xss";
 import { createComment, findCommentById } from "../data/comment.js";
 import { validateCommenter, validateObjectIdArray, validateObjectIdString, validateParent, validateString } from "../helpers.js";
-const router = Router();
 
+const router = Router();
 
 router.route("/")
   .post(async (req, res) => {
@@ -55,4 +55,4 @@ router.route("/:id")
     }
   });
 
-
+export default router;
