@@ -12,7 +12,7 @@ document.getElementById('coffee-checkbox').addEventListener('change', async func
       // Display locations if any are returned
       if (data && data.elements && data.elements.length > 0) {
         const table = document.createElement('table');
-        table.style.width = '30%';
+        table.style.width = '100%';
         table.style.borderCollapse = 'collapse';
 
         const thead = document.createElement('thead');
@@ -38,7 +38,7 @@ document.getElementById('coffee-checkbox').addEventListener('change', async func
             Latitude: ${location.lat}<br>
             Longitude: ${location.lon} <br>
             Place id: ${location.id}<br>
-            <a href="../coffeeShop/${location.id}">See More</a>
+            <a href="../location/coffeeShop/detail/${location.id}">See More</a>
           `;
 
           const ratingsCell = document.createElement('td');

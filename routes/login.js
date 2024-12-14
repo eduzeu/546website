@@ -7,47 +7,46 @@ import { validateEmailAddress, validateString } from "../helpers.js";
 
 const router = Router();
 
-// GET / route to check session token
-router.route('/').get(async (req, res) => {
-  try {
-    let token = req.cookies["session_token"]; // Attempt to retrieve the cookie
-    token = await sessionTokenFunctions.sessionChecker(token); // Check if sessionId is valid
-    return res.redirect('/home/'); // Render the account page
-  } catch (e) {
-    return res.render('../views/account'); // Render the account page on error
-  }
-});
+router.route("/")
+  // GET /signin route to check session token
+  .get(async (req, res) => {
+    try {
+      let token = req.cookies["session_token"]; // Attempt to retrieve the cookie
+      token = await sessionTokenFunctions.sessionChecker(token); // Check if sessionId is valid
+      return res.redirect('/home/'); // Render the account page
+    } catch (e) {
+      return res.render('../views/account'); // Render the account page on error
+    }
+  })
+  .post(async (req, res) => {
+    let username = req.body.loginUser;
+    let password = req.body.loginPassword;
 
-// POST / route for login
-router.route('/').post(async (req, res) => {
-  let username = req.body.loginUser;
-  let password = req.body.loginPassword;
+    try {
+      username = validateString(username, "Username").toLowerCase();
+      password = validateString(password, "Password");
+    } catch (error) {
+      res.status(400).json({ error: error.toString() });
+    }
 
-  try {
-    username = validateString(username, "Username").toLowerCase();
-    password = validateString(password, "Password");
-  } catch (error) {
-    res.status(400).json({ error: error.toString() });
-  }
+    username = xss(username);
+    password = xss(password);
 
-  username = xss(username);
-  password = xss(password);
+    try {
+      const user = await userFunctions.checkUser(username, password);//isvalid login
+      const sessionId = uuid.v4();//unique sessionid
+      const expiresAt = new Date();
+      expiresAt.setMinutes(expiresAt.getMinutes() + 30);//expires in 30 min from creation time
+      await sessionTokenFunctions.addSessionToken(sessionId, user, expiresAt);
+      res.cookie("session_token", sessionId, { maxAge: 60 * 60 * 1000, httpOnly: true });
+      return res.redirect('/home'); // Redirect on successful login
+    } catch (error) {
+      return res.status(400).render("../views/account", { error: error.toString() }); // Handle login error
+    }
+  });
 
-  try {
-    const user = await userFunctions.checkUser(username, password);//isvalid login
-    const sessionId = uuid.v4();//unique sessionid
-    const expiresAt = new Date();
-    expiresAt.setMinutes(expiresAt.getMinutes() + 30);//expires in 30 min from creation time
-    await sessionTokenFunctions.addSessionToken(sessionId, user, expiresAt);
-    res.cookie("session_token", sessionId, { maxAge: 60 * 60 * 1000, httpOnly: true });
-    return res.redirect('/home'); // Redirect on successful login
-  } catch (error) {
-    return res.status(400).render("../views/account", { error: error.toString() }); // Handle login error
-  }
-});
-
-// GET and POST /newAccount for account creation
-router.route("/newAccount")
+// GET and POST /signup for account creation
+router.route("/signup")
   .get(async (req, res) => {
     res.render("../views/newAccount", { title: "Welcome to WiFly NYC" });
   })
@@ -79,9 +78,9 @@ router.route("/newAccount")
       const result = await userFunctions.addNewUser(username, email, password);
       res.redirect('/');
     } catch (error) {
-    //   const errorMessage = error && error.message ? error.message : "Unknown error";
-    //   return res.status(errorMessage.includes("validation") ? 400 : 500).json({ error: errorMessage });
-    return res.status(404).json({error: error});
+      //   const errorMessage = error && error.message ? error.message : "Unknown error";
+      //   return res.status(errorMessage.includes("validation") ? 400 : 500).json({ error: errorMessage });
+      return res.status(404).json({ error: error });
     }
   });
 
@@ -104,5 +103,7 @@ router.route("/logout")
       return res.status(500).send("An error occurred during logout.");
     }
   })
+
+
 
 export default router;

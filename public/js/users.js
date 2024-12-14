@@ -13,12 +13,16 @@ if (form) {
             confirmPassword.value = validateString(confirmPassword.value, 'Confirm-Password');
             username.value = validateString(username.value, 'Username');
             password.value = validateString(password.value, 'Password');
-            if(confirmPassword.value !== password.value){
-                throw 'Passwords do not match';
-            }
+            
             if (email) {
                 email.value = validateEmailAddress(email.value, 'Email');
             };
+            if (confirmPassword) {
+                confirmPassword.value = validateString(confirmPassword.value, 'Confirm Password');
+                if(confirmPassword.value !== password.value){
+                    throw 'Passwords do not match';
+                }
+            }
 
         } catch (e) {
             e.preventDefault();
