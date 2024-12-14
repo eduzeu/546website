@@ -1,24 +1,32 @@
-<link rel="stylesheet" type="text/css" href="../public/css/events.css">
-
-<header>
-  <h1>{{title}}</h1>
-
-  <!-- https://www.w3schools.com/howto/howto_css_dropdown_navbar.asp -->
-  <div class="navbar">
-    <a href="/home">Home Page</a>
-    <div class="dropdown">
-      <button class="dropbtn">
-        Events
-        <i class="fa fa-caret-down"></i>
-      </button>
-      <div class="dropdown-content">
-        <a href="/events">All Events</a>
-        <a href="/events/city">Search by Borough</a>
-        <a href="/events/date">Search by Date</a>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>{{title}}</title>
+    <link rel="stylesheet" type="text/css" href="../public/css/style_a.css">
+  </head>
+  <body>
+    <header>
+      <h1>{{title}}</h1>
+    <!-- https://www.w3schools.com/howto/howto_css_dropdown_navbar.asp -->
+      <div class="navbar">
+        <a href="/home">Home Page</a>
+        <div class="dropdown">
+          <button class="dropbtn">
+            Events
+            <i class="fa fa-caret-down"></i>
+          </button>
+          <div class="dropdown-content">
+            <a href="/events">All Events</a>
+            <a href="/events/city">Search by Borough</a>
+            <a href="/events/date">Search by Date</a>
+          </div>
+        </div>
+        <a href="friends">Friends List</a>
+        <a href="/logout">Signout</a>
       </div>
-    </div>
-  </div>
-</header>
+      
+    </header>
 
 <main>
   <section class="events-list">

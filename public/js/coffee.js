@@ -12,7 +12,7 @@ document.getElementById('coffee-checkbox').addEventListener('change', async func
       // Display locations if any are returned
       if (data && data.elements && data.elements.length > 0) {
         const table = document.createElement('table');
-        table.style.width = '30%';
+        table.style.width = '100%';
         table.style.borderCollapse = 'collapse';
 
         const thead = document.createElement('thead');
