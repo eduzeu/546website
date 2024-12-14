@@ -1,6 +1,7 @@
 import { static as staticDir } from 'express';
 import aboutRoutes from './about.js';
 import commentsRoutes from "./comments.js";
+import friendRoutes from './friends.js';
 import locationRoutes from './location.js';
 import loginRoutes from './login.js';
 import mapRoutes from './map.js';
@@ -14,6 +15,7 @@ const constructorMethod = (app) => {
   app.use('/location', locationRoutes);
   app.use('/comments', commentsRoutes);
   app.use('/posts', postRoutes);
+  app.use('/friends', friendRoutes);
   app.use('/home', mapRoutes);
   app.use("/userFeed", userFeedRoutes)
 

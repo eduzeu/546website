@@ -1,8 +1,6 @@
-<link rel="stylesheet" type="text/css" href="../public/css/events.css">
+<link rel="stylesheet" type="text/css" href="../public/css/style_a.css">
 
 <header>
-  <h1>{{title}}</h1>
-
   <!-- https://www.w3schools.com/howto/howto_css_dropdown_navbar.asp -->
   <div class="navbar">
     <a href="/home">Home Page</a>
@@ -17,11 +15,13 @@
         <a href="/location/events/date">Search by Date</a>
       </div>
     </div>
+    <a href="friends">Friends List</a>
+    <a href="/logout">Signout</a>
   </div>
 </header>
 
 <main>
-  <div class="searchbar">
+  <<<<<<< HEAD <div class="searchbar">
     <p id="error"></p>
     <form class="searchform" id="searchform" action="/location/events/city" method="POST">
       <label for="searchByBorough">Borough:</label>
@@ -29,8 +29,16 @@
         title="Please enter a valid borough name">
       <input type="submit" value="Search">
     </form>
-  </div>
-
+    </div>
+    =======
+    <div class="searchbar">
+      <form class="searchform" action="/events/city" method="POST">
+        <label for="searchByBorough">Borough:</label>
+        <input type="text" id="searchByBorough" name="searchByBorough" required placeholder="Borough name"
+          title="Please enter a valid borough name">
+        <input type="submit" value="Search">
+      </form>
+    </div>
 </main>
 
 <script src="../public/js/event.js"></script>

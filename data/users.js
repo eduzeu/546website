@@ -21,7 +21,8 @@ export const addNewUser = async (username, email, password) => {
         favoriteHotspots: [],
         favoriteEvents: [],
         favoriteCoffeeShops: [],
-        reviews: []
+        reviews: [],
+        friends: []
     };
     const insertInfo = await userCollection.insertOne(userObj);
     //console.log(insertInfo);
