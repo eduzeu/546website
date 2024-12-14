@@ -55,9 +55,8 @@ app.use('/', async (req, res, next) => {
     if (authorizedUser) {
       return res.redirect('/home');
     }
-  }
-
-  if (route == "/" && authorizedUser) {
+    
+  } else if (route == "/" && authorizedUser) {
     return res.redirect('/home');
   }
   // else if(route.startsWith('/location')){
