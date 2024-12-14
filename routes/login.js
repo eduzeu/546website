@@ -7,7 +7,7 @@ import { validateEmailAddress, validateString } from "../helpers.js";
 
 const router = Router();
 
-router.route("/signin")
+router.route("/")
   // GET /signin route to check session token
   .get(async (req, res) => {
     try {
