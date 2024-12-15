@@ -10,13 +10,16 @@ body {
 header {
   background-color: #f8f9fa;
   text-align: center;
-  border-bottom: 1px solid #ddd;
 }
 
 main {
   display: flex;
   flex: 1;
   overflow: hidden;
+}
+
+h2{
+  display: none;
 }
 
 .sidebar {
@@ -358,4 +361,10 @@ section.sectionSpacing {
   padding: 1rem;
   text-align: center;
   border-bottom: 1px solid #ddd;
+}
+
+.events-list {
+  max-height: 80vh; /* Adjust the height as needed */
+  overflow-y: auto; /* Add vertical scrolling */
+  width:100%; 
 }

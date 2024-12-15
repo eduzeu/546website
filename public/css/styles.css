@@ -76,13 +76,16 @@ body {
   min-height: 100vh;
   margin: 0;
   font-family: Arial, sans-serif;
-  background-color: #D6CE93;
+  background-color: #EFEBCE;
   padding: 0;
 }
 
 main {
   text-align: center;
   margin: 10px;
+  justify-items: center;
+  align-items: center;
+  justify-content: center;
 }
 
 form {
@@ -128,11 +131,6 @@ form {
   z-index: 1000;
 }
 
-main {
-  justify-items: center;
-  align-items: center;
-  justify-content: center;
-}
 
 .exit-button {
   margin-bottom: 10px;
@@ -287,21 +285,40 @@ section.sectionSpacing {
   padding-bottom: 5px;
 }
 
+header {
+  font-family: monospace;
+  position: fixed;
+  top: 0;
+  left: 0;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center; 
+  justify-content: flex-start; 
+  width: 100%;
+  z-index: 1000; /* Ensure header is above other content */
+  background-color: #EFEBCE;
+}
 
 .navbar {
   overflow: hidden;
-  background-color: #333;
+  background-color: #D6CE93;
   font-family: Arial;
+  border-radius: 8px;
+  width:100%;
+
 }
 
 /* Links inside the navbar */
 .navbar a {
   float: left;
   font-size: 16px;
-  color: white;
+  color: #8b8b65;
   text-align: center;
   padding: 14px 16px;
   text-decoration: none;
+  
 }
 
 /* The dropdown container */
@@ -315,7 +332,7 @@ section.sectionSpacing {
   font-size: 16px;
   border: none;
   outline: none;
-  color: white;
+  color: #8b8b65;
   padding: 14px 16px;
   background-color: inherit;
   font-family: inherit; /* Important for vertical align on mobile phones */
@@ -324,14 +341,14 @@ section.sectionSpacing {
 
 /* Add a red background color to navbar links on hover */
 .navbar a:hover, .dropdown:hover .dropbtn {
-  background-color: red;
+  background-color: #EFEBCE;
 }
 
 /* Dropdown content (hidden by default) */
 .dropdown-content {
   display: none;
   position: absolute;
-  background-color: #f9f9f9;
+  background-color: #EFEBCE;
   min-width: 160px;
   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
   z-index: 1;
@@ -340,7 +357,7 @@ section.sectionSpacing {
 /* Links inside the dropdown */
 .dropdown-content a {
   float: none;
-  color: black;
+  color: #8b8b65;
   padding: 12px 16px;
   text-decoration: none;
   display: block;
@@ -355,4 +372,18 @@ section.sectionSpacing {
 /* Show the dropdown menu on hover */
 .dropdown:hover .dropdown-content {
   display: block;
+}
+
+#friend-head {
+  color: black;
+  font-family: monospace;
+  padding: 1rem;
+  text-align: center;
+  border-bottom: 1px solid #ddd;
+}
+
+.main-content {
+  margin-top: 100px; 
+  padding: 50px; 
+
 }
