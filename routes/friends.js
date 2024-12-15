@@ -1,16 +1,17 @@
 import { Router } from "express";
 import { getAllFriends } from '../data/friendlist.js';
+import * as sessionTokenFunctions from "../data/sessionTokens.js";
+import session from "express-session";
+
 
 const router = Router()
 
 router.route("/").get(async (req, res) => {
     try {
-        console.log(req.session.user.username)
-        let allfriends = await getAllFriends(req.session.user.username);;
-        res.render('friends', { 'title': 'Friends', 'friends': allfriends ,'username': req.session.user.username });
+        let user = await sessionTokenFunctions.findUserFromSessionToken(req.cookies["session_token"]);
+        res.render('friends', { 'title': 'Friends', 'friends': user.friends ,'username': user.username });
     } catch (e) {
         return res.status(400).send(e);
     }
-
-    })
+})
 export default router;

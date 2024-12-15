@@ -39,7 +39,11 @@ router.route("/city")
             const events = await getEventbyBorough(searchBorough);
 
             if (events.length === 0) {
-                return res.status(404).send('No events found for the specified date.');
+                return res.render('error', {
+                    title: 'Search Events by Borough',
+                    class: 'error',
+                    message: 'No events found.',
+                });
             }
 
             return res.render('results', {
@@ -76,7 +80,11 @@ router.route("/date")
             const events = await getEventbyDate(searchDate);
 
             if (events.length === 0) {
-                return res.status(404).send('No events found for the specified date.');
+                return res.render('error', {
+                    title: 'Search Events by Date',
+                    class: 'error',
+                    message: 'No events found for the specified date.',
+                });
             }
 
             return res.render('results', {

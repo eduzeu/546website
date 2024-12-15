@@ -1,10 +1,18 @@
 import { fetchFrom, validateDateString, validateString } from '../helpers.js';
 import axios from 'axios'; 
 import { response } from 'express';
+
+
 export const getAllEvents = async ()=> {
     let response = await axios.get(`https://data.cityofnewyork.us/resource/tvpp-9vvx.json`);
     let data = response.data
     let results = []
+
+    data = data.sort((a, b) => {
+        const dateA = new Date(a.start_date_time);
+        const dateB = new Date(b.start_date_time);
+        return dateA - dateB;
+    });
 
     const now = new Date();
 
@@ -29,7 +37,7 @@ export const getAllEvents = async ()=> {
         const currentDateTime = new Date(curr[0], curr[1] - 1, curr[2]);
 
         if(eventDateTime >= currentDateTime){
-            event.start_date_time = formattedDate + " Time: " + time[0]+":"+ time[1]
+            event.start_date_time = formattedDate + " Start Time: " + time[0]+":"+ time[1]
             results.push(event);
         }
     }
@@ -41,6 +49,12 @@ export const getEventbyBorough = async (borough) => {
 
     let data = await fetchFrom('https://data.cityofnewyork.us/resource/tvpp-9vvx.json');
     let events_in_borough = [];
+
+    data = data.sort((a, b) => {
+        const dateA = new Date(a.start_date_time);
+        const dateB = new Date(b.start_date_time);
+        return dateA - dateB;
+    });
 
     const now = new Date();
 

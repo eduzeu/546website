@@ -1,43 +1,63 @@
 <link rel="stylesheet" href="/public/css/styles.css" />
 
 <header>
-  <a href="/home">Home Page</a>
-  <h1>User Feed</h1>
+      <h1>{{title}}</h1>
+      <!-- https://www.w3schools.com/howto/howto_css_dropdown_navbar.asp -->
+      <div class="navbar">
+        <a href="/home">Home Page</a>
+        <div class="dropdown">
+          <button class="dropbtn">
+            Events
+            <i class="fa fa-caret-down"></i>
+          </button>
+          <div class="dropdown-content">
+            <a href="/location/events">All Events</a>
+            <a href="/location/events/city">Search by Borough</a>
+            <a href="/location/events/date">Search by Date</a>
+          </div>
+        </div>
+        <a href="/friends">Friends List</a>
+        <a href="/userFeed"> User Feed </a>
+        <a href="/logout">Signout</a>
+
+      </div>
 </header>
 
-<button id="postButton">Create Post</button>
+<div class="main-content">
+  <button id="postButton">Create Post</button>
 
-<div id="reviewPrompt" class="hidden">
-  <form id="reviewForm">
-    <h3>Leave a Review</h3>
+  <div id="reviewPrompt" class="hidden">
+    <form id="reviewForm">
+      <h3>Leave a Review</h3>
 
-    <label for="placeName">Place Name:</label>
-    <input type="text" id="placeName" name="placeName" required />
+      <label for="placeName">Place Name:</label>
+      <input type="text" id="placeName" name="placeName" required />
 
-    <label for="reviewText">Your Review:</label>
-    <textarea id="reviewText" name="reviewText" rows="4" cols="30" placeholder="Enter your review here"
-      required></textarea>
+      <label for="reviewText">Your Review:</label>
+      <textarea id="reviewText" name="reviewText" rows="4" cols="30" placeholder="Enter your review here"
+        required></textarea>
 
-    <img id="imagePreview" src="Placeholder" alt="Your uploaded image">
+      <img id="imagePreview" src="Placeholder" alt="Your uploaded image">
 
-    <label for="imageAltText" id="imageAltLabel">
-      Image Alt Text:
-      <textarea id="imageAltText" name="imageAltText" rows="4" cols="30"
-        placeholder="Enter alt text for your image here"></textarea>
-    </label>
+      <label for="imageAltText" id="imageAltLabel">
+        Image Alt Text:
+        <textarea id="imageAltText" name="imageAltText" rows="4" cols="30"
+          placeholder="Enter alt text for your image here"></textarea>
+      </label>
 
-    <button id="upload_widget" class="cloudinary-button">Upload files</button>
-    <br>
-    <button id="removeImage">Remove Image</button>
+      <button id="upload_widget" class="cloudinary-button">Upload files</button>
+      <br>
+      <button id="removeImage">Remove Image</button>
 
-    <div class="buttonGroup" style="margin-top: 20px;">
-      <button type="submit" id="submitReviewButton">Submit</button>
-      <button type="button" id="cancelButton">Cancel</button>
-    </div>
-  </form>
+      <div class="buttonGroup" style="margin-top: 20px;">
+        <button type="submit" id="submitReviewButton">Submit</button>
+        <button type="button" id="cancelButton">Cancel</button>
+      </div>
+    </form>
+  </div>
+  <p id="error"></p>
+  <div id="userPosts"> </div>
 </div>
-<p id="error"></p>
-<div id="userPosts"> </div>
 
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"
   integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
