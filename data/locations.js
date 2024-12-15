@@ -125,7 +125,7 @@ export const getPlaceOfTheDay = async () => {
     let random = Math.floor(Math.random() * coffeArray.length);
     let response = coffeArray[random];
 
-    let address = response.tags['addr:housenumber']  +
+    let address = response.tags['addr:housenumber']  + " " +
                   response.tags['addr:street'] + ', ' +
                   response.tags['addr:city'] + ', ' +
                   response.tags['addr:state'] + ', ' +
