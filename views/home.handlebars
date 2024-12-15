@@ -1,14 +1,9 @@
 <link rel="stylesheet" href="/public/css/styles.css">
 <header>
   <h1>Welcome to WiFly NYC</h1>
-</header>
-<main>
-  <p>Here we say who we are.</p>
-
   <!-- https://www.w3schools.com/howto/howto_css_dropdown_navbar.asp -->
       <div class="navbar">
         <a href="/home">Home Page</a>
-        <a href="about">About</a>
         <div class="dropdown">
           <button class="dropbtn">
             Events
@@ -22,33 +17,37 @@
         </div>
         <a href="/friends">Friends List</a>
         <a href="/userFeed"> User Feed </a>
+        <a href="about">About</a>
         <a href="/logout">Signout</a>
 
       </div>
+</header>
+
+<body>
+  <div id="motivation">
+    <h1> Our Motivation</h1>
+    <p> In today's extremely digital world staying connected is more important than ever. 
+    But let's face it, finding free, and reliable WiFi in New York City can be a real challenge.
+     For remote workers and students, the struggle doesn't end there. Even when you find WiFi, you need a 
+     comfortable, productive space to work or study. And in a city as diverse and dynamic as New York, there
+      are countless hidden gems and interesting places waiting to be discovered – if only we knew where to look.
+       These are the problems we set out to solve with WiFly NYC.</p>
+  </div>
   
-  <div class="checkbox-container">
-    <form>
-      <label>
-        Wi-Fi
-        <input type="checkbox" id="wifiCheckbox" name="wifi" />
-      </label>
-    </form>
-
-    <form>
-      <label>
-        Coffee
-        <input type="checkbox" id="coffeeCheckBox" name="coffee" />
-      </label>
-    </form>
-
+  <div id="description">
+    <h1> Description</h1>
+    <p> Discover the perfect blend of connectivity and comfort in the heart of New York City. WiFly NYC 
+      is your go-to guide for finding free WiFi hotspots and cozy spaces to work, study, or simply unwind as well as events 
+      happening in the city, such as festivals, street markets, or sports events.</p>
   </div>
 
-  <div id="wifiLocations"></div>
-  <div id="coffeeLocations"></div>
+  <div id="members">
+    <h1> Who are we?</h1>
 
-</main>
-
-<script src="/public/js/wifi.js"></script>
-<script src="/public/js/coffee.js"></script>
-<script src="/public/js/helpers.js"></script>
-<script src="/public/js/review.js"></script>
+    <ul> Emma Freire: 3rd year CS student at Stevens Institute of Technology </ul>
+    <ul> Eduardo Hernandez: 4th year CS student at Stevens Institute of Technology </ul>
+    <ul> Daniel Fong: 3rd year CS student at Stevens Institute of Technology </ul>
+    <ul> Alice Agnoletto: 3rd year CS student at Stevens Institute of Technology </ul>
+    <ul> Chris : 4th year CS student at Stevens Institute of Technology </ul>
+  </div>
+</body>

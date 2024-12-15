@@ -316,8 +316,8 @@ section.sectionSpacing {
   color: #8b8b65;
   padding: 14px 16px;
   background-color: inherit;
-  font-family: inherit; /* Important for vertical align on mobile phones */
-  margin: 0; /* Important for vertical align on mobile phones */
+  font-family: inherit; 
+  margin: 0;
 }
 
 /* Add a red background color to navbar links on hover */
