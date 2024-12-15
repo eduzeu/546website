@@ -24,45 +24,48 @@
 </header>
 
 
+<div id="postpage">
+  <p id="postId" class="hidden">{{post._id}}</p>
+  <div class="event">
+    <h4>Post:</h4>
+    <ul>
+      <li>Place: {{post.placeName}}</li>
+      <li>Posted By: {{post.poster.username}}</li>
+      <li>Body: {{post.body}}</li>
+    </ul>
+    {{#if post.image }}
+    <img class="review-image" src="{{post.image.url}}" alt="{{post.image.altText}}">
+    {{/if}}
+  </div>
 
-<p id="postId" class="hidden">{{post._id}}</p>
-<div class="event">
-  <h4>Post:</h4>
-  <ul>
-    <li>Place: {{post.placeName}}</li>
-    <li>Posted By: {{post.poster.username}}</li>
-    <li>Body: {{post.body}}</li>
-  </ul>
-  {{#if post.image }}
-  <img class="review-image" src="{{post.image.url}}" alt="{{post.image.altText}}">
-  {{/if}}
+
+  <button id="postButton">Create Comment</button>
+
+  <div id="reviewPrompt" class="hidden">
+    <form id="reviewForm">
+      <h3>Leave a Comment</h3>
+      <!-- Review Textarea -->
+      <label for="reviewText">Your Comment:</label>
+      <textarea id="reviewText" name="reviewText" rows="4" cols="30" placeholder="Enter your comment here"
+        required></textarea>
+
+      <!-- Buttons -->
+      <div class="buttonGroup" style="margin-top: 20px;">
+        <button type="submit" id="submitCommentButton">Submit</button>
+        <button type="button" id="cancelButton">Cancel</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Comments -->
+  <h3>Comments:</h3>
+  <div id="userComments"> 
+    
+  </div>
+
+  <p id="error"></p>
+
 </div>
-
-<button id="postButton">Create Comment</button>
-
-<div id="reviewPrompt" class="hidden">
-  <form id="reviewForm">
-    <h3>Leave a Comment</h3>
-    <!-- Review Textarea -->
-    <label for="reviewText">Your Comment:</label>
-    <textarea id="reviewText" name="reviewText" rows="4" cols="30" placeholder="Enter your comment here"
-      required></textarea>
-
-    <!-- Buttons -->
-    <div class="buttonGroup" style="margin-top: 20px;">
-      <button type="submit" id="submitCommentButton">Submit</button>
-      <button type="button" id="cancelButton">Cancel</button>
-    </div>
-  </form>
-</div>
-
-<!-- Comments -->
-<h3>Comments:</h3>
-<div id="userComments"> 
-  
-</div>
-
-<p id="error"></p>
 
 <script src="/public/js/helpers.js"></script>
 <script src="/public/js/post.js"></script>

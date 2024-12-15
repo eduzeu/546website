@@ -364,7 +364,7 @@ section.sectionSpacing {
 }
 
 .events-list {
-  max-height: 80vh; /* Adjust the height as needed */
-  overflow-y: auto; /* Add vertical scrolling */
+  max-height: 80vh; 
+  overflow-y: auto; 
   width:100%; 
 }
