@@ -36,7 +36,6 @@ app.use('/', async (req, res, next) => {
   const method = req.method;
   const route = req.originalUrl;
   let authorizedUser = false;
-  console.log(route);
   let sessionId;
   try {
     sessionId = req.cookies["session_token"];
