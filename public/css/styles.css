@@ -203,14 +203,14 @@ form {
   padding-bottom: 10px;
 }
 
-h2.coffeeDetailHeader,
+h3.coffeeDetailHeader,
 p.noSpacing {
   margin: 0
 }
 
-section.sectionSpacing {
+/* section.sectionSpacing {
   margin-bottom: 20px;
-}
+} */
 
 #userPosts {
   display: flex;
