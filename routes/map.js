@@ -1,26 +1,32 @@
 import { Router } from "express";
 import * as sessionTokens from "../data/sessionTokens.js";
+import { getPlaceOfTheDay } from "../data/locations.js";
 
-const router = Router()
+const router = Router();
 
 router.route('/').get(async (req, res) => {
   try {
     let token;
     try {
-      token = req.cookies["session_token"];//gets the sessionId
+      token = req.cookies["session_token"]; 
     } catch {
       throw 'no cookie';
     }
-    token = await sessionTokens.sessionChecker(token);//checks if sessionId is valid
+    
+    token = await sessionTokens.sessionChecker(token);  
+    
     if (token) {
-      res.render('../views/map', { title: "WiFly NYC - map" });
+      const placeOfDay = await getPlaceOfTheDay();  
+      // console.log("Came to display place", placeOfDay);
+
+       res.render('../views/map', { 
+        title: "WiFly NYC - map", 
+        placeOfDay
+      });
     }
   } catch (e) {
     res.status(401).render('../views/invalidLogin', { error: e });
   }
 });
-/* use req.cookies["session_token"] to get the current sessionId, then you can use that to search the sessionToken collection to find information like the _id of a user
-as well as the expiration date/time of the session.
-*/
 
 export default router;

@@ -126,33 +126,3 @@ document.getElementById('wifi-checkbox').addEventListener('change', async functi
     document.getElementById('wifiLocations').innerHTML = '';
   }
 });
-
-const displayPlaceOfTheDay = async () => {
-  try {
-    let store = JSON.parse(localStorage.getItem("placeOfTheDay"));
-    let storeTime = localStorage.getItem("nextUpdateTime");
-    const time = Date.now();
-
-    storeTime = parseInt(storeTime, 10);
-
-    if (!store || !storeTime || time >= storeTime) {
-      const placeInfo = await fetchFrom('../location/wifi/place');
-      console.log(placeInfo);
-
-      localStorage.setItem('placeOfTheDay', JSON.stringify(placeInfo));
-      localStorage.setItem('nextUpdateTime', (time + 24 * 60 * 60 * 1000).toString());
-
-      store = placeInfo;
-    }
-
-    document.getElementById('place-name').textContent = store.Neighborhood || "No name available";
-    document.getElementById('place-address').textContent = store.Place || "No address available";
-    document.getElementById('place-type').textContent = "Wifi";
-
-  } catch (e) {
-    console.error('Error displaying place of the day:', e);
-  }
-}
-
-// Attach the function to window load
-window.onload = displayPlaceOfTheDay;
