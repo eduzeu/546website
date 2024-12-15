@@ -1,4 +1,6 @@
 import axios from "axios";
+import { fromZonedTime } from "date-fns-tz";
+import { parse } from "isoformat";
 import { ObjectId } from "mongodb";
 import * as uuid from 'uuid';
 
@@ -92,6 +94,35 @@ export const validateDateString = (dateStr, dateName) => {
   validateDate(dateObj, dateName);
 
   return dateStr;
+}
+
+export const validateISODateString = (dateStr, dateName) => {
+  dateStr = validateString(dateStr, dateName);
+
+  if (!parse(dateStr))
+    throw `${dateName || "Provided string"} is not an ISO date string.`
+
+  const split = dateStr.split(/\D+/);
+  if (split.length !== 7)
+    throw `${dateName || "Provided string"} is not in the proper ISO format YYYY-MM-DDThh:mm:ss.MMM.`
+
+  return dateStr;
+}
+
+export const isoDateToComponents = (date) => {
+  date = validateISODateString(date, "Date");
+
+  const utcDate = fromZonedTime(date, "America/New_York")
+  const utcString = utcDate.toISOString();
+
+  const split = utcString.split(/\D+/);
+  const year = split[0];
+  const month = split[1];
+  const day = split[2];
+  const hour = split[3];
+  const minute = split[4];
+
+  return [ year, month, day, hour, minute ];
 }
 
 // Based on: https://stackoverflow.com/a/1353711
