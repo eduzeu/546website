@@ -70,6 +70,7 @@ app.use('/', async (req, res, next) => {
   }
   next();
 });
+
 app.engine('handlebars', exphbs.engine({ defaultLayout: 'main' }));
 app.set('view engine', 'handlebars');
 

@@ -116,11 +116,11 @@ export const isoDateToComponents = (date) => {
   const utcString = utcDate.toISOString();
 
   const split = utcString.split(/\D+/);
-  const year = split[0];
-  const month = split[1];
-  const day = split[2];
-  const hour = split[3];
-  const minute = split[4];
+  const year = Number(split[0]);
+  const month = Number(split[1]);
+  const day = Number(split[2]);
+  const hour = Number(split[3]);
+  const minute = Number(split[4]);
 
   return [ year, month, day, hour, minute ];
 }

@@ -105,10 +105,10 @@ export const getEventbyDate = async (date) => {
 }
 
 export const getEventICS = async (id, startDate) => {
-    validateString(id, "Event ID");
-    validateISODateString(startDate, "Start Date");
+    id = validateString(id, "Event ID");
+    startDate = validateISODateString(startDate, "Start Date");
 
-    let data = await fetchFrom(`https://data.cityofnewyork.us/resource/tvpp-9vvx.json?event_id=${id}&start_date_time='${startDate}'`);
+    let data = await fetchFrom(`https://data.cityofnewyork.us/resource/tvpp-9vvx.json?event_id=${id}&start_date_time=${startDate}`);
 
     if (!data || data.length === 0)
         throw "Event not found"
@@ -126,12 +126,14 @@ export const getEventICS = async (id, startDate) => {
         endOutputType: "local"
     }
 
-    ics.createEvent(icsEvent, (error, value) => {
+    const file = ics.createEvent(icsEvent, (error, value) => {
         if (error)
             throw error.message;
 
         return value;
     })
+
+    return file;
 }
 
 //console.log(await getEventbyDate("11/27/2024"));

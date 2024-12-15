@@ -1,7 +1,7 @@
 import { Router } from "express";
 import xss from "xss";
-import { getAllEvents, getEventbyBorough, getEventbyDate } from '../data/events.js';
-import { validateDateString, validateString } from "../helpers.js";
+import { getAllEvents, getEventbyBorough, getEventbyDate, getEventICS } from '../data/events.js';
+import { validateDateString, validateISODateString, validateNumericId, validateString } from "../helpers.js";
 
 const router = Router()
 
@@ -88,5 +88,28 @@ router.route("/date")
             return res.status(500).send(e);
         }
     });
+
+router.route("/ics")
+    .get(async (req, res) => {
+        try {
+            req.body.eventId = validateNumericId(req.body.eventId, "Event Id");
+            req.body.startDate = validateISODateString(req.body.startDate, "Start Date");
+        } catch (e) {
+            return res.status(400).json({ error: e });
+        }
+
+        req.body.eventId = xss(`${req.body.eventId}`);
+        req.body.startDate = xss(req.body.startDate);
+
+        try {
+            const icsFile = await getEventICS(req.body.eventId, req.body.startDate);
+            res.set('Content-Type', 'text/calendar');
+            res.set('Content-Disposition', `attachment; filename="${req.body.eventId}-${req.body.startDate}.ics"`);
+            return res.send(icsFile);
+
+        } catch (e) {
+            return res.status(400).send(e);
+        }
+    })
 
 export default router;
