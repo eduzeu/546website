@@ -19,7 +19,7 @@ const callReview = async (score, text, id, type) => {
         })
         // console.log(response);
     } catch (error) {
-        throw 'Failed to submit the review';
+        throw error;
     }
 };
 
@@ -195,7 +195,7 @@ const createReview = (id, type) => {
             updateReview(id, type);
         } catch (error) {
             console.error('Error submitting review:', error);
-            alert('There was an error submitting your review.');
+            alert('Error submitting review');
         }
     });
 
