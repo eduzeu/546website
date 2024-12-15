@@ -1,7 +1,7 @@
 //poster({userId, username}, body, imagelink, id of comments)
 import { ObjectId } from "mongodb";
 import { posts } from "../config/mongoCollections.js";
-import { validateCloudinaryUrl, validateObjectIdString, validateString, validateUserCookie } from "../helpers.js";
+import { validateCloudinaryUrl, validateNumericId, validateObjectIdString, validateString, validateUserCookie } from "../helpers.js";
 
 export const insertUserPost = async (user, body, imageUrl, imageAltText, placeName) => {
     user = validateUserCookie(user, 'User');
@@ -76,3 +76,10 @@ export const getUserFeedPost = async () => {
         console.error(e);
     }
 };
+
+export const getLocationImages = async (locId) => {
+    locId = validateNumericId(locId, 'Location Id');
+    const postCollection = await posts();
+    const locationImages = await postCollection.find({ 'location.id': locId, 'location.type': 'coffee' }).toArray();
+    return locationImages;
+}

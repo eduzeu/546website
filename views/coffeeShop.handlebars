@@ -1,12 +1,30 @@
+<link rel="stylesheet" type="text/css" href="../../../public/css/style_a.css">
+
 <header>
     <h1>{{ title }}</h1>
-    <link rel="stylesheet" type="text/css" href="../public/css/style_a.css">
+          <!-- https://www.w3schools.com/howto/howto_css_dropdown_navbar.asp -->
+      <div class="navbar">
+        <a href="/home">Home Page</a>
+        <div class="dropdown">
+          <button class="dropbtn">
+            Events
+            <i class="fa fa-caret-down"></i>
+          </button>
+          <div class="dropdown-content">
+            <a href="/location/events">All Events</a>
+            <a href="/location/events/city">Search by Borough</a>
+            <a href="/location/events/date">Search by Date</a>
+          </div>
+        </div>
+        <a href="/friends">Friends List</a>
+        <a href="/userFeed"> User Feed </a>
+        <a href="/logout">Signout</a>
+      </div>
 </header>
 
-<main>
-
+<div class="coffeeDetails">
     <section class="sectionSpacing">
-        <h2 class="coffeeDetailHeader">Location Details</h2>
+        <h3 class="coffeeDetailHeader">Location Details</h3>
         <p class="noSpacing">{{ coffeeShop.tags.[addr:housenumber] }} {{ coffeeShop.tags.[addr:street] }}, {{
             coffeeShop.tags.[addr:city]
             }}</p>
@@ -16,8 +34,8 @@
             stars{{else}}No Ratings Yet.{{/if}}</p>
     </section>
 
-    <section>
-        <h2 class="coffeeDetailHeader">Reviews</h2>
+    <section class="sectionSpacing">
+        <h3 class="coffeeDetailHeader">Reviews</h3>
         {{#if review}}
         {{#if review.rating.length}}
         {{#each review.rating}}
@@ -34,4 +52,14 @@
         {{/if}}
     </section>
 
-</main>
+    <section class="sectionSpacing">
+        <h3 class="coffeeDetailHeader">Image Gallery</h3>
+        {{#if images.length}}
+            {{#each images}}
+            <img src="{{this.url}}" alt="{{this.altText}}">
+            {{/each}}
+        {{else}}
+        <p class="noSpacing">No images of this place yet.</p>
+        {{/if}}
+    </section>
+</div>
