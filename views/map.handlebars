@@ -57,15 +57,17 @@
             <section class="places-feed">
                 <div id="wifiLocations"></div>
                 <div id="coffeeLocations"></div>
+
         </section>
 
         </div>
         <aside class="sidebar">
+
             <section class="place-of-the-day">
-                <h2>Place of the Day</h2>
-                <p>Name: <span id="place-name">Loading...</span></p>
-                <p>Address: <span id="place-address">Loading...</span></p>
-                <p>Type: <span id="place-type">Loading...</span></p>
+                <h1> Place of The Day</h1>
+            <p>Name: <span id="place-name">{{placeOfDay.name }} </span></p>
+            <p>Address: <span id="place-address"> {{placeOfDay.address}}  </span></p>
+            <p>Type: <span id="place-type"> {{placeOfDay.type}}</span></p>
             </section>
             <div class="map">
                 <div id="map-canvas" style="height: 400px; width: 100%;"></div>
