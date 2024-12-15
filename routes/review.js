@@ -62,9 +62,11 @@ router.route('/')
 
         try {
             const review = await createReview(score, text, id, reviewType, currUser);
+            console.log(review);
             return res.json(review);
 
         } catch (e) {
+            console.log(e);
             return res.status(500).json({ error: e });
         }
     });
