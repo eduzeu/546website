@@ -78,6 +78,7 @@ body {
   font-family: Arial, sans-serif;
   background-color: #EFEBCE;
   padding: 0;
+  height: 100vh;
 }
 
 main {
@@ -220,9 +221,15 @@ p.noSpacing {
   max-width: 100%;
 }
 
+#userComments {
+  overflow-y: auto; 
+  max-height: 70vh;
+  padding: 10px;
+  border-radius: 5px;
+}
+
 .review {
   width: 400px;
-  /* Fixed width */
   margin-bottom: 15px;
   padding: 10px;
   border: 1px solid #ddd;
@@ -297,7 +304,7 @@ header {
   align-items: center; 
   justify-content: flex-start; 
   width: 100%;
-  z-index: 1000; /* Ensure header is above other content */
+  z-index: 1000; 
   background-color: #EFEBCE;
 }
 
@@ -335,8 +342,8 @@ header {
   color: #8b8b65;
   padding: 14px 16px;
   background-color: inherit;
-  font-family: inherit; /* Important for vertical align on mobile phones */
-  margin: 0; /* Important for vertical align on mobile phones */
+  font-family: inherit; 
+  margin: 0; 
 }
 
 /* Add a red background color to navbar links on hover */
@@ -385,5 +392,88 @@ header {
 .main-content {
   margin-top: 100px; 
   padding: 50px; 
+  overflow-y: auto;
+  max-height: 80vh;
 
+}
+
+#postpage{
+  overflow-y: auto;
+  width: 100%;
+  max-width: 800px;
+  margin: 120px auto 0;
+  text-align: center;
+}
+
+ul {
+  list-style-position: inside; 
+  margin: 0 auto; 
+}
+
+#postId{
+  text-align: center; 
+  margin: 0 auto; 
+  border: 2px solid #BB8588;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.event {
+  border: 2px solid #754100;
+  border-radius: 10px;
+  padding: 20px;
+  margin: 20px auto;
+  width: 80%;
+  max-width: 800px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.event ul {
+  list-style: none;
+  padding: 0;
+  margin: 15px 0;
+}
+
+.event li {
+  margin: 10px 0;
+  text-align: left;
+  padding-left: 20px;
+}
+
+.event h4 {
+  margin-top: 0;
+  color: #754100;
+}
+
+#motivation{
+  font-family: monospace;
+  text-align: center; 
+  margin: 0 auto; 
+  width:60%;
+  padding-bottom: 5dvh;
+  padding-top: 0dvh;
+}
+
+#description{
+  font-family: monospace;
+  text-align: center; 
+  margin: 0 auto; 
+  width:60%;
+  padding-bottom: 5dvh;
+}
+
+#members{
+  font-family: monospace;
+  text-align: center; 
+  margin: 0 auto; 
+  width:60%;
+}
+
+#members ul {
+  list-style: none;
+  margin: 10px;
+}
+
+#members li {
+  text-align: left;
 }

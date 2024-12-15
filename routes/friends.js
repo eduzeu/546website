@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getAllFriends } from '../data/friendlist.js';
+//import { getAllFriends } from '../data/friendlist.js';
 import * as sessionTokenFunctions from "../data/sessionTokens.js";
 import session from "express-session";
 
