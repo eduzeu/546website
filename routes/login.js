@@ -15,7 +15,7 @@ router.route("/")
       token = await sessionTokenFunctions.sessionChecker(token); // Check if sessionId is valid
       return res.redirect('/home/'); // Render the account page
     } catch (e) {
-      return res.render('../views/account'); // Render the account page on error
+      return res.render('../views/account',{title: "Welcome to WiFly NYC"}); // Render the account page on error
     }
   })
   .post(async (req, res) => {
