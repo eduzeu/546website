@@ -254,13 +254,19 @@ footer {
   padding-bottom: 10px;
 }
 
-h2.coffeeDetailHeader,
+h3.coffeeDetailHeader,
 p.noSpacing {
-  margin: 0
+  margin: 0;
 }
 
 section.sectionSpacing {
   margin-bottom: 20px;
+  display: block;
+}
+
+.coffeeDetails {
+  padding-top: 10px;
+  padding-left: 10px;
 }
 
 .star-rating {

@@ -1,6 +1,6 @@
 import { Router } from "express";
 import xss from "xss";
-import { findPostById, getUserFeedPost, insertUserPost } from "../data/posts.js";
+import { findPostById, getLocationImages, getUserFeedPost, insertUserPost } from "../data/posts.js";
 import { findUserFromSessionToken } from "../data/sessionTokens.js";
 import { validateCloudinaryUrl, validateObjectIdString, validateString } from "../helpers.js";
 
@@ -73,5 +73,25 @@ router.route("/:id")
             return res.status(400).json({ error: e });
         }
     })
+
+router.route("/images")
+.get(async (req, res) => {
+    try {
+        req.body.id = validateObjectIdString(req.params.id, "Location Id");
+        req.body.type = validateString(req.body.type, "Location Type");
+        if (req.body.type.toLowercase() != "coffee") { throw "Location Type must be coffee" };
+    } catch (e) {
+        return res.status(400).send(e);
+    }
+
+    try {
+        const images = await getLocationImages(id);
+        return res.json(images);
+        
+    } catch (e) {
+        console.log(e);
+        return res.status(500).json({ error: e });
+    }
+})
 
 export default router;
