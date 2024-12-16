@@ -107,7 +107,7 @@ router.route("/ics/:id/:date")
             eventId = validateStringId(eventId, "Event Id");
             startDate = validateISODateString(startDate, "Start Date");
         } catch (e) {
-            return res.status(400).json({ error: e });
+            return res.status(400).send(e);
         }
 
         eventId = xss(eventId);
@@ -120,7 +120,7 @@ router.route("/ics/:id/:date")
             return res.send(icsFile);
 
         } catch (e) {
-            return res.status(500).json({ error: e });
+            return res.status(500).send(e);
         }
     })
     
