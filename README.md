@@ -20,13 +20,12 @@ If it doesn't run on the first try, then do the following command on the termina
 npm i
 ```
 
-
 ## Cloudinary API Credentials
-To use the image saving functionality of WiFly, you will need [Cloudinary](https://cloudinary.com) credentials.
+To use the image saving functionality of WiFly, you will need a [Cloudinary](https://cloudinary.com) account and credentials. You can sign up for free and get the required API information.
 
-You can sign up for free and get the required API information.
+Rename `.env.example` to `.env` and update the values of `CLOUDINARY_CLOUD_NAME` and `CLOUDINARY_UPLOAD_PRESET` with your credentials.
 
-Rename `.env.example` to `.env` and update the values of `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, and `CLOUDINARY_API_SECRET` with your credentials.
+The upload preset must be unsigned.
 
 ## Running the Application
 
