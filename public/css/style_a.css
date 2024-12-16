@@ -359,3 +359,9 @@ section.sectionSpacing {
   text-align: center;
   border-bottom: 1px solid #ddd;
 }
+
+#downloadICS {
+  color: black;
+  font-family: monospace;
+  font-size: 0.8rem;
+}

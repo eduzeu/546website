@@ -1,6 +1,6 @@
 import axios from 'axios';
 import ics from "ics";
-import { fetchFrom, isoDateToComponents, validateDateString, validateISODateString, validateString } from '../helpers.js';
+import { fetchFrom, isoDateToComponents, validateDateString, validateISODateString, validateString, validateStringId } from '../helpers.js';
 
 export const getAllEvents = async () => {
     let response = await axios.get(`https://data.cityofnewyork.us/resource/tvpp-9vvx.json`);
@@ -105,7 +105,7 @@ export const getEventbyDate = async (date) => {
 }
 
 export const getEventICS = async (id, startDate) => {
-    id = validateString(id, "Event ID");
+    id = validateStringId(id, "Event ID");
     startDate = validateISODateString(startDate, "Start Date");
 
     let data = await fetchFrom(`https://data.cityofnewyork.us/resource/tvpp-9vvx.json?event_id=${id}&start_date_time=${startDate}`);
