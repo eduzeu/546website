@@ -18,9 +18,6 @@ export const addNewUser = async (username, email, password) => {
         username: username.toLowerCase(),
         email: email.toLowerCase(),
         password: hashedPass,
-        favoriteHotspots: [],
-        favoriteEvents: [],
-        favoriteCoffeeShops: [],
         reviews: [],
         friends: []
     };
