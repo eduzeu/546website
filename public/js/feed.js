@@ -75,7 +75,6 @@
                       revDiv.html(`
                       <div class="review-header">
                           <h3 class="place-name">${user.placeName || "Unknown Place"}</h3>
-                          ${addFriendButton}
                           <span class="username">by ${user.poster.username || "Anonymous"}</span>
                       </div>
                       <p class="review-text">${user.body || "No review text"}</p>
