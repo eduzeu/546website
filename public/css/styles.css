@@ -499,3 +499,10 @@ ul {
 #members li {
   text-align: left;
 }
+
+#about{
+  padding-top: 30dvh;
+  width: 1000px;
+  height: 800px;
+  padding-bottom: 5dvh;
+}
