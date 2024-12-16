@@ -129,6 +129,7 @@
         uploadWidget.html("Upload image");
     })
 
+    // Reference for Search Bar: https://webdesign.tutsplus.com/how-to-build-a-search-bar-with-javascript--cms-107227t 
     locationSearchBar.on("change", () => {
         // Get the value of the search bar
         const value = locationSearchBar.val();
