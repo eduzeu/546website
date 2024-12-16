@@ -37,9 +37,9 @@ cancelButton.addEventListener("click", () => {
 });
 
 const hideAddFriend = () => {
-  console.log("removing button");
+  //console.log("removing button");
   addFriendButton.classList.add("hidden");
-  console.log(addFriendButton);
+  //console.log(addFriendButton);
 }
 
 const displayReviews = async () => {
@@ -48,13 +48,13 @@ const displayReviews = async () => {
     const comments = await fetch(`/comments/${id}`);
     if (!comments.ok) throw new Error("Failed to fetch reviews.");
     const data = await comments.json();
-    console.log("Fetched comments:", data);
+    //console.log("Fetched comments:", data);
 
     userComments.innerHTML = ""; 
 
     data.forEach((user) => {
       if (user) {
-        console.log(user);
+        //console.log(user);
         const isCurrentUser = posterUsername === userData.username;
         const isFriend = userData.friends && userData.friends.includes(posterUsername);
         if(!isCurrentUser && !isFriend){
@@ -100,7 +100,7 @@ const displayComments = async (parentId) => {
     const comments = await commentsResponse.json();
 
 
-    console.log("Fetched comments for parent:", comments);
+    //console.log("Fetched comments for parent:", comments);
 
     userComments.innerHTML = ""; 
     comments.reverse().forEach((comment) => { 
@@ -132,7 +132,7 @@ const makeComment = async () => {
     }
 
     const commentPayload = { parent: id, body: reviewText };
-    console.log("Submitting comment:", commentPayload);
+    //console.log("Submitting comment:", commentPayload);
 
     try {
       await InsertComment(commentPayload);
@@ -153,14 +153,14 @@ const InsertReview = async (object) => {
       body: JSON.stringify(object),
     });
     if (!response.ok) throw new Error("Failed to insert review");
-    console.log("Review inserted successfully.");
+    //console.log("Review inserted successfully.");
   } catch (error) {
     console.error("Error inserting review:", error);
   }
 };
 
 const InsertComment = async (object) => {
-  console.log("Inserting comment:", object);
+  //console.log("Inserting comment:", object);
   try {
     const response = await fetch("/comments/", {
       method: "POST",
@@ -173,7 +173,7 @@ const InsertComment = async (object) => {
     }
 
     const data = await response.json();
-    console.log("Comment inserted successfully:", data);
+    //console.log("Comment inserted successfully:", data);
     return data;
   } catch (error) {
     console.error("Error inserting comment:", error);

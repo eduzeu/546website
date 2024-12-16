@@ -26,7 +26,7 @@ export const insertUserPost = async (user, body, title, image, location) => {
         return userPost;
 
     } catch (e) {
-        console.error(e);
+        throw e;
     };
 };
 
@@ -34,10 +34,10 @@ export const insertUserPost = async (user, body, title, image, location) => {
 
 export const findPostById = async (id) => {
     id = validateObjectIdString(id, 'Post Id')
-    console.log(id);
+    // console.log(id);
     const postCollection = await posts();
     const post = await postCollection.findOne({ _id: new ObjectId(id) });
-    console.log(post);
+    // console.log(post);
     if (!post) {
         throw 'Unable to find post with matching id';
     }
@@ -52,7 +52,8 @@ export const getUserFeedPost = async () => {
         const displayReviews = await postCollection.find().toArray();
         return displayReviews;
     } catch (e) {
-        console.error(e);
+        throw e;
+        // console.error(e);
     }
 };
 

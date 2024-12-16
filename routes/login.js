@@ -78,8 +78,6 @@ router.route("/signup")
       const result = await userFunctions.addNewUser(username, email, password);
       res.redirect('/');
     } catch (error) {
-      //   const errorMessage = error && error.message ? error.message : "Unknown error";
-      //   return res.status(errorMessage.includes("validation") ? 400 : 500).json({ error: errorMessage });
       return res.status(400).render("newAccount", { error: error });
     }
   });

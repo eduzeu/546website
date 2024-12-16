@@ -68,14 +68,14 @@
                 return;
             }
 
-            console.log(`The place gotten is: `);
-            console.log(place);
+            //console.log(`The place gotten is: `);
+            //console.log(place);
 
             const lat = place.geometry.location.lat();
             const lng = place.geometry.location.lng();
             initialLatLng['lat'] = lat;
             initialLatLng['lng'] = lng;
-            console.log(`lat: ${lat}, lng: ${lng}.`);
+            //console.log(`lat: ${lat}, lng: ${lng}.`);
 
             map.gMap.setCenter({ lat: lat, lng: lng });
             map.gMap.setZoom(15);
@@ -97,13 +97,13 @@
 
     window.radiusSubmit = function () {
         if (initialLatLng['lat'] === null || initialLatLng['lng'] === null) {
-            console.log('Please enter an address first.');
+            //console.log('Please enter an address first.');
             alert('Please enter an address first.');
             return;
         }
         const selectedRadius = document.getElementById('radius');
         const radiusValue = selectedRadius.value;
-        console.log('Radius selected:', radiusValue + ' miles');
+        //console.log('Radius selected:', radiusValue + ' miles');
 
         if (currCircle) {
             currCircle.setMap(null);
@@ -137,9 +137,9 @@
             });
             coffee_markers = [];
             try {
-                console.log("Fetching WiFi data...");
+                //console.log("Fetching WiFi data...");
                 const data = await fetchFrom(wifi_url);
-                console.log("WiFi data fetched successfully:", data);
+                //console.log("WiFi data fetched successfully:", data);
 
                 const wifi_entries = Object.values(data);
 
@@ -189,9 +189,9 @@
             });
             wifi_markers = [];
             try {
-                console.log("Fetching Coffee Shop data...");
+                //console.log("Fetching Coffee Shop data...");
                 const data = await fetchFrom(coffee_url);
-                console.log("Coffee Shop data fetched successfully:", data);
+                //console.log("Coffee Shop data fetched successfully:", data);
 
                 data.elements.forEach(entry => {
                     if (entry.lat && entry.lon) {

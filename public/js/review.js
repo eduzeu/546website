@@ -35,7 +35,7 @@ const updateReview = async (id, type) => {
     try {
         const reviews = await fetchFrom(`../review/${type}/${id}`);
 
-        console.log("Reviews data:", reviews); // Log the structure of the reviews
+        //console.log("Reviews data:", reviews); // Log the structure of the reviews
 
         const locationRow = document.getElementById(`${type}Locations`).querySelector(`td[data-location-id="${id}"]`); // Target the correct location by place_id
 

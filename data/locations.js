@@ -75,11 +75,11 @@ export const getWifiLocations = async () => {
 
 export const deleteScratchFolder = async () => { 
   const folderPath = path.join(__dirname, '..', 'scratch');
-  console.log(folderPath);
+  //console.log(folderPath);
 
   if (fs.existsSync(folderPath)) {
     const files = fs.readdirSync(folderPath);
-    console.log("files: ", files);
+    //console.log("files: ", files);
 
     files.forEach(file => {
       const filePath = path.join(folderPath, file);
@@ -95,7 +95,7 @@ export const deleteScratchFolder = async () => {
     });
      await getPlaceOfTheDay();
   } else {
-    console.log("folder does not exist.");
+    //console.log("folder does not exist.");
   }
 };
 setInterval(deleteScratchFolder, 24 * 60 * 60 * 1000);
@@ -109,7 +109,7 @@ export const getPlaceOfTheDay = async () => {
     store = JSON.parse(fs.readFileSync(placeFilePath, 'utf8')); 
   } catch (err) {
     if (err.code === 'ENOENT') {
-      console.log('placeOfTheDay file does not exist, creating a new one.');
+      //console.log('placeOfTheDay file does not exist, creating a new one.');
     } else {
       console.error('Error reading placeOfTheDay file:', err);
     }

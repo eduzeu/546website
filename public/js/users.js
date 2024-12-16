@@ -10,7 +10,7 @@ if (form) {
     form.addEventListener('submit', async (e) => {
 
         try {
-            console.log(username.value);
+            //console.log(username.value);
             username.value = validateString(username.value, 'Username');
             password.value = validatePassword(password.value, 'Password');
             

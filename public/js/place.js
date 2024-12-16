@@ -2,7 +2,7 @@
 const displayPlaceOfTheDay = async ()  => { 
   try{
     const response = await fetch("../home/");
-    console.log(response);
+    //console.log(response);
 
     if(!response.ok){
       throw new Error("Failed to fetch place of the day.");
@@ -10,7 +10,7 @@ const displayPlaceOfTheDay = async ()  => {
 
     const place =  await response.json();
     
-    console.log("place: ", place); 
+    //console.log("place: ", place); 
     document.getElementById("place-name").textContent = place.name || "No place found";
     document.getElementById("place-address").textContent = place.address || "No place found";
     document.getElementById("place-type").textContent = place.type || "No place found";

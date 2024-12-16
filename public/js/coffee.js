@@ -148,7 +148,8 @@ document.getElementById('coffee-checkbox').addEventListener('change', async func
         locationContainer.textContent = 'No coffee shops found.';
       }
     } catch (error) {
-      console.error('Error fetching coffee shops:', error);
+      // console.error('Error fetching coffee shops:', error);
+      throw e;
     }
   } else {
     document.getElementById('coffeeLocations').innerHTML = '';
