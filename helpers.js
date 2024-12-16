@@ -46,6 +46,31 @@ export const validateEmailAddress = (email, emailName) => {
   return email;
 }
 
+export const validatePassword = (password, passwordName) => {
+  password = validateString(password, passwordName);
+
+  if (password.length < 8) {
+    throw "Password must be at least 8 characters long."
+  }
+
+  const lowerRegex = /[a-z]+/g;
+  if (!lowerRegex.test(password)) {
+    throw "Password must contain at least one lowercase letter."
+  }
+
+  const upperRegex = /[A-Z]+/g;
+  if (!upperRegex.test(password)) {
+    throw "Password must contain at least one uppercase letter."
+  }
+
+  const symbolRegex = /[^A-Za-z0-9]+/g;
+  if (!symbolRegex.test(password)) {
+    throw "Password must contain at least one symbol."
+  }
+
+  return password;
+}
+
 export const validateRating = (rating, ratingName) => {
   validateNumber(Number(rating), ratingName);
 

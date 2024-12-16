@@ -12,13 +12,13 @@ if (form) {
         try {
             console.log(username.value);
             username.value = validateString(username.value, 'Username');
-            password.value = validateString(password.value, 'Password');
+            password.value = validatePassword(password.value, 'Password');
             
             if (email) {
                 email.value = validateEmailAddress(email.value, 'Email');
             };
             if (confirmPassword) {
-                confirmPassword.value = validateString(confirmPassword.value, 'Confirm Password');
+                confirmPassword.value = validatePassword(confirmPassword.value, 'Confirm Password');
                 if(confirmPassword.value !== password.value){
                     throw 'Passwords do not match';
                 }
