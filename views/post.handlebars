@@ -27,8 +27,12 @@
 
 <div id="postpage">
   <p id="postId" class="hidden">{{post._id}}</p>
+  <p id="username" class="hidden">{{post.poster.username}}</p>
+    <input type="hidden" id="userData" value='{{{userData}}}'>
+
   <div class="event">
     <h4>Post:</h4>
+    <button id="addFriend" class="hidden"> +Friend </button>
     <ul>
       <li>Place: {{post.placeName}}</li>
       <li>Posted By: {{post.poster.username}}</li>

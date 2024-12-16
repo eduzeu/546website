@@ -51,7 +51,7 @@ export const findCommentsByParentId = async (parentId) => {
     const commentCollection = await comment();
     const comments = await commentCollection.find({ "parent.id": parentId }).toArray();
   
-    if (comments.length === 0) throw new Error(`No comments found with parent ID: ${parentId}`);
+    //if (comments.length === 0) throw new Error(`No comments found with parent ID: ${parentId}`);
   
     return comments.map((com) => ({
       ...com,
