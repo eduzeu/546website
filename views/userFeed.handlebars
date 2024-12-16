@@ -1,26 +1,26 @@
 <link rel="stylesheet" href="/public/css/styles.css" />
 
 <header>
-      <h1>{{title}}</h1>
-      <!-- https://www.w3schools.com/howto/howto_css_dropdown_navbar.asp -->
-      <div class="navbar">
-        <a href="/home">Home Page</a>
-        <div class="dropdown">
-          <button class="dropbtn">
-            Events
-            <i class="fa fa-caret-down"></i>
-          </button>
-          <div class="dropdown-content">
-            <a href="/location/events">All Events</a>
-            <a href="/location/events/city">Search by Borough</a>
-            <a href="/location/events/date">Search by Date</a>
-          </div>
-        </div>
-        <a href="/friends">Friends List</a>
-        <a href="/userFeed"> User Feed </a>
-        <a href="/logout">Signout</a>
-
+  <h1>{{title}}</h1>
+  <!-- https://www.w3schools.com/howto/howto_css_dropdown_navbar.asp -->
+  <div class="navbar">
+    <a href="/home">Home Page</a>
+    <div class="dropdown">
+      <button class="dropbtn">
+        Events
+        <i class="fa fa-caret-down"></i>
+      </button>
+      <div class="dropdown-content">
+        <a href="/location/events">All Events</a>
+        <a href="/location/events/city">Search by Borough</a>
+        <a href="/location/events/date">Search by Date</a>
       </div>
+    </div>
+    <a href="/friends">Friends List</a>
+    <a href="/userFeed"> User Feed </a>
+    <a href="/logout">Signout</a>
+
+  </div>
 </header>
 
 <div class="main-content">
@@ -30,8 +30,14 @@
     <form id="reviewForm">
       <h3>Leave a Review</h3>
 
-      <label for="placeName">Place Name:</label>
-      <input type="text" id="placeName" name="placeName" required />
+      <label class="locationSearchLabel" id="locationSearchLabel" for="locationSearch">
+        Location:
+        <input type="search" id="locationSearch" name="locationSearch" placeholder="Start typing to search..."
+          list="locationSearchOptions" size="40">
+      </label>
+
+      <label for="placeName">Post Title:</label>
+      <input type="text" id="placeName" name="placeName" required /><br><br>
 
       <label for="reviewText">Your Review:</label>
       <textarea id="reviewText" name="reviewText" rows="4" cols="30" placeholder="Enter your review here"
@@ -55,6 +61,17 @@
       </div>
     </form>
   </div>
+
+  <datalist id="locationSearchOptions"></datalist>
+
+  <fieldset>
+    <legend>Select a Location Type:</legend>
+    <label><input id="none-checkbox" type="radio" name="filter" value="none"> None</label>
+    <label><input id="wifi-checkbox" type="radio" name="filter" value="wifi"> Wifi</label>
+    <label><input id="coffee-checkbox" type="radio" name="filter" value="coffee"> Coffee</label>
+    <label><input id="event-checkbox" type="radio" name="filter" value="event"> Event</label>
+  </fieldset>
+
   <p id="error"></p>
   <div id="userPosts"> </div>
 </div>

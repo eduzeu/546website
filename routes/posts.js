@@ -2,7 +2,7 @@ import { Router } from "express";
 import xss from "xss";
 import { findPostById, getLocationImages, getUserFeedPost, insertUserPost } from "../data/posts.js";
 import { findUserFromSessionToken } from "../data/sessionTokens.js";
-import { validateCloudinaryUrl, validateObjectIdString, validateString } from "../helpers.js";
+import { validateImageDetails, validateLocationPostDetails, validateObjectIdString, validateString } from "../helpers.js";
 
 const router = Router();
 
@@ -19,34 +19,42 @@ router.route("/")
     })
     .post(async (req, res) => {
         let review = req.body.reviewText;
-        let place = req.body.placename;
-        let imageUrl = req.body.imageUrl;
-        let imageAltText = req.body.imageAltText;
+        let title = req.body.title;
+        let image = req.body.image;
+        let location = req.body.location;
+        location.id = `${location.id}`;
 
         try {
             review = validateString(review, "Review Text");
-            place = validateString(place, "Place Name");
-            if (imageUrl && imageAltText) {
-                imageUrl = validateCloudinaryUrl(imageUrl, "Image URL");
-                imageAltText = validateString(imageAltText, "Image Alt Text");
-
-            } else if ((imageUrl && !imageAltText) || (!imageUrl && imageAltText)) {
-                throw "Both image URL and image alt text must be provided";
-            }
+            title = validateString(title, "Review Title");
+            image = validateImageDetails(image, "Image Details");
+            location = validateLocationPostDetails(location, "Location Details");
+            location.id = `${location.id}`;
 
         } catch (e) {
             return res.status(400).json({ error: e });
         }
 
+        // XSS
         review = xss(review);
-        place = xss(place);
-        if (imageUrl) { imageUrl = xss(imageUrl) }
-        if (imageAltText) { imageAltText = xss(imageAltText) }
+        title = xss(title);
+
+        if (image) {
+            image.url = xss(image.url);
+            image.altText = xss(image.altText);
+        }
+
+        if (location) {
+            location.id = xss(location.id);
+            location.type = xss(location.type);
+            location.name = xss(location.name);
+            if (location.detail) { location.detail = xss(location.detail) }
+        }
 
         try {
             let sessionId = req.cookies["session_token"];
             let user = await findUserFromSessionToken(sessionId);
-            const postReview = await insertUserPost(user, review, imageUrl, imageAltText, place);
+            const postReview = await insertUserPost(user, review, title, image, location);
             return res.status(200).json(postReview);
         } catch (e) {
             console.error(e);

@@ -1,6 +1,7 @@
 import { Router } from "express";
 import xss from "xss";
-import { getAllEvents, getEventbyBorough, getEventbyDate } from '../data/events.js';
+import { getAllEvents, getEventbyBorough, getEventbyDate, getEventNameLocations } from '../data/events.js';
+import * as sessionTokens from "../data/sessionTokens.js";
 import { validateDateString, validateString } from "../helpers.js";
 
 const router = Router()
@@ -96,5 +97,27 @@ router.route("/date")
             return res.status(500).send(e);
         }
     });
+
+router.route("/names")
+  .get(async (req, res) => {
+    try {
+        let token;
+        try {
+            token = req.cookies["session_token"];//gets the sessionId
+        } catch {
+            throw 'no cookie';
+        }
+        token = await sessionTokens.sessionChecker(token);//checks if sessionId is valid
+    } catch (e) {
+        return res.status(401).json({ error: e });
+    }
+
+    try {
+      const names = await getEventNameLocations();
+      res.json(names);
+    } catch (e) {
+      res.status(500).json({ error: e });
+    }
+  });
 
 export default router;

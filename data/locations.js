@@ -89,6 +89,19 @@ export const getPlaceOfTheDay = async () => {
 
 };
 
+export const getWiFiLocationNames = async () => {
+  const data = await fetchFrom("https://data.cityofnewyork.us/resource/npnk-wrj8.json?$select=public_space_open_space_name, min(oid)&$group=public_space_open_space_name&$order=public_space_open_space_name asc");
+
+  const output = data.map((item) => {
+    return {
+      "oid": Number(item.min_oid),
+      'public_space_open_space_name': item.public_space_open_space_name
+    };
+  });
+
+  return output;
+}
+
 // (async () => {
 //   console.log(await getPlaceOfTheDay());
 // })();

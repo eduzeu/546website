@@ -1,9 +1,8 @@
+import axios from 'axios';
 import { fetchFrom, validateDateString, validateString } from '../helpers.js';
-import axios from 'axios'; 
-import { response } from 'express';
 
 
-export const getAllEvents = async ()=> {
+export const getAllEvents = async () => {
     let response = await axios.get(`https://data.cityofnewyork.us/resource/tvpp-9vvx.json`);
     let data = response.data
     let results = []
@@ -17,9 +16,9 @@ export const getAllEvents = async ()=> {
     const now = new Date();
 
     let curr = now.toISOString();  //to manipluate as date as a string
-    curr = curr.split("T");        
-    curr = curr[0].split("-"); 
-    
+    curr = curr.split("T");
+    curr = curr[0].split("-");
+
     for (const event of data) {
         if (results.length >= 50) {
             break;
@@ -28,7 +27,7 @@ export const getAllEvents = async ()=> {
         let time = eventDates.split("T");
 
         eventDates = time[0]
-        time = time[1].split(":"); 
+        time = time[1].split(":");
         eventDates = eventDates.split("-");
 
         let formattedDate = eventDates[1] + "/" + eventDates[2] + "/" + eventDates[0];
@@ -36,12 +35,12 @@ export const getAllEvents = async ()=> {
         const eventDateTime = new Date(eventDates[0], eventDates[1] - 1, eventDates[2]);
         const currentDateTime = new Date(curr[0], curr[1] - 1, curr[2]);
 
-        if(eventDateTime >= currentDateTime){
-            event.start_date_time = formattedDate + " Start Time: " + time[0]+":"+ time[1]
+        if (eventDateTime >= currentDateTime) {
+            event.start_date_time = formattedDate + " Start Time: " + time[0] + ":" + time[1]
             results.push(event);
         }
     }
-    return results 
+    return results
 }
 
 export const getEventbyBorough = async (borough) => {
@@ -59,8 +58,8 @@ export const getEventbyBorough = async (borough) => {
     const now = new Date();
 
     let curr = now.toISOString();  //to manipluate as date as a string
-    curr = curr.split("T");        
-    curr = curr[0].split("-");     
+    curr = curr.split("T");
+    curr = curr[0].split("-");
 
     for (const event of data) {
         if (events_in_borough.length >= 50) {
@@ -72,7 +71,7 @@ export const getEventbyBorough = async (borough) => {
             let time = eventDates.split("T");
 
             eventDates = time[0]
-            time = time[1].split(":"); 
+            time = time[1].split(":");
             eventDates = eventDates.split("-");
 
             let formattedDate = eventDates[1] + "/" + eventDates[2] + "/" + eventDates[0];
@@ -80,8 +79,8 @@ export const getEventbyBorough = async (borough) => {
             const eventDateTime = new Date(eventDates[0], eventDates[1] - 1, eventDates[2]);
             const currentDateTime = new Date(curr[0], curr[1] - 1, curr[2]);
 
-            if(eventDateTime >= currentDateTime){
-                event.start_date_time = formattedDate + " Time: " + time[0]+":"+ time[1]
+            if (eventDateTime >= currentDateTime) {
+                event.start_date_time = formattedDate + " Time: " + time[0] + ":" + time[1]
                 events_in_borough.push(event);
             }
         }
@@ -115,6 +114,20 @@ export const getEventbyDate = async (date) => {
         }
     }
     return events_in_date;
+}
+
+export const getEventNameLocations = async () => {
+    const data = await fetchFrom("https://data.cityofnewyork.us/resource/tvpp-9vvx.json?$select=event_name, event_location, min(event_id)&$group=event_name, event_location&$order=event_name, event_location asc");
+
+    const output = data.map((item) => {
+        return {
+            event_name: item.event_name,
+            event_location: item.event_location,
+            event_id: item.min_event_id
+        };
+    });
+
+    return output;
 }
 
 

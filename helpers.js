@@ -75,6 +75,16 @@ export const validateReviewType = (reviewType, typeName) => {
   return reviewType
 }
 
+export const validateLocationType = (locType, typeName) => {
+  locType = validateString(locType, typeName);
+
+  if (locType !== "wifi" && locType !== "coffee" && locType !== "event") {
+    throw "Review type is invalid."
+  }
+
+  return locType
+}
+
 export const validateDateString = (dateStr, dateName) => {
   dateStr = validateString(dateStr, dateName);
 
@@ -224,6 +234,41 @@ export const validateObjectIdArray = (arr, arrName) => {
   }
 
   return arr;
+}
+
+export const validateLocationPostDetails = (details, detailName) => {
+  if (!details) { return details }
+
+  validateObject(details, detailName);
+
+  if (!details.type || !details.id || !details.name)
+    throw `${detailName || "Provided object"} is missing id, type, or name.`
+
+  details.id = validateNumericId(details.id, `${detailName || "Provided Location Info"}  Id`);
+  details.type = validateLocationType(details.type, `${detailName || "Provided Location Info"} Type`);
+  details.name = validateString(details.name, `${detailName || "Provided Location Info"} Name`);
+
+  if (details.detail) {
+    details.detail = validateString(details.detail, `${detailName || "Provided Location Info"} Details`)
+  } else {
+    details["detail"] = null;
+  }
+
+  return details;
+}
+
+export const validateImageDetails = (details, detailName) => {
+  if (!details) { return details }
+
+  validateObject(details, detailName);
+
+  if (!details.url || !details.altText)
+    throw `${detailName || "Provided object"} is missing url or alt text.`
+
+  details.url = validateCloudinaryUrl(details.url, "Image URL");
+  details.altText = validateString(details.altText, "Image Alt Text");
+
+  return details;
 }
 
 export const fetchFrom = async (url) => {
