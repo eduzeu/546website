@@ -1,6 +1,6 @@
 import axios from 'axios';
-import { fetchFrom, validateDateString, validateString } from '../helpers.js';
-
+import ics from "ics";
+import { fetchFrom, isoDateToComponents, validateDateString, validateISODateString, validateString, validateStringId } from '../helpers.js';
 
 export const getAllEvents = async () => {
     let response = await axios.get(`https://data.cityofnewyork.us/resource/tvpp-9vvx.json`);
@@ -36,7 +36,7 @@ export const getAllEvents = async () => {
         const currentDateTime = new Date(curr[0], curr[1] - 1, curr[2]);
 
         if (eventDateTime >= currentDateTime) {
-            event.start_date_time = formattedDate + " Start Time: " + time[0] + ":" + time[1]
+            event["start_formatted"] = formattedDate + " Time: " + time[0] + ":" + time[1]
             results.push(event);
         }
     }
@@ -80,7 +80,7 @@ export const getEventbyBorough = async (borough) => {
             const currentDateTime = new Date(curr[0], curr[1] - 1, curr[2]);
 
             if (eventDateTime >= currentDateTime) {
-                event.start_date_time = formattedDate + " Time: " + time[0] + ":" + time[1]
+                event["start_formatted"] = formattedDate + " Time: " + time[0] + ":" + time[1]
                 events_in_borough.push(event);
             }
         }
@@ -109,11 +109,43 @@ export const getEventbyDate = async (date) => {
         const dateStr = dateSplit[1] + "/" + dateSplit[2] + "/" + dateSplit[0]
 
         if (eventDates == date) {
-            event.start_date_time = dateStr;
+            event["start_formatted"] = dateStr;
             events_in_date.push(event);
         }
     }
     return events_in_date;
+}
+
+export const getEventICS = async (id, startDate) => {
+    id = validateStringId(id, "Event ID");
+    startDate = validateISODateString(startDate, "Start Date");
+
+    let data = await fetchFrom(`https://data.cityofnewyork.us/resource/tvpp-9vvx.json?event_id=${id}&start_date_time=${startDate}`);
+
+    if (!data || data.length === 0)
+        throw "Event not found"
+
+    data = data[0];
+
+    let icsEvent = {
+        title: data.event_name,
+        location: `${data.event_location}, ${data.event_borough}`,
+        start: isoDateToComponents(data.start_date_time),
+        startInputType: "utc",
+        startOutputType: "local",
+        end: isoDateToComponents(data.end_date_time),
+        endInputType: "utc",
+        endOutputType: "local"
+    }
+
+    const file = ics.createEvent(icsEvent, (error, value) => {
+        if (error)
+            throw error.message;
+
+        return value;
+    })
+
+    return file;
 }
 
 export const getEventNameLocations = async () => {

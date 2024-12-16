@@ -1,8 +1,8 @@
 import { Router } from "express";
 import xss from "xss";
-import { getAllEvents, getEventbyBorough, getEventbyDate, getEventNameLocations } from '../data/events.js';
+import { getAllEvents, getEventbyBorough, getEventbyDate, getEventICS, getEventNameLocations } from '../data/events.js';
 import * as sessionTokens from "../data/sessionTokens.js";
-import { validateDateString, validateString } from "../helpers.js";
+import { validateDateString, validateISODateString, validateString, validateStringId } from "../helpers.js";
 
 const router = Router()
 
@@ -98,6 +98,32 @@ router.route("/date")
         }
     });
 
+router.route("/ics/:id/:date")
+    .post(async (req, res) => {
+        let eventId = req.params.id;
+        let startDate = req.params.date;
+
+        try {
+            eventId = validateStringId(eventId, "Event Id");
+            startDate = validateISODateString(startDate, "Start Date");
+        } catch (e) {
+            return res.status(400).send(e);
+        }
+
+        eventId = xss(eventId);
+        startDate = xss(startDate);
+
+        try {
+            const icsFile = await getEventICS(eventId, startDate);
+            res.set('Content-Type', 'text/calendar');
+            res.set('Content-Disposition', `attachment; filename="${req.body.eventId}-${startDate}.ics"`);
+            return res.send(icsFile);
+
+        } catch (e) {
+            return res.status(500).send(e);
+        }
+    })
+    
 router.route("/names")
   .get(async (req, res) => {
     try {

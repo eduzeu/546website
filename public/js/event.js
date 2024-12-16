@@ -8,7 +8,7 @@ if (form) {
         error.innerHTML = "";
 
         if (searchCity) {
-            let borough = search.value;
+            let borough = searchCity.value;
 
             try {
                 borough = validateString(borough, "Borough");
