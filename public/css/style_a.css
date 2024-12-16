@@ -119,7 +119,7 @@ footer {
   #wifiLocations table {
     width:100%;
     text-align: center;
-    color: #A3A380;
+    color: black;
     background-color: #EFEBCE;
   
   }
@@ -133,7 +133,7 @@ footer {
 #coffeeLocations table {
   width:100%;
   text-align: center;
-  color: #A3A380;
+  color: black;
   background-color: #EFEBCE;
 }
 
@@ -151,12 +151,12 @@ footer {
 
 
 #wifiLocations table tr:hover {
-  color: #EFEBCE;
+  color: white;
   background-color: #A3A380;
 }
 
 #coffeeLocations table tr:hover {
-  color: #EFEBCE;
+  color: white;
   background-color: #A3A380;
 }
 /* Hover effect for individual table cells */
@@ -301,7 +301,7 @@ section.sectionSpacing {
 .navbar a {
   float: left;
   font-size: 16px;
-  color: #8b8b65;
+  color: #754100;
   text-align: center;
   padding: 14px 16px;
   text-decoration: none;
@@ -319,7 +319,7 @@ section.sectionSpacing {
   font-size: 16px;
   border: none;
   outline: none;
-  color: #8b8b65;
+  color: #754100;
   padding: 14px 16px;
   background-color: inherit;
   font-family: inherit; 
@@ -344,7 +344,7 @@ section.sectionSpacing {
 /* Links inside the dropdown */
 .dropdown-content a {
   float: none;
-  color: #8b8b65;
+  color: #754100;
   padding: 12px 16px;
   text-decoration: none;
   display: block;

@@ -85,7 +85,7 @@ body {
   min-height: 100vh;
   margin: 0;
   font-family: Arial, sans-serif;
-  background-color: #EFEBCE;
+  background-color: #f8f9fa;
   padding: 0;
   height: 100vh;
 }
@@ -327,7 +327,7 @@ header {
   justify-content: flex-start; 
   width: 100%;
   z-index: 1000; 
-  background-color: #EFEBCE;
+  background-color: #f8f9fa;
 }
 
 .navbar {
@@ -343,7 +343,7 @@ header {
 .navbar a {
   float: left;
   font-size: 16px;
-  color: #8b8b65;
+  color: #754100;
   text-align: center;
   padding: 14px 16px;
   text-decoration: none;
@@ -361,7 +361,7 @@ header {
   font-size: 16px;
   border: none;
   outline: none;
-  color: #8b8b65;
+  color: #754100;
   padding: 14px 16px;
   background-color: inherit;
   font-family: inherit; 
@@ -386,7 +386,7 @@ header {
 /* Links inside the dropdown */
 .dropdown-content a {
   float: none;
-  color: #8b8b65;
+  color: #754100;
   padding: 12px 16px;
   text-decoration: none;
   display: block;
