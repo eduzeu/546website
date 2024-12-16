@@ -4,7 +4,7 @@ const fetchFrom = async (url, options) => {
     if (response.ok) {
         const contentType = response.headers.get("content-type");
 
-        if (contentType && contentType === "application/json") {
+        if (contentType && contentType.includes("application/json")) {
             const json = await response.json();
             return json;
 
@@ -14,7 +14,16 @@ const fetchFrom = async (url, options) => {
         }
 
     } else {
-        throw `Recieved status ${response.status}: ${response.statusText}`;
+        const contentType = response.headers.get("content-type");
+
+        if (contentType && contentType.includes("application/json")) {
+            const json = await response.json();
+            throw `${response.statusText}: ${json["error"]}`;
+
+        } else {
+            const errorMsg = await response.text();
+            throw `${response.statusText}: ${errorMsg}`;
+        }
     }
 }
 
