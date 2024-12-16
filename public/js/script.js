@@ -79,12 +79,20 @@
 
             map.gMap.setCenter({ lat: lat, lng: lng });
             map.gMap.setZoom(15);
+            if (typeof lat === 'number' && typeof lng === 'number' && !isNaN(lat) && !isNaN(lng)) {
+                position_marker.setPosition({ lat, lng });
+                position_marker.setVisible(true);
+            } else {
+                console.error("Invalid coordinates for position:", { lat, lng });
+                alert("Error: Invalid coordinates. Please try again.");
+            }
             position_marker.setPosition({ lat: lat, lng: lng });
             position_marker.setVisible(true);
         });
     }
 
-    google.maps.event.addDomListener(window, 'load', initialize);
+    // google.maps.event.addDomListener(window, 'load', initialize); // deprecated
+    window.addEventListener('load', initialize);
     let currCircle = null;
 
     window.radiusSubmit = function () {
@@ -141,13 +149,6 @@
                             lat: parseFloat(entry.Latitude),
                             lng: parseFloat(entry.Longitude),
                             title: entry['Wifi name'] || "Unnamed Location",
-                            // FIX EVENT
-                            // event: {
-                            //     name: "click",
-                            //     callback: function () {
-                            //         alert("You clicked on " + (entry['Wifi name'] || "Unnamed Location"));
-                            //     }
-                            // },
                             icon: {
                                 // url: 'https://i.imgur.com/xgIzHcA.png',
                                 url: 'https://i.imgur.com/pDk8HOg.png',
@@ -164,7 +165,7 @@
                             </div>`
                         });
                         // wifi_markers.push(marker);
-                        window.wifi_markers.push({ id: location.place_id, marker });
+                        wifi_markers.push({ id: entry.place_id, marker });
                     } else {
                         console.warn("Missing coordinates for entry:", entry);
                     }
@@ -175,35 +176,29 @@
             }
         }
         else {
-            window.wifi_markers.forEach(item => {
-                window.mapsterInstance._removeMarker(item.marker);
+            wifi_markers.forEach(item => {
+                map._removeMarker(item.marker);
             });
-            window.wifi_markers.length = 0; 
+            wifi_markers = [];
         }
     });
     document.getElementById('coffee-checkbox').addEventListener('change', async function () {
         if (this.checked) {
-            wifi_markers.forEach(marker => {
-                map._removeMarker(marker);
+            wifi_markers.forEach(item => {
+                map._removeMarker(item.marker);
             });
             wifi_markers = [];
             try {
                 console.log("Fetching Coffee Shop data...");
                 const data = await fetchFrom(coffee_url);
                 console.log("Coffee Shop data fetched successfully:", data);
+
                 data.elements.forEach(entry => {
                     if (entry.lat && entry.lon) {
                         let marker = map.addMarker({
                             lat: parseFloat(entry.lat),
                             lng: parseFloat(entry.lon),
                             title: entry.tags.name || "Unnamed Coffee Shop",
-                            // TODO: FIX EVENT
-                            // event: {
-                            //     name: "click",
-                            //     callback: function () {
-                            //         alert("You clicked on " + (entry.tags.name || "Unnamed Coffee Shop"));
-                            //     }
-                            // },
                             icon: {
                                 // url: 'https://i.imgur.com/Q0lGgUU.png',
                                 url: 'https://i.imgur.com/CU43Ymm.png',
