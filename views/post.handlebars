@@ -29,7 +29,10 @@
 <div class="event">
   <h4>Post:</h4>
   <ul>
-    <li>Place: {{post.placeName}}</li>
+    <li>Title: {{post.title}}</li>
+    {{#if post.location}}
+    <li>Location: {{post.location.name}}{{#if post.location.detail}}, {{post.location.detail}}{{/if}}</li>
+    {{/if}}
     <li>Posted By: {{post.poster.username}}</li>
     <li>Body: {{post.body}}</li>
   </ul>
