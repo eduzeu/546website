@@ -9,7 +9,7 @@ const router = Router();
 
 router.route("/")
   .post(async (req, res) => {
-    console.log("POST request received at /comments/");
+    //console.log("POST request received at /comments/");
     try {
       const token = req.cookies["session_token"];
       if (!token) {
@@ -25,12 +25,12 @@ router.route("/")
       const parent = { id: xss(req.body.parent), type: "Post" };
       const body = xss(req.body.body);
 
-      console.log("commenter:");
-      console.log(commenter);
-      console.log("parent:");
-      console.log(parent);
-      console.log("body:");
-      console.log(body);
+      // console.log("commenter:");
+      // console.log(commenter);
+      // console.log("parent:");
+      // console.log(parent);
+      // console.log("body:");
+      // console.log(body);
 
       // Validate input
       // try {
@@ -40,7 +40,7 @@ router.route("/")
       // } catch (validationError) {
       //   return res.status(400).json({ error: validationError.message });
       // }
-      console.log(commenter);
+      //console.log(commenter);
 
       const newComment = await createComment(commenter, parent, body, []);
       return res.status(201).json(newComment);
@@ -52,7 +52,7 @@ router.route("/")
 
 router.route("/:id")
   .get(async (req, res) => {
-    console.log(`GET request received for comment ID: ${req.params.id}`);
+    //console.log(`GET request received for comment ID: ${req.params.id}`);
     try {
       const id = xss(req.params.id);
       const getComments = await findCommentsByParentId(id);

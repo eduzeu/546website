@@ -68,14 +68,14 @@
             contentType: "application/json",
             success: function (response) {
                 // if successful
-                console.log("Fetched reviews:", response);
+                //console.log("Fetched reviews:", response);
                 userPosts.html("");
 
                 response.forEach(user => {
                     // If user exists and has a poster
                     // add new div with review info
                     if (user && user.poster) {
-                        console.log("Individual review:", user.poster);
+                        //console.log("Individual review:", user.poster);
 
                     const revDiv = $("<div>").addClass("review");
 
@@ -205,7 +205,7 @@
                 // Show search bar
                 locationSearchLabel.css("display", "");
 
-                console.log("Fetched coffee shops:", response);
+                //console.log("Fetched coffee shops:", response);
 
                 // Populate options for autocomplete
                 response.elements.forEach(coffeeShop => {
@@ -243,7 +243,7 @@
             success: function (response) {
                 locationSearchLabel.css("display", "");
 
-                console.log("Fetched wifi names:", response);
+                //console.log("Fetched wifi names:", response);
 
                 locationSearchOptions.html("");
 
@@ -281,7 +281,7 @@
             success: function (response) {
                 locationSearchLabel.css("display", "");
 
-                console.log("Fetched event names:", response);
+                //console.log("Fetched event names:", response);
 
                 // Populate options for autocomplete
                 response.forEach(event => {
@@ -354,7 +354,7 @@
             revObject["location"] = locationDetails
         }
 
-        console.log("inserting review", revObject);
+        //console.log("inserting review", revObject);
 
         // Make POST request to /posts
         $.ajax({
@@ -364,7 +364,7 @@
             data: JSON.stringify(revObject),
             // If sucessful
             success: function (response) {
-                console.log("Review inserted successfully:", response);
+                //console.log("Review inserted successfully:", response);
 
                 // Reset/Hide values
                 reviewForm.trigger("reset");

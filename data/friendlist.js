@@ -13,7 +13,7 @@ export const updateFriends = async (name, friend) => {
 
     if (user.friends.includes(friend)) throw "User is already a friend";
 
-    console.log(user.friends);
+    //console.log(user.friends);
 
     const updateInfo = await data.updateOne(
         { username: name },

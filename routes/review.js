@@ -62,11 +62,11 @@ router.route('/')
 
         try {
             const review = await createReview(score, text, id, reviewType, currUser);
-            console.log(review);
+            //console.log(review);
             return res.json(review);
 
         } catch (e) {
-            console.log(e);
+            //console.log(e);
             return res.status(500).json({ error: e });
         }
     });
@@ -117,7 +117,7 @@ router.route("/:type/:id")
         //   }
         let reviewType = req.params.type;
         let id = req.params.id;
-        console.log(reviewType, id);
+        //console.log(reviewType, id);
         try {
             reviewType = validateReviewType(reviewType, "Review Type");
             id = validateNumericId(id, "Location ID");

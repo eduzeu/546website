@@ -8,7 +8,7 @@ router.route('/')
     try {
       const placeOfDay = await getPlaceOfTheDay();
       // console.log(placeOfDay)
-      console.log("Came to display place")
+      //console.log("Came to display place")
       return res.json(placeOfDay);
     } catch (e) {
       res.status(500).json({ error: 'Failed to fetch place of the day.' })

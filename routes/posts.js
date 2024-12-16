@@ -11,7 +11,7 @@ router.route("/")
         try {
             //console.log("GET ALL REVIEWS, came from DOM!");
             const getReviews = await getUserFeedPost();
-            console.log(getReviews);
+            //console.log(getReviews);
             return res.json(getReviews);
         } catch (e) {
             return res.status(400).send(e);
@@ -68,14 +68,14 @@ router.route("/:id")
         try {
             req.params.id = validateObjectIdString(req.params.id, "Post Id");
         } catch (e) {
-            console.log(e);
+            //console.log(e);
             return res.status(400).send(e);
         }
         try{
             user = await findUserFromSessionToken(req.cookies["session_token"]);
         }
         catch (e) {
-            console.log(e);
+            //console.log(e);
             return res.status(400).json({ error:e });
         }
         try {
@@ -86,7 +86,7 @@ router.route("/:id")
                 userData: JSON.stringify(user)
             });
         } catch (e) {
-            console.log(e);
+            //console.log(e);
             return res.status(400).json({ error: e });
         }
     })
@@ -106,7 +106,7 @@ router.route("/images")
         return res.json(images);
         
     } catch (e) {
-        console.log(e);
+        //console.log(e);
         return res.status(500).json({ error: e });
     }
 })
