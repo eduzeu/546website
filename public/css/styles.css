@@ -1,3 +1,12 @@
+#locationSearchLabel, #placeLabel {
+  display: block;
+  padding-bottom: 10px;
+}
+
+#postButton {
+  margin-bottom: 10px;
+}
+
 .coffeeShopDetail {
   margin-bottom: 20px;
 }
@@ -204,14 +213,14 @@ form {
   padding-bottom: 10px;
 }
 
-h2.coffeeDetailHeader,
+h3.coffeeDetailHeader,
 p.noSpacing {
   margin: 0
 }
 
-section.sectionSpacing {
+/* section.sectionSpacing {
   margin-bottom: 20px;
-}
+} */
 
 #userPosts {
   display: flex;
@@ -252,6 +261,19 @@ section.sectionSpacing {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.location-name {
+  color: #666;
+  font-size: 0.85em;
+  margin-bottom: 0px;
+}
+
+.location-detail {
+  color: #666;
+  font-size: 0.85em;
+  margin-top: 0px;
+  margin-bottom: 0px;
 }
 
 .username {
@@ -466,7 +488,7 @@ ul {
   font-family: monospace;
   text-align: center; 
   margin: 0 auto; 
-  width:60%;
+  width:45%;
 }
 
 #members ul {

@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="/public/css/styles.css" />
+<link rel="stylesheet" href="/public/css/styles.css">
 
 <header>
       <h1>Comments</h1>
@@ -70,6 +70,20 @@
 
   <p id="error"></p>
 
+<p id="postId" class="hidden">{{post._id}}</p>
+<div class="event">
+  <h4>Post:</h4>
+  <ul>
+    <li>Title: {{post.title}}</li>
+    {{#if post.location}}
+    <li>Location: {{post.location.name}}{{#if post.location.detail}}, {{post.location.detail}}{{/if}}</li>
+    {{/if}}
+    <li>Posted By: {{post.poster.username}}</li>
+    <li>Body: {{post.body}}</li>
+  </ul>
+  {{#if post.image }}
+  <img class="review-image" src="{{post.image.url}}" alt="{{post.image.altText}}">
+  {{/if}}
 </div>
 
 <script src="/public/js/helpers.js"></script>

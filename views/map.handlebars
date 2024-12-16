@@ -1,4 +1,4 @@
-<body>
+
     <link rel="stylesheet" href="/public/css/style_a.css">
     <header>
         <h1>Main Feed Page</h1>
@@ -29,6 +29,7 @@
     <main>
         <div class="content">
             <section class="input-section">
+                <h2>radius</h2>
                 {{!-- <label for="starting-address">Starting Address:</label>
                 <input id="starting-address" type="text" placeholder="Enter a location" /> --}}
                 <input id="searchTextField" type="text" placeholder="Enter a specific address" size="50">
@@ -56,17 +57,20 @@
                 </fieldset>
             </section>
             <section class="places-feed">
+                <h2>place</h2>
                 <div id="wifiLocations"></div>
                 <div id="coffeeLocations"></div>
+
         </section>
 
         </div>
         <aside class="sidebar">
+
             <section class="place-of-the-day">
-                <h2>Place of the Day</h2>
-                <p>Name: <span id="place-name">Loading...</span></p>
-                <p>Address: <span id="place-address">Loading...</span></p>
-                <p>Type: <span id="place-type">Loading...</span></p>
+                <h3> Place of The Day</h3>
+                <p>Name: <span id="place-name">{{placeOfDay.name }} </span></p>
+                <p>Address: <span id="place-address"> {{placeOfDay.address}}  </span></p>
+                <p>Type: <span id="place-type"> {{placeOfDay.type}}</span></p>
             </section>
             <div class="map">
                 <div id="map-canvas" style="height: 400px; width: 100%;"></div>
@@ -79,8 +83,7 @@
     {{!--
     <script type="text/javascript"
         src="https://maps.googleapis.com/maps/api/js?key=&libraries=places&callback=initMap"></script> --}}
-    <script type="text/javascript"
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyChIdMPrp5hO5iGxXaPp83MRojZSMRKgkA&libraries=places&callback=initMap"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyChIdMPrp5hO5iGxXaPp83MRojZSMRKgkA&libraries=places&callback=initMap"></script>
     {{!--
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=&libraries=places"></script> --}}
     <script src="/public/js/List.js"></script>
@@ -93,4 +96,3 @@
     <script src="/public/js/review.js"></script>
     {{!--
     <script src="/public/js/map-display.js"></script> --}}
-</body>

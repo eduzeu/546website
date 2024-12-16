@@ -10,7 +10,7 @@ if (form) {
         e.textContent = "";
 
         try {
-            confirmPassword.value = validateString(confirmPassword.value, 'Confirm-Password');
+            console.log(username.value);
             username.value = validateString(username.value, 'Username');
             password.value = validateString(password.value, 'Password');
             
@@ -24,9 +24,9 @@ if (form) {
                 }
             }
 
-        } catch (e) {
+        } catch (err) {
             e.preventDefault();
-            error.textContent = e;
+            error.textContent = err;
         }
     });
 }
