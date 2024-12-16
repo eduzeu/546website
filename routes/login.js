@@ -3,7 +3,7 @@ import * as uuid from 'uuid';
 import xss from "xss";
 import * as sessionTokenFunctions from "../data/sessionTokens.js";
 import * as userFunctions from "../data/users.js";
-import { validateEmailAddress, validateString } from "../helpers.js";
+import { validateEmailAddress, validatePassword, validateString } from "../helpers.js";
 
 const router = Router();
 
@@ -15,7 +15,7 @@ router.route("/")
       token = await sessionTokenFunctions.sessionChecker(token); // Check if sessionId is valid
       return res.redirect('/home/'); // Render the account page
     } catch (e) {
-      return res.render('../views/account'); // Render the account page on error
+      return res.render('../views/account',{title: "Welcome to WiFly NYC"}); // Render the account page on error
     }
   })
   .post(async (req, res) => {
@@ -24,7 +24,7 @@ router.route("/")
 
     try {
       username = validateString(username, "Username").toLowerCase();
-      password = validateString(password, "Password");
+      password = validatePassword(password, "Password");
     } catch (error) {
       res.status(400).json({ error: error.toString() });
     }
@@ -60,8 +60,8 @@ router.route("/signup")
       // Validate inputs
       username = validateString(username, "Username").toLowerCase();
       email = validateEmailAddress(email, "Email");
-      password = validateString(password, "Password");
-      confirmPassword = validateString(confirmPassword, "Confirm Password");
+      password = validatePassword(password, "Password");
+      confirmPassword = validatePassword(confirmPassword, "Confirm Password");
       if (confirmPassword !== password) {
         throw 'Passwords do not match';
       }

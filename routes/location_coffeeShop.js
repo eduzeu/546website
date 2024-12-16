@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { fetchCoffeeShopById, fetchCoffeeShops } from "../data/locations.js";
+import { getLocationImages } from "../data/posts.js";
 import { getReviewById } from "../data/reviews.js";
 import * as sessionTokens from "../data/sessionTokens.js";
 import { validateNumericId } from "../helpers.js";
@@ -82,6 +83,7 @@ router.route("/detail/:id")
         try {
             const coffeeShop = await fetchCoffeeShopById(req.params.id);
             const review = await getReviewById(req.params.id, "coffee");
+            const images = await getLocationImages(`${req.params.id}`);
     
             let overallRating = undefined;
             if (review && review.rating.length !== 0) {
@@ -92,7 +94,8 @@ router.route("/detail/:id")
                 title: coffeeShop.tags.name,
                 coffeeShop: coffeeShop,
                 review: review,
-                overallRating: overallRating
+                overallRating: overallRating,
+                images: images
             })
     
         } catch (e) {

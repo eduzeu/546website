@@ -1,5 +1,6 @@
 
 document.getElementById('wifi-checkbox').addEventListener('change', async function () {
+  const mapsterInstance = window.mapsterInstance;
   if (this.checked) {
     try {
       document.getElementById('coffeeLocations').innerHTML = '';
@@ -103,6 +104,50 @@ document.getElementById('wifi-checkbox').addEventListener('change', async functi
           // Append row to the table body
           tbody.appendChild(row);
 
+          // adding marker 
+          const marker = mapsterInstance.addMarker({
+            lat: parseFloat(location.Latitude),
+            lng: parseFloat(location.Longitude),
+            title: location['Wifi name'] || "Unnamed Wifi Location",
+            icon: {
+              url: 'https://i.imgur.com/pDk8HOg.png',
+              scaledSize: new google.maps.Size(28, 34),
+              origin: new google.maps.Point(0, 0),
+              anchor: new google.maps.Point(16, 32)
+            },
+            content: `
+                <div>
+                    <strong>${location['Wifi name'] || "Unnamed Wifi Location"}</strong><br>
+                    Place: ${location.Place || "No place provided"}<br>
+                    Neighborhood: ${location.Neighborhood || "No neighborhood provided"}<br>
+                </div>
+            `
+          });
+          window.wifi_markers.push({ id: location.place_id, marker });
+
+
+          row.addEventListener('click', () => {
+            mapsterInstance.gMap.setCenter(marker.getPosition());
+            mapsterInstance.gMap.setZoom(15);
+
+            mapsterInstance._closeCurrentInfoWindow();
+
+            if (!window.sharedInfoWindow) {
+              window.sharedInfoWindow = new google.maps.InfoWindow();
+            }
+
+            window.sharedInfoWindow.setContent(`
+              <div>
+                  <strong>${location['Wifi name']}</strong><br>
+                  Place: ${location.Place || "No place provided"}<br>
+                  Neighborhood: ${location.Neighborhood || "No neighborhood provided"}
+              </div>
+          `);
+
+            window.sharedInfoWindow.open(mapsterInstance.gMap, marker);
+            mapsterInstance.currentInfoWindow = window.sharedInfoWindow;
+          });
+
           seeReviews.querySelector('a').addEventListener('click', () => {
             event.preventDefault();
             showReviews(allReviews);
@@ -123,36 +168,11 @@ document.getElementById('wifi-checkbox').addEventListener('change', async functi
       console.error('Error fetching Wi-Fi locations:', error);
     }
   } else {
+    wifi_markers.forEach(item => {
+      mapsterInstance._removeMarker(item.marker);
+    });
+    wifi_markers.length = 0;
+    document.getElementById('wifiLocations').innerHTML = '';
     document.getElementById('wifiLocations').innerHTML = '';
   }
 });
-
-const displayPlaceOfTheDay = async () => {
-  try {
-    let store = JSON.parse(localStorage.getItem("placeOfTheDay"));
-    let storeTime = localStorage.getItem("nextUpdateTime");
-    const time = Date.now();
-
-    storeTime = parseInt(storeTime, 10);
-
-    if (!store || !storeTime || time >= storeTime) {
-      const placeInfo = await fetchFrom('../location/wifi/place');
-      console.log(placeInfo);
-
-      localStorage.setItem('placeOfTheDay', JSON.stringify(placeInfo));
-      localStorage.setItem('nextUpdateTime', (time + 24 * 60 * 60 * 1000).toString());
-
-      store = placeInfo;
-    }
-
-    document.getElementById('place-name').textContent = store.Neighborhood || "No name available";
-    document.getElementById('place-address').textContent = store.Place || "No address available";
-    document.getElementById('place-type').textContent = "Wifi";
-
-  } catch (e) {
-    console.error('Error displaying place of the day:', e);
-  }
-}
-
-// Attach the function to window load
-window.onload = displayPlaceOfTheDay;

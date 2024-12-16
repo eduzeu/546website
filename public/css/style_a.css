@@ -10,13 +10,16 @@ body {
 header {
   background-color: #f8f9fa;
   text-align: center;
-  border-bottom: 1px solid #ddd;
 }
 
 main {
   display: flex;
   flex: 1;
   overflow: hidden;
+}
+
+h2{
+  display: none;
 }
 
 .sidebar {
@@ -116,7 +119,7 @@ footer {
   #wifiLocations table {
     width:100%;
     text-align: center;
-    color: #A3A380;
+    color: #754100;
     background-color: #EFEBCE;
   
   }
@@ -130,7 +133,7 @@ footer {
 #coffeeLocations table {
   width:100%;
   text-align: center;
-  color: #A3A380;
+  color: #754100;
   background-color: #EFEBCE;
 }
 
@@ -148,12 +151,12 @@ footer {
 
 
 #wifiLocations table tr:hover {
-  color: #EFEBCE;
+  color: white;
   background-color: #A3A380;
 }
 
 #coffeeLocations table tr:hover {
-  color: #EFEBCE;
+  color: white;
   background-color: #A3A380;
 }
 /* Hover effect for individual table cells */
@@ -251,13 +254,19 @@ footer {
   padding-bottom: 10px;
 }
 
-h2.coffeeDetailHeader,
+h3.coffeeDetailHeader,
 p.noSpacing {
-  margin: 0
+  margin: 0;
 }
 
 section.sectionSpacing {
   margin-bottom: 20px;
+  display: block;
+}
+
+.coffeeDetails {
+  padding-top: 10px;
+  padding-left: 10px;
 }
 
 .star-rating {
@@ -292,7 +301,7 @@ section.sectionSpacing {
 .navbar a {
   float: left;
   font-size: 16px;
-  color: #8b8b65;
+  color: #754100;
   text-align: center;
   padding: 14px 16px;
   text-decoration: none;
@@ -310,11 +319,11 @@ section.sectionSpacing {
   font-size: 16px;
   border: none;
   outline: none;
-  color: #8b8b65;
+  color: #754100;
   padding: 14px 16px;
   background-color: inherit;
-  font-family: inherit; /* Important for vertical align on mobile phones */
-  margin: 0; /* Important for vertical align on mobile phones */
+  font-family: inherit; 
+  margin: 0;
 }
 
 /* Add a red background color to navbar links on hover */
@@ -335,7 +344,7 @@ section.sectionSpacing {
 /* Links inside the dropdown */
 .dropdown-content a {
   float: none;
-  color: #8b8b65;
+  color: #754100;
   padding: 12px 16px;
   text-decoration: none;
   display: block;
@@ -364,4 +373,17 @@ section.sectionSpacing {
   color: black;
   font-family: monospace;
   font-size: 0.8rem;
+}
+
+.events-list {
+  max-height: 80vh; 
+  overflow-y: auto; 
+  width:100%; 
+}
+
+.galleryImage {
+  width: 100%;
+  max-width: 400px;
+  padding-top: 5px;
+  padding-bottom: 5px;
 }

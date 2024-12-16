@@ -1,5 +1,6 @@
 <link rel="stylesheet" href="/public/css/style_a.css">
 <header> 
+    <h1>{{title}}</h1>
     <!-- https://www.w3schools.com/howto/howto_css_dropdown_navbar.asp -->
       <div class="navbar">
         <a href="/home">Home Page</a>
@@ -15,12 +16,14 @@
           </div>
         </div>
         <a href="friends">Friends List</a>
-        <a href="signoutuser">Signout</a>
+        <a href="/userFeed"> User Feed </a>
+        <a href="/about">About</a>
+        <a href="/logout">Signout</a>
+
       </div>
   </header>
 
 
-  <body>
     <h2 id="friend-head">{{username}}'s Friends</h2>
     <main>
       {{#if friends.length}}
@@ -35,4 +38,3 @@
         <p>You haven't added any friends yet!</p>
       {{/if}}
     </main>
-  </body>

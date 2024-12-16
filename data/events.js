@@ -7,6 +7,12 @@ export const getAllEvents = async () => {
     let data = response.data
     let results = []
 
+    data = data.sort((a, b) => {
+        const dateA = new Date(a.start_date_time);
+        const dateB = new Date(b.start_date_time);
+        return dateA - dateB;
+    });
+
     const now = new Date();
 
     let curr = now.toISOString();  //to manipluate as date as a string
@@ -42,6 +48,12 @@ export const getEventbyBorough = async (borough) => {
 
     let data = await fetchFrom('https://data.cityofnewyork.us/resource/tvpp-9vvx.json');
     let events_in_borough = [];
+
+    data = data.sort((a, b) => {
+        const dateA = new Date(a.start_date_time);
+        const dateB = new Date(b.start_date_time);
+        return dateA - dateB;
+    });
 
     const now = new Date();
 
@@ -135,6 +147,21 @@ export const getEventICS = async (id, startDate) => {
 
     return file;
 }
+
+export const getEventNameLocations = async () => {
+    const data = await fetchFrom("https://data.cityofnewyork.us/resource/tvpp-9vvx.json?$select=event_name, event_location, min(event_id)&$group=event_name, event_location&$order=event_name, event_location asc");
+
+    const output = data.map((item) => {
+        return {
+            event_name: item.event_name,
+            event_location: item.event_location,
+            event_id: item.min_event_id
+        };
+    });
+
+    return output;
+}
+
 
 //console.log(await getEventbyDate("11/27/2024"));
 

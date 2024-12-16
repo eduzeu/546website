@@ -90,6 +90,15 @@ const updateReview = async (id, type) => {
     }
 };
 
+//scrollToTop("#userComments");
+
+const scroll = (selector) => {
+    $(selector).css({
+      "max-height": "70vh",
+      "overflow-y": "auto",
+    });
+  };
+
 const showReviews = (revs) => {
     try {
         validateReviewsArray(revs, "Reviews");
@@ -125,6 +134,7 @@ const showReviews = (revs) => {
             revText.className = 'review-text';
             reviewContainer.appendChild(revText);
         });
+        scroll("#userComments")
     }
 
     structure.appendChild(exit);
@@ -194,8 +204,8 @@ const createReview = (id, type) => {
             document.body.removeChild(structure); // Close the review form
             updateReview(id, type);
         } catch (error) {
-            console.error('Error submitting review:', error);
-            alert('Error submitting review');
+            console.error('You are only allowed to submit one review per place:', error);
+            alert('You are only allowed to submit one review per place');
         }
     });
 
