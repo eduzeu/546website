@@ -5,8 +5,27 @@ const reviewForm = document.getElementById("reviewForm");
 const userComments = document.getElementById("userComments");
 const submitButton = document.getElementById("submitCommentButton");
 const postId = document.getElementById("postId");
+const username = document.getElementById("username");
+const addFriendButton = document.getElementById("addFriend");
 
+const userData = JSON.parse(document.getElementById('userData').value);
 let imageUrl = undefined;
+let posterUsername = username.textContent;
+
+addFriendButton.addEventListener("click", async () => {
+  hideAddFriend();
+  try{
+    await fetch('/friends', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({poster: posterUsername})
+    });
+  } catch (e) {
+    throw e;
+  }
+})
 
 postButton.addEventListener("click", () => {
   commentPrompt.classList.remove("hidden");
@@ -16,6 +35,12 @@ cancelButton.addEventListener("click", () => {
   commentPrompt.classList.add("hidden");
   reviewForm.reset();
 });
+
+const hideAddFriend = () => {
+  console.log("removing button");
+  addFriendButton.classList.add("hidden");
+  console.log(addFriendButton);
+}
 
 const displayReviews = async () => {
   try {
@@ -29,28 +54,36 @@ const displayReviews = async () => {
 
     data.forEach((user) => {
       if (user) {
+        console.log(user);
+        const isCurrentUser = posterUsername === userData.username;
+        const isFriend = userData.friends && userData.friends.includes(posterUsername);
+        if(!isCurrentUser && !isFriend){
+          addFriendButton.classList.remove("hidden");
+        }
+        else{
+          addFriendButton.classList.add("hidden");
+        }
         const revDiv = document.createElement("div");
         revDiv.classList.add("comment");
-
-        if (user.imageUrl) {
-          revDiv.innerHTML = `
-          <div class="review-header">
-            <h3 class="place-name">${user.placeName || "Unknown Place"}</h3>
-            <span class="username">by ${user.user.username || "Anonymous"}</span>
-          </div>
-          <p class="review-text">${user.body || "No review text"}</p>
-          <img class="review-image" src="${user.imageUrl}" alt="Review Image">
-          `;
-        } else {
-          revDiv.innerHTML = `
-          <div class="review-header">
-            <h3 class="place-name">${user.placeName || "Unknown Place"}</h3>
-            <span class="username">by ${user.user.username || "Anonymous"}</span>
-          </div>
-          <p class="review-text">${user.body || "No review text"}</p>
-        `;
-        }
-        userComments.appendChild(revDiv);
+        // if (user.imageUrl) {
+        //   revDiv.innerHTML = `
+        //   <div class="review-header">
+        //     <h3 class="place-name">${user.placeName || "Unknown Place"}</h3>
+        //     <span class="username">by ${user.user.username || "Anonymous"}</span>
+        //   </div>
+        //   <p class="review-text">${user.body || "No review text"}</p>
+        //   <img class="review-image" src="${user.imageUrl}" alt="Review Image">
+        //   `;
+        // } else {
+        //   revDiv.innerHTML = `
+        //   <div class="review-header">
+        //     <h3 class="place-name">${user.placeName || "Unknown Place"}</h3>
+        //     <span class="username">by ${user.user.username || "Anonymous"}</span>
+        //   </div>
+        //   <p class="review-text">${user.body || "No review text"}</p>
+        // `;
+        // }
+        // userComments.appendChild(revDiv);
       }
     });
   } catch (error) {
@@ -65,6 +98,7 @@ const displayComments = async (parentId) => {
 
     if (!commentsResponse.ok) throw new Error("Failed to fetch comments.");
     const comments = await commentsResponse.json();
+
 
     console.log("Fetched comments for parent:", comments);
 

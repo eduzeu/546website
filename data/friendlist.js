@@ -19,11 +19,11 @@ export const updateFriends = async (name, friend) => {
         { username: name },
         { $push: { friends: friend } }
     );
-    const updatedUser = await data.findOne({username: name});
+    // const updatedUser = await data.findOne({username: name});
 
-    console.log(updatedUser.friends);
+    // console.log(updatedUser.friends);
 
-    return updatedUser.friends;
+    return updateInfo;
 }
 
 //console.log(await updateFriends("sammy", "emmaxfreire"));

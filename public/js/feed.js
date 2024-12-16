@@ -69,7 +69,7 @@
                       //  console.log("Is friend:", isFriend);
 
                       const addFriendButton = (!isCurrentUser && !isFriend) ? 
-                          `<button id="addFriend" data-userid="${user.poster.username}"> +Friend </button>` : 
+                          `<button class="addFriend" data-userid="${user.poster.username}"> +Friend </button>` : 
                           '';
 
                       revDiv.html(`
