@@ -4,10 +4,10 @@ const password = document.getElementById('loginPassword');
 const confirmPassword = document.getElementById('confirmPassword');
 const email = document.getElementById('loginEmail');
 const error = document.getElementById('error');
+let signup = false;
 
 if (form) {
     form.addEventListener('submit', async (e) => {
-        e.textContent = "";
 
         try {
             console.log(username.value);
@@ -16,6 +16,7 @@ if (form) {
             
             if (email) {
                 email.value = validateEmailAddress(email.value, 'Email');
+                signup = true;
             };
             if (confirmPassword) {
                 confirmPassword.value = validatePassword(confirmPassword.value, 'Confirm Password');

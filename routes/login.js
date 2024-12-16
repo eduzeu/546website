@@ -80,7 +80,7 @@ router.route("/signup")
     } catch (error) {
       //   const errorMessage = error && error.message ? error.message : "Unknown error";
       //   return res.status(errorMessage.includes("validation") ? 400 : 500).json({ error: errorMessage });
-      return res.status(404).json({ error: error });
+      return res.status(400).render("newAccount", { error: error });
     }
   });
 
