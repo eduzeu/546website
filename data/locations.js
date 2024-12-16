@@ -1,9 +1,8 @@
-import { LocalStorage } from 'node-localstorage';
-import { fetchFrom, fetchFromOverpass, validateNumber } from '../helpers.js';
 import fs from "fs";
-import path from "path";
+import { LocalStorage } from 'node-localstorage';
+import path, { dirname } from "path";
 import { fileURLToPath } from 'url';
-import { dirname } from 'path';
+import { fetchFrom, fetchFromOverpass, validateNumber } from '../helpers.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -150,3 +149,20 @@ export const getPlaceOfTheDay = async () => {
 
   return store;
 };
+
+export const getWiFiLocationNames = async () => {
+  const data = await fetchFrom("https://data.cityofnewyork.us/resource/npnk-wrj8.json?$select=public_space_open_space_name, min(oid)&$group=public_space_open_space_name&$order=public_space_open_space_name asc");
+
+  const output = data.map((item) => {
+    return {
+      "oid": Number(item.min_oid),
+      'public_space_open_space_name': item.public_space_open_space_name
+    };
+  });
+
+  return output;
+}
+
+// (async () => {
+//   console.log(await getPlaceOfTheDay());
+// })();
