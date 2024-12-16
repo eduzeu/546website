@@ -119,7 +119,7 @@ footer {
   #wifiLocations table {
     width:100%;
     text-align: center;
-    color: black;
+    color: #754100;
     background-color: #EFEBCE;
   
   }
@@ -133,7 +133,7 @@ footer {
 #coffeeLocations table {
   width:100%;
   text-align: center;
-  color: black;
+  color: #754100;
   background-color: #EFEBCE;
 }
 
