@@ -117,9 +117,9 @@
         window.mapsterInstance.gMap.fitBounds(circleBounds);
     }
 
-    let wifi_markers = [];
     // globally accessible
     window.coffee_markers = [];
+    window.wifi_markers = []; 
 
 
     document.getElementById('wifi-checkbox').addEventListener('change', async function () {
@@ -163,7 +163,8 @@
                                 <strong>Neighborhood:</strong> ${entry.Neighborhood || "No neighborhood provided"}<br>
                             </div>`
                         });
-                        wifi_markers.push(marker);
+                        // wifi_markers.push(marker);
+                        window.wifi_markers.push({ id: location.place_id, marker });
                     } else {
                         console.warn("Missing coordinates for entry:", entry);
                     }
@@ -174,10 +175,10 @@
             }
         }
         else {
-            wifi_markers.forEach(marker => {
-                map._removeMarker(marker);
+            window.wifi_markers.forEach(item => {
+                window.mapsterInstance._removeMarker(item.marker);
             });
-            wifi_markers = [];
+            window.wifi_markers.length = 0; 
         }
     });
     document.getElementById('coffee-checkbox').addEventListener('change', async function () {
