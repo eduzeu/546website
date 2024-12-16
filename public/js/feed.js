@@ -83,8 +83,8 @@
                           <span class="username">by ${user.poster.username || "Anonymous"}</span>
                       </div>
                       <p class="review-text">${user.body || "No review text"}</p>
-                      ${user.location ? `<p>${user.location.name}</p>` : ""}
-                      ${user.location && user.location.detail ? `<p>${user.location.detail}</p>` : ""}
+                      ${user.location ? `<p class="location-name">${user.location.name}</p>` : ""}
+                      ${user.location && user.location.detail ? `<p class="location-detail">${user.location.detail}</p>` : ""}
                       ${user.image ? `<img class="review-image" src="${user.image.url}" alt="${user.image.altText}">` : ""}
                       <a href="/posts/${user._id}">View/Add Comments</a>
                       `);

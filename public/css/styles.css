@@ -1,5 +1,10 @@
-#locationSearchLabel, #locationSearch {
+#locationSearchLabel, #placeLabel {
+  display: block;
   padding-bottom: 10px;
+}
+
+#postButton {
+  margin-bottom: 10px;
 }
 
 .coffeeShopDetail {
@@ -249,6 +254,19 @@ p.noSpacing {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.location-name {
+  color: #666;
+  font-size: 0.85em;
+  margin-bottom: 0px;
+}
+
+.location-detail {
+  color: #666;
+  font-size: 0.85em;
+  margin-top: 0px;
+  margin-bottom: 0px;
 }
 
 .username {

@@ -59,6 +59,9 @@ export const getUserFeedPost = async () => {
 export const getLocationImages = async (locId) => {
     locId = validateNumericId(locId, 'Location Id');
     const postCollection = await posts();
-    const locationImages = await postCollection.find({ 'location.id': locId, 'location.type': 'coffee' }).toArray();
-    return locationImages;
+    const locationImages = await postCollection.find(
+        { 'location.id': locId, 'location.type': 'coffee' },
+        { projection: { image: 1, _id: 0 }}
+    ).toArray();
+    return locationImages.map(item => item.image);
 }

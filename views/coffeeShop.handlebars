@@ -24,8 +24,8 @@
 
 <div class="coffeeDetails">
     <section class="sectionSpacing">
-        <h3 class="coffeeDetailHeader">Location Details</h3>
-        <p class="noSpacing">{{ coffeeShop.tags.[addr:housenumber] }} {{ coffeeShop.tags.[addr:street] }}, {{
+        <h3 class="coffeeDetailHeader">{{ coffeeShop.tags.name }}</h3>
+        <p class="noSpacing"><strong>Address: </strong>{{ coffeeShop.tags.[addr:housenumber] }} {{ coffeeShop.tags.[addr:street] }}, {{
             coffeeShop.tags.[addr:city]
             }}</p>
         <p class="noSpacing"><strong>Latitude:</strong> {{ coffeeShop.lat }}</p>
@@ -56,7 +56,7 @@
         <h3 class="coffeeDetailHeader">Image Gallery</h3>
         {{#if images.length}}
             {{#each images}}
-            <img src="{{this.url}}" alt="{{this.altText}}">
+            <img class="galleryImage" src="{{this.url}}" alt="{{this.altText}}">
             {{/each}}
         {{else}}
         <p class="noSpacing">No images of this place yet.</p>

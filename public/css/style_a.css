@@ -374,3 +374,10 @@ section.sectionSpacing {
   overflow-y: auto; /* Add vertical scrolling */
   width:100%; 
 }
+
+.galleryImage {
+  width: 100%;
+  max-width: 400px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
