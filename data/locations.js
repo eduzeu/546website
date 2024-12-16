@@ -1,5 +1,11 @@
+import fs from "fs";
 import { LocalStorage } from 'node-localstorage';
+import path, { dirname } from "path";
+import { fileURLToPath } from 'url';
 import { fetchFrom, fetchFromOverpass, validateNumber } from '../helpers.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const localStorage = new LocalStorage('./scratch');
 
@@ -67,26 +73,81 @@ export const getWifiLocations = async () => {
   return wifiInfo;
 };
 
+export const deleteScratchFolder = async () => { 
+  const folderPath = path.join(__dirname, '..', 'scratch');
+  console.log(folderPath);
+
+  if (fs.existsSync(folderPath)) {
+    const files = fs.readdirSync(folderPath);
+    console.log("files: ", files);
+
+    files.forEach(file => {
+      const filePath = path.join(folderPath, file);
+      try {
+        if (fs.lstatSync(filePath).isFile()) {
+          fs.unlinkSync(filePath); // Delete file
+        } else {
+          fs.rmdirSync(filePath, { recursive: true });  
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    });
+     await getPlaceOfTheDay();
+  } else {
+    console.log("folder does not exist.");
+  }
+};
+setInterval(deleteScratchFolder, 24 * 60 * 60 * 1000);
+
 export const getPlaceOfTheDay = async () => {
-  let store = JSON.parse(localStorage.getItem("placeOfTheDay"));
-  let storeTime = localStorage.getItem("nextUpdatedTime");
+  const folderPath = path.join(__dirname, '..', 'scratch');
+  const placeFilePath = path.join(folderPath, 'placeOfTheDay');
+
+  let store;
+  try {
+    store = JSON.parse(fs.readFileSync(placeFilePath, 'utf8')); 
+  } catch (err) {
+    if (err.code === 'ENOENT') {
+      console.log('placeOfTheDay file does not exist, creating a new one.');
+    } else {
+      console.error('Error reading placeOfTheDay file:', err);
+    }
+  }
+
+  const storeTime = localStorage.getItem('nextUpdatedTime');
   const time = Date.now();
 
-  if (!store || time >= storeTime) {
-    let wifiObject = await fetchCoffeeShops();
-    let wifiArray = Object.values(wifiObject);
-    let random = Math.floor(Math.random() * wifiArray.length);
-    let response = wifiArray[random];
+  if (!store || (storeTime && time >= Number(storeTime))) {
+    let coffeData = await fetchCoffeeShops();
+    let coffeArray = Object.values(coffeData.elements);
+    let random = Math.floor(Math.random() * coffeArray.length);
+    let response = coffeArray[random];
 
-    localStorage.setItem('placeOfTheDay', JSON.stringify(response));
-    localStorage.setItem('nextUpdateTime', time + 24 * 60 * 60 * 1000);
+    let address = response.tags['addr:housenumber']  + " " +
+                  response.tags['addr:street'] + ', ' +
+                  response.tags['addr:city'] + ', ' +
+                  response.tags['addr:state'] + ', ' +
+                  response.tags['addr:postcode']
 
-    return response;
+    let placeOfDayObject = {
+      name: response.tags.name,
+      address: address,
+      type: response.tags.amenity,
+    };
 
+    try {
+      fs.writeFileSync(placeFilePath, JSON.stringify(placeOfDayObject), 'utf8');
+    } catch (err) {
+      console.error('Error writing to placeOfTheDay file:', err);
+    }
+
+    localStorage.setItem('nextUpdateTime', time + 24 * 60 * 60 * 1000); 
+
+    return placeOfDayObject;
   }
 
   return store;
-
 };
 
 export const getWiFiLocationNames = async () => {

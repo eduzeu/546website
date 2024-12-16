@@ -90,6 +90,15 @@ const updateReview = async (id, type) => {
     }
 };
 
+//scrollToTop("#userComments");
+
+const scroll = (selector) => {
+    $(selector).css({
+      "max-height": "70vh",
+      "overflow-y": "auto",
+    });
+  };
+
 const showReviews = (revs) => {
     try {
         validateReviewsArray(revs, "Reviews");
@@ -125,6 +134,7 @@ const showReviews = (revs) => {
             revText.className = 'review-text';
             reviewContainer.appendChild(revText);
         });
+        scroll("#userComments")
     }
 
     structure.appendChild(exit);

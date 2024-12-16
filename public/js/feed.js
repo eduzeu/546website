@@ -30,6 +30,8 @@
     let imageUrl = undefined;
     let locationDetails = undefined;
 
+    const userData = JSON.parse(document.getElementById('userData').value);
+
     // Upload Button Config
     // Actions upon upload and error
     var myWidget = cloudinary.createUploadWidget(
@@ -75,11 +77,21 @@
                     if (user && user.poster) {
                         console.log("Individual review:", user.poster);
 
-                        const revDiv = $("<div>").addClass("review");
+                    const revDiv = $("<div>").addClass("review");
 
-                        revDiv.html(`
+                      const isCurrentUser = user.poster.username === userData.username;
+                      const isFriend = userData.friends && userData.friends.includes(user.poster.username);
+                      console.log("Is current user:", isCurrentUser);
+                      //  console.log("Is friend:", isFriend);
+
+                      const addFriendButton = (!isCurrentUser && !isFriend) ? 
+                          `<button id="addFriend" data-userid="${user.poster.username}"> +Friend </button>` : 
+                          '';
+
+                      revDiv.html(`
                       <div class="review-header">
-                          <h3 class="place-name">${user.title || "A Post"}</h3>
+                        <h3 class="place-name">${user.title || "A Post"}</h3>
+                          ${addFriendButton}
                           <span class="username">by ${user.poster.username || "Anonymous"}</span>
                       </div>
                       <p class="review-text">${user.body || "No review text"}</p>

@@ -99,6 +99,34 @@ document.getElementById('coffee-checkbox').addEventListener('change', async func
           row.appendChild(coffeeDetailsCell);
           row.appendChild(ratingsCell);
 
+          // add click functionality to the table:
+          row.addEventListener('click', () => {
+            // alert(`Row clicked for: ${location.tags.name || 'Unnamed Coffee Shop'}`);
+
+            const locationId = location.id;
+            const findMarker = window.coffee_markers.find(m => m.id === locationId);
+            if (findMarker) {
+              const marker = findMarker.marker;
+              window.mapsterInstance.gMap.setCenter(marker.getPosition());
+              window.mapsterInstance.gMap.setZoom(15);
+
+              mapsterInstance._closeCurrentInfoWindow();
+
+              if (!window.sharedInfoWindow) {
+                window.sharedInfoWindow = new google.maps.InfoWindow();
+              }
+              window.sharedInfoWindow.setContent(`
+                      <div>
+                        <strong>${location.tags.name}</strong><br>
+                        Address: ${location.tags['addr:street'] || "No address provided"}
+                      </div>
+                  `);
+
+              window.sharedInfoWindow.open(window.mapsterInstance.gMap, marker);
+              mapsterInstance.currentInfoWindow = window.sharedInfoWindow;
+            }
+          })
+
           // Append row to the table body
           tbody.appendChild(row);
 

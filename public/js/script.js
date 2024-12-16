@@ -10,6 +10,9 @@
 
     // map
     const map = mapster.create(element, options);
+    // make the map global
+    window.mapsterInstance = map;
+
 
     const initialLatLng = { 'lat': null, 'lng': null };
 
@@ -99,25 +102,30 @@
         }
 
         currCircle = new google.maps.Circle({
-            strokeColor: "#85beff",
+            strokeColor: "#A3A380",
             strokeOpacity: 0.8,
             strokeWeight: 2,
-            fillColor: "#85beff",
+            fillColor: "#A3A380",
             fillOpacity: 0.35,
             map: map.gMap,
             center: { lat: initialLatLng['lat'], lng: initialLatLng['lng'] },
             // radius is in meters apparently so multiply the miles by 1609.34
             radius: radiusValue * 1609.34,
         });
+
+        const circleBounds = currCircle.getBounds();
+        window.mapsterInstance.gMap.fitBounds(circleBounds);
     }
 
     let wifi_markers = [];
-    let coffee_markers = [];
+    // globally accessible
+    window.coffee_markers = [];
+
 
     document.getElementById('wifi-checkbox').addEventListener('change', async function () {
         if (this.checked) {
-            coffee_markers.forEach(marker => {
-                map._removeMarker(marker);
+            coffee_markers.forEach(item => {
+                map._removeMarker(item.marker); 
             });
             coffee_markers = [];
             try {
@@ -210,7 +218,8 @@
                             </div>`
                             // content: `Name: ${entry.tags.name}, Address: ${entry.tags["addr:street"] || "No address provided"}` // ADD THE NECESSARY THINGS HERE
                         });
-                        coffee_markers.push(marker);
+                        // coffee_markers.push(marker);
+                        coffee_markers.push({ id: entry.id, marker });
                     } else {
                         console.warn("Missing coordinates for entry:", entry);
                     }
@@ -220,11 +229,12 @@
             }
         }
         else {
-            coffee_markers.forEach(marker => {
-                map._removeMarker(marker);
+            coffee_markers.forEach(item => {
+                map._removeMarker(item.marker); 
             });
             coffee_markers = [];
         }
+        
     });
 
 })(window, window.Mapster);
