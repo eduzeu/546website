@@ -369,7 +369,7 @@ section.sectionSpacing {
   border-bottom: 1px solid #ddd;
 }
 
-#downloadICS {
+.downloadICS {
   color: black;
   font-family: monospace;
   font-size: 0.8rem;

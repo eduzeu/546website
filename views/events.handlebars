@@ -35,9 +35,9 @@
         <li>Date: {{this.start_formatted}}</li>
         <li>Location: {{this.event_location}}</li>
         <li>Type: {{this.event_type}}</li>
-        <button id="downloadICS" value="{{this.event_id}} ||| {{this.start_date_time}}">Add to Calendar</button>
+        <button class="downloadICS" value="{{this.event_id}} ||| {{this.start_date_time}}">Add to Calendar</button>
       </ul>
-      <p id="icsError"></p>
+      <p class="icsError"></p>
     </div>
     {{/each}}
   </section>
