@@ -56,17 +56,26 @@ router.route("/")
 
 router.route("/:id")
     .get(async (req, res) => {
+        let user;
         try {
             req.params.id = validateObjectIdString(req.params.id, "Post Id");
         } catch (e) {
+            console.log(e);
             return res.status(400).send(e);
         }
-
+        try{
+            user = await findUserFromSessionToken(req.cookies["session_token"]);
+        }
+        catch (e) {
+            console.log(e);
+            return res.status(400).json({ error:e });
+        }
         try {
             const post = await findPostById(req.params.id);
             return res.render('post', {
                 title: post.placeName,
-                post: post
+                post: post,
+                userData: JSON.stringify(user)
             });
         } catch (e) {
             console.log(e);
