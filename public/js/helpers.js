@@ -2,11 +2,28 @@ const fetchFrom = async (url, options) => {
     const response = await fetch(url, options);
 
     if (response.ok) {
-        const json = await response.json();
-        return json;
+        const contentType = response.headers.get("content-type");
+
+        if (contentType && contentType.includes("application/json")) {
+            const json = await response.json();
+            return json;
+
+        } else {
+            const text = await response.text();
+            return text;
+        }
 
     } else {
-        throw `Recieved status ${response.status}: ${response.statusText}`;
+        const contentType = response.headers.get("content-type");
+
+        if (contentType && contentType.includes("application/json")) {
+            const json = await response.json();
+            throw `${response.statusText}: ${json["error"]}`;
+
+        } else {
+            const errorMsg = await response.text();
+            throw `${response.statusText}: ${errorMsg}`;
+        }
     }
 }
 
@@ -92,6 +109,25 @@ const validateDateString = (dateStr, dateName) => {
     return dateStr;
 }
 
+const validateISODateString = (dateStr, dateName) => {
+  dateStr = validateString(dateStr, dateName);
+
+  // Regex based on: https://stackoverflow.com/a/3143231
+  const isoRegex = /^\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d{3}$/;
+  if (!isoRegex.test(dateStr))
+    throw `${dateName || "Provided string"} is not an ISO date string.`
+
+  const split = dateStr.split(/\D+/);
+  if (split.length !== 7)
+    throw `${dateName || "Provided string"} is not in the proper ISO format: YYYY-MM-DDThh:mm:ss.MMM.`
+
+  const zonedDate = `${dateStr}-05:00`;
+  if ((new Date(zonedDate)) === "Invalid Date")
+    throw `${dateName || "Provided string"} is not a valid date.`
+
+  return dateStr;
+}
+
 const validateNumber = (num, numName) => {
     if (typeof num === "undefined") {
         throw `${numName || "Provided parameter"} was not supplied.`;
@@ -115,6 +151,15 @@ const validateNumericId = (id, idName) => {
     validateNumber(numericId, idName);
 
     return numericId;
+}
+
+const validateStringId = (id, idName) => {
+  id = validateString(id, idName);
+
+  const numericId = Number(id);
+  validateNumber(numericId, idName);
+
+  return id;
 }
 
 const validateReviewType = (reviewType, typeName) => {

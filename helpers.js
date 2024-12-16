@@ -81,6 +81,15 @@ export const validateRating = (rating, ratingName) => {
   return rating;
 }
 
+export const validateStringId = (id, idName) => {
+  id = validateString(id, idName);
+
+  const numericId = Number(id);
+  validateNumber(numericId, idName);
+
+  return id;
+}
+
 export const validateNumericId = (id, idName) => {
   const strId = validateString(id, idName);
 
@@ -127,6 +136,43 @@ export const validateDateString = (dateStr, dateName) => {
   validateDate(dateObj, dateName);
 
   return dateStr;
+}
+
+export const validateISODateString = (dateStr, dateName) => {
+  dateStr = validateString(dateStr, dateName);
+
+  // Regex based on: https://stackoverflow.com/a/3143231
+  const isoRegex = /^\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d{3}$/;
+  if (!isoRegex.test(dateStr))
+    throw `${dateName || "Provided string"} is not an ISO date string.`
+
+  const split = dateStr.split(/\D+/);
+  if (split.length !== 7)
+    throw `${dateName || "Provided string"} is not in the proper ISO format: YYYY-MM-DDThh:mm:ss.MMM.`
+
+  const zonedDate = `${dateStr}-05:00`;
+  if ((new Date(zonedDate)) === "Invalid Date")
+    throw `${dateName || "Provided string"} is not a valid date.`
+
+  return dateStr;
+}
+
+export const isoDateToComponents = (date) => {
+  date = validateISODateString(date, "Date");
+
+  const zonedDateStr = `${date}-05:00`;
+  const zonedDate = new Date(zonedDateStr);
+
+  const utcString = zonedDate.toISOString();
+
+  const split = utcString.split(/\D+/);
+  const year = Number(split[0]);
+  const month = Number(split[1]);
+  const day = Number(split[2]);
+  const hour = Number(split[3]);
+  const minute = Number(split[4]);
+
+  return [ year, month, day, hour, minute ];
 }
 
 // Based on: https://stackoverflow.com/a/1353711

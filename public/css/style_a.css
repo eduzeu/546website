@@ -369,6 +369,12 @@ section.sectionSpacing {
   border-bottom: 1px solid #ddd;
 }
 
+.downloadICS {
+  color: black;
+  font-family: monospace;
+  font-size: 0.8rem;
+}
+
 .events-list {
   max-height: 80vh; 
   overflow-y: auto; 

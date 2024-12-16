@@ -32,11 +32,16 @@
       <ul>
         <li>Hosts: {{this.event_agency}}</li>
         <li>Borough: {{this.event_borough}}</li>
-        <li>Date: {{this.formattedStart}}</li>
+        <li>Date: {{this.start_formatted}}</li>
         <li>Location: {{this.event_location}}</li>
         <li>Type: {{this.event_type}}</li>
+        <button class="downloadICS" value="{{this.event_id}} ||| {{this.start_date_time}}">Add to Calendar</button>
       </ul>
+      <p class="icsError"></p>
     </div>
     {{/each}}
   </section>
 </main>
+
+<script src="../public/js/helpers.js"></script>
+<script src="../public/js/ics.js"></script>

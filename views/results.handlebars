@@ -33,11 +33,13 @@
           <h4>{{this.event_name}}</h4>
             <p>Hosts: {{this.event_agency}} </p>
             <p>Borough: {{this.event_borough}}</p>
-            <p>Date: {{this.start_date_time}}</p>
+            <p>Date: {{this.start_formatted}}</p>
             <p>Location: {{this.event_location}}</p>
             <p>Type: {{this.event_type}}</p>
+          <button class="downloadICS" value="{{this.event_id}} ||| {{this.start_date_time}}">Add to Calendar</button>
         </li>
       </ul>
+      <p class="icsError"></p>
     </div>
     {{/each}}
     {{else}}
@@ -45,3 +47,6 @@
     {{/if}}
   </div>
 </section>
+
+<script src="../../public/js/helpers.js"></script>
+<script src="../../public/js/ics.js"></script>
