@@ -1,5 +1,5 @@
-import mongoose from "mongoose";
 import bcrypt from "bcrypt";
+import mongoose from "mongoose";
 
 const URL = "mongodb://localhost:27017/CS546-FP-WiFly";
 
@@ -216,59 +216,78 @@ const seedDatabase = async () => {
     let insertedPostIds = insertedPosts.insertedIds;
     console.log("Seeded posts successfully.");
 
-    // console.log(insertedPosts);
-    // console.log(insertedPostIds);
+    console.log(insertedPosts);
+    console.log(insertedPostIds);
     
     
-    // let id1 = insertedPostIds['0'].toString();
-    // let id2 = insertedPostIds['1'].toString();
-    // let id3 = insertedPostIds['2'].toString();
+    let postId1 = insertedPostIds['0'].toString();
+    let postId2 = insertedPostIds['1'].toString();
+    let postId3 = insertedPostIds['2'].toString();
 
-    // console.log(id1)
-    // console.log(id2)
-    // console.log(id3)
+    console.log(postId1)
+    console.log(postId2)
+    console.log(postId3)
 
+    const comments = [
+        {
+            commenter: {
+                id : user456._id,
+                name : "user456"
+            },
+            parent:{
+                id: `${postId1}`,
+                type: 'Post'
+            },
+            body:"Wow, I definitely have to check it out! Thanks for the review!"
+        },
+        {
+            commenter: {
+                id : randomuser._id,
+                name : "randomuser"
+            },
+            parent:{
+                id: `${postId2}`,
+                type: 'Post'
+            },
+            body:"This is near me! Can't wait to try! "
+        },
+        {
+            commenter: {
+                id : randomuser._id,
+                name : "randomuser"
+            },
+            parent:{
+                id: `${postId3}`,
+                type: 'Post'
+            },
+            body:"In this economy??? My wallet will stay home XD"
+        }
+    ]
 
+    let insertedComments = await commentCollection.insertMany(comments);
+    const insertedCommentsId = insertedComments.insertedIds;
+    console.log("Seeded comments successfully.");
 
-    // const comments = [
-    //     {
-    //         poster: {
-    //             userId : user456._id,
-    //             username : "user456"
-    //         },
-    //         parent:{
-    //             id: `${id1}`,
-    //             type: 'Post'
-    //         },
-    //         body:"Wow, I definitely have to check it out! Thanks for the review!"
-    //     },
-    //     {
-    //         poster: {
-    //             userId : randomuser._id,
-    //             username : "randomuser"
-    //         },
-    //         parent:{
-    //             id: `${id2}`,
-    //             type: 'Post'
-    //         },
-    //         body:"This is near me! Can't wait to try! "
-    //     },
-    //     {
-    //         poster: {
-    //             userId : randomuser._id,
-    //             username : "randomuser"
-    //         },
-    //         parent:{
-    //             id: `${id3}`,
-    //             type: 'Post'
-    //         },
-    //         body:"In this economy??? My wallet will stay home XD"
-    //     }
-    // ]
+    const commentId1 = insertedCommentsId['0'].toString();
+    const commentId2 = insertedCommentsId['1'].toString();
+    const commentId3 = insertedCommentsId['2'].toString();
 
-    // await commentCollection.insertMany(comments);
-    // console.log("Seeded comments successfully.");
+    await postsCollection.updateOne(
+      { _id: new mongoose.Types.ObjectId(postId1) },
+      { $push: { comments: commentId1 } }
+    );
 
+    await postsCollection.updateOne(
+      { _id: new mongoose.Types.ObjectId(postId2) },
+      { $push: { comments: commentId2 } }
+    );
+
+    await postsCollection.updateOne(
+      { _id: new mongoose.Types.ObjectId(postId3) },
+      { $push: { comments: commentId3 } }
+    );
+
+    console.log("Successfully assigned comments to posts.")
 
   } catch (e) {
     console.error("Error:", e);
