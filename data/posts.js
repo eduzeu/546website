@@ -64,5 +64,5 @@ export const getLocationImages = async (locId) => {
         { 'location.id': locId, 'location.type': 'coffee' },
         { projection: { image: 1, _id: 0 }}
     ).toArray();
-    return locationImages.map(item => item.image);
+    return locationImages.map(item => item.image).filter(item => item != null);
 }
