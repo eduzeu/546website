@@ -10,6 +10,8 @@ const seedDatabase = async () => {
 
     const usersCollection = mongoose.connection.db.collection("users");
     const reviewsCollection = mongoose.connection.db.collection("reviews");
+    const postsCollection = mongoose.connection.db.collection("posts");
+    const commentCollection = mongoose.connection.db.collection("comment");
 
     const hashedPassword1 = await bcrypt.hash("password123A#", 16);
     const hashedPassword2 = await bcrypt.hash("password456A#", 16);
@@ -23,6 +25,12 @@ const seedDatabase = async () => {
 
     await reviewsCollection.deleteMany({});
     console.log("Cleared existing reviews.");
+
+    await postsCollection.deleteMany({});
+    console.log("Cleared existing users.");
+
+    await commentCollection.deleteMany({});
+    console.log("Cleared existing users.");
 
     const reviews = [
        {
@@ -94,7 +102,7 @@ const seedDatabase = async () => {
       {
         username: "user123",
         email: "email@gmail.com",
-        password: hashedPassword1,
+        password: hashedPassword1, 
         reviews: [418520887, 1, 28],
         friends: [],
       },
@@ -102,7 +110,7 @@ const seedDatabase = async () => {
         username: "user456",
         email: "email1l@gmail.com",
         password: hashedPassword2,
-        reviews: [ 21,],
+        reviews: [ 21 ],
         friends: ["user1", "randomuser"],
       },
       {
@@ -137,6 +145,130 @@ const seedDatabase = async () => {
 
     await usersCollection.insertMany(users);
     console.log("Seeded users successfully.");
+
+
+    const user123 = await usersCollection.findOne({ username: "user123" });
+    const user456 = await usersCollection.findOne({ username: "user456" });
+    const user1 = await usersCollection.findOne({ username: "user1" }); 
+    const randomuser = await usersCollection.findOne({ username: "randomuser" }); 
+
+    const posts = [
+        {
+            poster: {
+                userId : user123._id,
+                username : "user123"
+            },
+            title: "best coffee", 
+            body: "I loved the coffee here; it was tasty and affordable.", 
+            image: {
+                url: "http://res.cloudinary.com/dcvqjizwy/image/upload/v1734395554/pp32kb4x1syrp41jnf4m.jpg", 
+                altText: "book, coffee, place"
+            }, 
+            location: {
+                type: "coffee", 
+                id: 418520887,
+                name: "Everything Goes Book Cafe", 
+                detail: "208 Bay Street, Staten Island"
+            }, 
+            comments: []
+        },
+        {
+            poster: {
+                userId : user456._id,
+                username : "user456"
+            },
+            title: "great outdoor park", 
+            body: "I went to this park down the street from my house, and the wifi connectivity was great! I was able to be outside and stay connected!", 
+            image: {
+                url: "http://res.cloudinary.com/dcvqjizwy/image/upload/v1734395718/gztjnbat8cj8udujxhwr.jpg", 
+                altText: "park, path, trees. wifi"
+            }, 
+            location: {
+                type: "wifi", 
+                id: 397,
+                name: "Chelsea Park", 
+                detail: null
+            }, 
+            comments: []
+        },
+        {
+            poster: {
+                userId : user1._id,
+                username : "user1"
+            },
+            title: "Christmas Market", 
+            body: "You definitely have to check this place out! There were so many cool vendors, and the lights were pretty. It was a little pricey so bring your wallets!!! #$$$ #ItsChristmasTime", 
+            image: {
+                url: "http://res.cloudinary.com/dcvqjizwy/image/upload/v1734395973/ktj5lqzcfconejizaoyn.jpg", 
+                altText: "people, lights, food"
+            }, 
+            location: {
+                type: "event", 
+                id: 811589,
+                name: "2025 HOLIDAY MARKET", 
+                detail: "Union Square Park: North Plaza, Union Square Park: South Plaza"
+            }, 
+            comments: []
+        },
+    ]
+
+    let insertedPosts = await postsCollection.insertMany(posts);
+    let insertedPostIds = insertedPosts.insertedIds;
+    console.log("Seeded posts successfully.");
+
+    // console.log(insertedPosts);
+    // console.log(insertedPostIds);
+    
+    
+    // let id1 = insertedPostIds['0'].toString();
+    // let id2 = insertedPostIds['1'].toString();
+    // let id3 = insertedPostIds['2'].toString();
+
+    // console.log(id1)
+    // console.log(id2)
+    // console.log(id3)
+
+
+
+    // const comments = [
+    //     {
+    //         poster: {
+    //             userId : user456._id,
+    //             username : "user456"
+    //         },
+    //         parent:{
+    //             id: `${id1}`,
+    //             type: 'Post'
+    //         },
+    //         body:"Wow, I definitely have to check it out! Thanks for the review!"
+    //     },
+    //     {
+    //         poster: {
+    //             userId : randomuser._id,
+    //             username : "randomuser"
+    //         },
+    //         parent:{
+    //             id: `${id2}`,
+    //             type: 'Post'
+    //         },
+    //         body:"This is near me! Can't wait to try! "
+    //     },
+    //     {
+    //         poster: {
+    //             userId : randomuser._id,
+    //             username : "randomuser"
+    //         },
+    //         parent:{
+    //             id: `${id3}`,
+    //             type: 'Post'
+    //         },
+    //         body:"In this economy??? My wallet will stay home XD"
+    //     }
+    // ]
+
+    // await commentCollection.insertMany(comments);
+    // console.log("Seeded comments successfully.");
+
 
   } catch (e) {
     console.error("Error:", e);
