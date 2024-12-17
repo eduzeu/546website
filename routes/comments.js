@@ -1,9 +1,8 @@
 import { Router } from "express";
 import xss from "xss";
 import { createComment, findCommentsByParentId } from "../data/comment.js";
-import { findPostById } from "../data/posts.js";
-import { validateCommenter, validateParent, validateString, validateObjectIdString } from "../helpers.js";
 import * as sessionTokenFunctions from '../data/sessionTokens.js';
+import { validateCommenter, validateObjectIdString, validateParent, validateString } from "../helpers.js";
 
 const router = Router();
 
@@ -21,9 +20,22 @@ router.route("/")
         return res.status(401).json({ error: "Unauthorized: Invalid session token." });
       }
 
-      const commenter = { id: xss(user._id), name: xss(user.username) };
-      const parent = { id: xss(req.body.parent), type: "Post" };
-      const body = xss(req.body.body);
+      let commenter = { id: user._id.toString(), name: user.username };
+      let parent = { id: req.body.parent, type: "post" };
+      let body = req.body.body;
+
+      try {
+        commenter = validateCommenter(commenter, "Commenter");
+        parent = validateParent(parent, "Comment Parent");
+        body = validateString(body, "Comment Body");
+      } catch (e) {
+        return res.status(400).json({ error: e });
+      }
+
+      commenter.id = xss(commenter.id);
+      commenter.name = xss(commenter.name);
+      parent.id = xss(parent.id);
+      body = xss(body);
 
       // console.log("commenter:");
       // console.log(commenter);
@@ -32,20 +44,12 @@ router.route("/")
       // console.log("body:");
       // console.log(body);
 
-      // Validate input
-      // try {
-      //   validateCommenter(commenter, "Commenter");
-      //   validateParent(parent, "Comment Parent");
-      //   validateString(body, "Comment Body");
-      // } catch (validationError) {
-      //   return res.status(400).json({ error: validationError.message });
-      // }
       //console.log(commenter);
 
       const newComment = await createComment(commenter, parent, body, []);
       return res.status(201).json(newComment);
-    } catch (error) {
-      console.error("Error processing POST /comments/:", error);
+    } catch (e) {
+      console.error("Error processing POST /comments/:", e);
       return res.status(500).json({ error: "Internal Server Error" });
     }
   });
@@ -53,8 +57,17 @@ router.route("/")
 router.route("/:id")
   .get(async (req, res) => {
     //console.log(`GET request received for comment ID: ${req.params.id}`);
+    let id = req.params.id;
+
     try {
-      const id = xss(req.params.id);
+      id = validateObjectIdString(id, "Comment Id");
+    } catch (e) {
+      return res.status(404).json({ error: e });
+    }
+
+    id = xss(id);
+
+    try {
       const getComments = await findCommentsByParentId(id);
       if (!getComments) {
         return res.status(404).json({ error: "Comment not found" });

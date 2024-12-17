@@ -186,16 +186,25 @@ const createReview = (id, type) => {
     });
 
     document.getElementById('submitReviewButton').addEventListener('click', async () => {
-        const userText = document.getElementById('reviewText').value.trim();
+        let userText = document.getElementById('reviewText').value;
 
         // Add validation checks
-        if (selectedRating === 0) {
+        try {
+            userText = validateString(userText, "Review Text");
+        } catch (e) {
+            alert("Please enter review text.")
+            return;
+        }
+
+        try {
+            selectedRating = validateNumber(selectedRating, "Rating");
+        } catch {
             alert('Please select a rating.');
             return;
         }
 
-        if (!userText) {
-            alert('Please enter a review text.');
+        if (selectedRating === 0) {
+            alert('Please select a rating.');
             return;
         }
 

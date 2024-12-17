@@ -1,8 +1,7 @@
 import { Router } from "express";
 //import { getAllFriends } from '../data/friendlist.js';
-import * as sessionTokenFunctions from "../data/sessionTokens.js";
 import * as friendFunctions from "../data/friendlist.js";
-import session from "express-session";
+import * as sessionTokenFunctions from "../data/sessionTokens.js";
 
 
 const router = Router()
@@ -16,15 +15,28 @@ router.route("/").get(async (req, res) => {
     }
 })
 router.route("/").post(async (req, res) => {
+    let newFriend = req.body.poster;
+
     try {
-        let user = await sessionTokenFunctions.findUserFromSessionToken(req.cookies["session_token"]);
-        let newFriend = req.body.poster;
+        newFriend = validateString(newFriend, "Friend Username");
+    } catch (e) {
+        return res.status(400).send(e);
+    }
+
+    let user;
+    try {
+        user = await sessionTokenFunctions.findUserFromSessionToken(req.cookies["session_token"]);
+    } catch (e) {
+        return res.status(400).send(e);
+    }
+
+    try {
         let inserted = await friendFunctions.updateFriends(user.username, newFriend);
         if(!inserted.acknowledged){
             throw 'Error updating user object';
         }
     } catch (e) {
-        return res.status(400).send(e);
+        return res.status(500).send(e);
     }
 })
 export default router;

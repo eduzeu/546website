@@ -34,7 +34,10 @@
     <h4>Post:</h4>
     <button id="addFriend" class="hidden"> +Friend </button>
     <ul>
-      <li>Place: {{post.placeName}}</li>
+      <li>Title: {{post.title}}</li>
+      {{#if post.location}}
+      <li>Place: {{post.location.name}}{{#if post.location.detail}}, {{post.location.detail}}{{/if}}</li>
+      {{/if}}
       <li>Posted By: {{post.poster.username}}</li>
       <li>Body: {{post.body}}</li>
     </ul>

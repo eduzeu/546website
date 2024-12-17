@@ -15,6 +15,7 @@ let posterUsername = username.textContent;
 addFriendButton.addEventListener("click", async () => {
   hideAddFriend();
   try{
+    posterUsername = validateString(posterUsername, "Poster Username");
     await fetch('/friends', {
       method: 'POST',
       headers: {
@@ -44,7 +45,14 @@ const hideAddFriend = () => {
 
 const displayReviews = async () => {
   try {
-    const id = postId.textContent;
+    let id = postId.textContent;
+
+    try {
+      id = validateObjectId(id, "Post ID")
+    } catch (e) {
+      throw new Error(e);
+    }
+
     const comments = await fetch(`/comments/${id}`);
     if (!comments.ok) throw new Error("Failed to fetch reviews.");
     const data = await comments.json();
@@ -94,6 +102,8 @@ const displayReviews = async () => {
 
 const displayComments = async (parentId) => {
   try {
+    parentId = validateObjectId(parentId, "Parent ID")
+
     const commentsResponse = await fetch(`/comments/${parentId}`);
 
     if (!commentsResponse.ok) throw new Error("Failed to fetch comments.");
@@ -123,10 +133,13 @@ const displayComments = async (parentId) => {
 const makeComment = async () => {
   submitButton.addEventListener("click", async (event) => {
     event.preventDefault();
-    const id = postId.textContent;
-    const reviewText = document.getElementById("reviewText").value;
+    let id = postId.textContent;
+    let reviewText = document.getElementById("reviewText").value;
 
-    if (!reviewText) {
+    try {
+      id = validateObjectId(id, "Post Id");
+      reviewText = validateString(reviewText, "Review Text");
+    } catch (e) {
       alert("Please enter a comment before submitting.");
       return;
     }
@@ -147,6 +160,10 @@ const makeComment = async () => {
 
 const InsertReview = async (object) => {
   try {
+    validateObject(object, "Review Object");
+    object.id = validateObjectId(object.id, "Post ID");
+    object.body = validateString(object.body, "Review Body");
+
     const response = await fetch("/userFeed/", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -162,6 +179,10 @@ const InsertReview = async (object) => {
 const InsertComment = async (object) => {
   //console.log("Inserting comment:", object);
   try {
+    validateObject(object, "Review Object");
+    object.parent = validateObjectId(object.parent, "Post ID");
+    object.body = validateString(object.body, "Review Body");
+
     const response = await fetch("/comments/", {
       method: "POST",
       headers: { "Content-Type": "application/json" },

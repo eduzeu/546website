@@ -44,7 +44,7 @@ export const getAllEvents = async () => {
 }
 
 export const getEventbyBorough = async (borough) => {
-    validateString(borough, "Search Borough")
+    borough = validateString(borough, "Search Borough")
 
     let data = await fetchFrom('https://data.cityofnewyork.us/resource/tvpp-9vvx.json');
     let events_in_borough = [];
@@ -90,7 +90,7 @@ export const getEventbyBorough = async (borough) => {
 }
 
 export const getEventbyDate = async (date) => {
-    validateDateString(date, "Search Date");
+    date = validateDateString(date, "Search Date");
 
     let data = await fetchFrom('https://data.cityofnewyork.us/resource/tvpp-9vvx.json');
     let events_in_date = [];
