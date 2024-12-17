@@ -162,6 +162,16 @@ const validateStringId = (id, idName) => {
   return id;
 }
 
+const validateObjectId = (id, idName) => {
+    id = validateString(id, idName);
+
+    const objectIdRegex = /^[a-f\d]{24}$/i;
+    if (!objectIdRegex.test(id))
+      throw `${idName || "Provided string"} is not a valid ObjectId.`
+
+    return id;
+}
+
 const validateReviewType = (reviewType, typeName) => {
     reviewType = validateString(reviewType, typeName);
 

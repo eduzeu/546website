@@ -67,6 +67,7 @@ router.route("/:id")
         let user;
         try {
             req.params.id = validateObjectIdString(req.params.id, "Post Id");
+            req.params.id = xss(req.params.id);
         } catch (e) {
             //console.log(e);
             return res.status(400).send(e);
@@ -100,6 +101,9 @@ router.route("/images")
     } catch (e) {
         return res.status(400).send(e);
     }
+
+    req.body.id = xss(req.body.id);
+    req.body.type = xss(req.body.type);
 
     try {
         const images = await getLocationImages(id);

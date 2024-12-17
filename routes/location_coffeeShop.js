@@ -47,6 +47,8 @@ router.get("/:id", async (req, res) => {
         return res.status(400).json({ error: e });
     }
 
+    req.params.id = xss(req.params.id);
+
     try {
         const coffeeShop = await fetchCoffeeShopById(req.params.id);
         return res.status(200).json(coffeeShop);
@@ -72,6 +74,7 @@ router.route("/detail/:id")
         }
         try {
             req.params.id = validateNumericId(req.params.id, "Coffee Shop ID");
+            req.params.id = xss(req.params.id);
         } catch (e) {
             return res.render("error", {
                 title: "Error",

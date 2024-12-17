@@ -6,10 +6,10 @@ import { findPostById } from "./posts.js";
 
 export const createComment = async (commenter, parent, body, comments) => {
     // validate stuff
-    // commenter = validateCommenter(commenter, 'Commenter')
-    // parent = validateParent(parent, 'Comment Parent');
-    // body = validateString(body, 'Comment Body');
-    // comments = validateObjectIdArray(comments, 'Comments Array')
+    commenter = validateCommenter(commenter, 'Commenter')
+    parent = validateParent(parent, 'Comment Parent');
+    body = validateString(body, 'Comment Body');
+    comments = validateObjectIdArray(comments, 'Comments Array')
 
     const commentCollection = await comment();
     // create comment obj:

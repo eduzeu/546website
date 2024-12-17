@@ -93,6 +93,8 @@ router.route('/:type')
             return res.status(400).json({ error: e });
         }
 
+        reviewType = xss(reviewType);
+
         try {
             const reviews = await getReviews(reviewType);
             res.json(reviews);
@@ -124,6 +126,8 @@ router.route("/:type/:id")
         } catch (e) {
             return res.status(400).json({ error: e });
         }
+
+        reviewType = xss(reviewType);
 
         try {
             const reviews = await getReviewById(id, reviewType);
