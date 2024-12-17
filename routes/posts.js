@@ -25,8 +25,8 @@ router.route("/")
         if (location) { location.id = `${location.id}` }
 
         try {
-            review = validateString(review, "Review Text");
-            title = validateString(title, "Review Title");
+            review = validateString(review, "Post Text");
+            title = validateString(title, "Post Title");
             image = validateImageDetails(image, "Image Details");
             location = validateLocationPostDetails(location, "Location Details");
             if (location) { location.id = `${location.id}` }

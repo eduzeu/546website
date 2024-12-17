@@ -113,7 +113,7 @@ export const validateLocationType = (locType, typeName) => {
   locType = validateString(locType, typeName);
 
   if (locType !== "wifi" && locType !== "coffee" && locType !== "event") {
-    throw "Review type is invalid."
+    throw "Post type is invalid."
   }
 
   return locType

@@ -54,7 +54,7 @@ const displayReviews = async () => {
     }
 
     const comments = await fetch(`/comments/${id}`);
-    if (!comments.ok) throw new Error("Failed to fetch reviews.");
+    if (!comments.ok) throw new Error("Failed to fetch posts.");
     const data = await comments.json();
     //console.log("Fetched comments:", data);
 
@@ -95,8 +95,8 @@ const displayReviews = async () => {
       }
     });
   } catch (error) {
-    console.error("Error fetching reviews:", error);
-    userComments.innerHTML = "<p>Failed to load reviews. Please try again later.</p>";
+    console.error("Error fetching posts:", error);
+    userComments.innerHTML = "<p>Failed to load posts. Please try again later.</p>";
   }
 };
 
@@ -138,7 +138,7 @@ const makeComment = async () => {
 
     try {
       id = validateObjectId(id, "Post Id");
-      reviewText = validateString(reviewText, "Review Text");
+      reviewText = validateString(reviewText, "Post Text");
     } catch (e) {
       alert("Please enter a comment before submitting.");
       return;
@@ -160,28 +160,28 @@ const makeComment = async () => {
 
 const InsertReview = async (object) => {
   try {
-    validateObject(object, "Review Object");
+    validateObject(object, "Post Object");
     object.id = validateObjectId(object.id, "Post ID");
-    object.body = validateString(object.body, "Review Body");
+    object.body = validateString(object.body, "Post Body");
 
     const response = await fetch("/userFeed/", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(object),
     });
-    if (!response.ok) throw new Error("Failed to insert review");
+    if (!response.ok) throw new Error("Failed to insert post");
     //console.log("Review inserted successfully.");
   } catch (error) {
-    console.error("Error inserting review:", error);
+    console.error("Error inserting post:", error);
   }
 };
 
 const InsertComment = async (object) => {
   //console.log("Inserting comment:", object);
   try {
-    validateObject(object, "Review Object");
+    validateObject(object, "Post Object");
     object.parent = validateObjectId(object.parent, "Post ID");
-    object.body = validateString(object.body, "Review Body");
+    object.body = validateString(object.body, "Post Body");
 
     const response = await fetch("/comments/", {
       method: "POST",
