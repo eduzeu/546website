@@ -15,6 +15,8 @@ cd 546website
 npm install
 ```
 
+If you already have the project downloaded, you can skip the `clone` step.
+
 If it doesn't run on the first try, then do the following command on the terminal: 
 ```bash
 npm i
@@ -33,4 +35,9 @@ To run the app and get started with WiFly NYC, run the following command after i
 
 ```bash
 npm start
+```
+
+To seed the application run:
+```bash
+npm run seed
 ```
