@@ -2,6 +2,7 @@ import { Router } from "express";
 //import { getAllFriends } from '../data/friendlist.js';
 import * as friendFunctions from "../data/friendlist.js";
 import * as sessionTokenFunctions from "../data/sessionTokens.js";
+import { validateString } from "../helpers.js";
 
 
 const router = Router()
