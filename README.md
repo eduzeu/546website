@@ -37,6 +37,11 @@ To run the app and get started with WiFly NYC, run the following command after i
 npm start
 ```
 
+Enter the following url into your web browser to start using the website:
+```
+localhost:3000
+```
+
 To seed the application run:
 ```bash
 npm run seed
