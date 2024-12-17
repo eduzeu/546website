@@ -233,11 +233,11 @@ export const validateUserCookie = (cookie, cookieName) => {
 export const validateCommenter = (commenter, comName) => {
   validateObject(commenter, comName);
 
-  if (!commenter.id || !commenter.username)
+  if (!commenter.id || !commenter.name)
     throw `${comName || "Provided object"} is missing id or username.`
 
   validateObjectIdString(commenter.id, "Commenter Id");
-  commenter.username = validateString(commenter.username, "Commenter Username");
+  commenter.name = validateString(commenter.name, "Commenter Username");
 
   return commenter;
 }

@@ -20,7 +20,7 @@ router.route("/")
         return res.status(401).json({ error: "Unauthorized: Invalid session token." });
       }
 
-      let commenter = { id: user._id, name: username };
+      let commenter = { id: user._id.toString(), name: user.username };
       let parent = { id: req.body.parent, type: "post" };
       let body = req.body.body;
 
@@ -48,8 +48,8 @@ router.route("/")
 
       const newComment = await createComment(commenter, parent, body, []);
       return res.status(201).json(newComment);
-    } catch (error) {
-      console.error("Error processing POST /comments/:", error);
+    } catch (e) {
+      console.error("Error processing POST /comments/:", e);
       return res.status(500).json({ error: "Internal Server Error" });
     }
   });

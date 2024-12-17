@@ -22,14 +22,14 @@ router.route("/")
         let title = req.body.title;
         let image = req.body.image;
         let location = req.body.location;
-        location.id = `${location.id}`;
+        if (location) { location.id = `${location.id}` }
 
         try {
             review = validateString(review, "Review Text");
             title = validateString(title, "Review Title");
             image = validateImageDetails(image, "Image Details");
             location = validateLocationPostDetails(location, "Location Details");
-            location.id = `${location.id}`;
+            if (location) { location.id = `${location.id}` }
 
         } catch (e) {
             return res.status(400).json({ error: e });

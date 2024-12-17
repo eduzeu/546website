@@ -22,7 +22,7 @@ export const createComment = async (commenter, parent, body, comments) => {
 
     if (!newComment.acknowledged || !newComment.insertedId) throw "Could not add comment";
 
-    const newCommentId = newComment.insertedId;
+    const newCommentId = newComment.insertedId.toString();
 
     if (parent.type === "comment") {
         await updateCommentsComment(newCommentId);
@@ -85,9 +85,9 @@ export const updateCommentsComment = async (commentId) => {
         { returnDocument: "after" }
     );
 
-    if (!updatedInfo.value) throw "Could not update comment successfully";
+    if (!updatedInfo) throw "Could not update comment successfully";
 
-    return updatedInfo.value;
+    return updatedInfo;
 }
 // used to add comments to the parent if the parent is a post
 export const updateCommentsPost = async (commentId) => {
@@ -103,7 +103,7 @@ export const updateCommentsPost = async (commentId) => {
         { $set: { comments: updated_comments } },
         { returnDocument: "after" }
     );
-    if (!updatedInfo.value) throw "Could not update post successfully";
+    if (!updatedInfo) throw "Could not update post successfully";
 
-    return updatedInfo.value;
+    return updatedInfo;
 }

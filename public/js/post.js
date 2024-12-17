@@ -137,7 +137,7 @@ const makeComment = async () => {
     let reviewText = document.getElementById("reviewText").value;
 
     try {
-      id = validateStringId(id, "Post Id");
+      id = validateObjectId(id, "Post Id");
       reviewText = validateString(reviewText, "Review Text");
     } catch (e) {
       alert("Please enter a comment before submitting.");
@@ -180,7 +180,7 @@ const InsertComment = async (object) => {
   //console.log("Inserting comment:", object);
   try {
     validateObject(object, "Review Object");
-    object.id = validateObjectId(object.id, "Post ID");
+    object.parent = validateObjectId(object.parent, "Post ID");
     object.body = validateString(object.body, "Review Body");
 
     const response = await fetch("/comments/", {
